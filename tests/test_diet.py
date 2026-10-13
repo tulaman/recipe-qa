@@ -9,7 +9,7 @@ gluten-free, which is never derived.
 import pytest
 
 from recipe_qa.corpus import Ingredient
-from recipe_qa.ingestion.diet import derive_diet
+from recipe_qa.ingestion.diet import category_conflicts, derive_diet
 
 
 def ing(*names: str) -> list[Ingredient]:
@@ -137,3 +137,19 @@ def test_no_ingredients_is_unknown() -> None:
     diet = derive_diet([], [])
     assert diet.vegetarian.status == "unknown"
     assert diet.vegan.status == "unknown"
+
+
+def test_category_contradicted_by_ingredients_is_reported() -> None:
+    conflicts = category_conflicts(["Vegetarian recipes"], ing("bread", "bacon"))
+    assert len(conflicts) == 1
+    assert "bacon" in conflicts[0]
+
+
+def test_vegan_category_with_honey_is_reported() -> None:
+    conflicts = category_conflicts(["Vegan recipes"], ing("oats", "honey"))
+    assert conflicts == ["vegan category, but ingredient 'honey' matches 'honey'"]
+
+
+def test_consistent_categories_report_nothing() -> None:
+    assert category_conflicts(["Vegan recipes"], ing("rice", "coconut milk")) == []
+    assert category_conflicts([], ing("bacon")) == []
