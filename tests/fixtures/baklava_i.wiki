@@ -1,0 +1,57 @@
+{{Recipe summary
+| Category = Recipes for dessert
+| Difficulty = 3
+| Image = [[File:Baklava(RobertK).jpg|300px]]
+}}
+
+{{recipe}} | [[Cookbook:Dessert|Desserts]]
+__NOTOC__
+==Ingredients==
+{{metricate}}
+
+=== Pastry ===
+*1 [[Cookbook:Pound|pound]] (454 [[Cookbook:Gram|g]]) [[cookbook:Phyllo dough|phyllo dough]]
+*4–5 [[cookbook:cup|cup]] [[cookbook:walnuts|walnuts]], [[Cookbook:Chopping|chopped]] coarsely
+*½ cup white granulated [[cookbook:sugar|sugar]]
+*¼ [[cookbook:tsp|tsp]] [[wikt:ground|ground]] [[cookbook:clove|cloves]]
+*1 tsp [[cookbook:cinnamon|cinnamon]]
+*¾ pound (340 g) sweet [[cookbook:butter|butter]]
+
+=== Syrup ===
+*2 ½ cups of [[cookbook:water|water]]
+*3 cups white granulated [[cookbook:sugar|sugar]]
+*3 tsp [[cookbook:Lemon Juice|lemon juice]]
+*1 tsp [[cookbook:vanilla Extract|vanilla extract]]
+
+==Procedure==
+
+=== Pastry ===
+#Combine nuts, cinnamon, cloves, and sugar. Melt butter in a [[cookbook:saucepan|saucepan]].
+#Use a pastry [[Cookbook:Brush|brush]] to brush inside of a 14 x 10.5-[[Cookbook:Inch|inch]] (36 x 27 [[Cookbook:Centimetre (cm)|cm]]) pan with melted butter. 
+#Line bottom of pan with one piece of Phyllo dough. Fold under excess Phyllo.
+#Alternate sides with each piece of Phyllo, brushing the top of each layer with melted butter.
+#Repeat 5 times, making 5 layers.
+#On the 6th sheet, sprinkle evenly with nut mixture.
+#Continue until all nut mixture is used and last 6 buttered sheets of Phyllo form top crust.
+#Use a sharp knife to cut into diamond shapes.
+#[[cookbook:Bake|Bake]] at 300 °F (150 °C) for about 1 ½ hours or until lightly brown.
+
+=== Syrup ===
+#Combine syrup ingredients. [[cookbook:Boil|Boil]] syrup for about 10 minutes and then allow to cool. 
+#Pour cooled syrup over hot pastry. Enjoy!
+
+[[Category:Greek recipes|Baklava]]
+[[Category:Recipes for dessert|Baklava]]
+[[Category:Recipes for pastries|Baklava]]
+[[Category:Recipes using walnut]]
+[[Category:Recipes using ground cinnamon]]
+[[Category:Recipes using clove]]
+[[Category:Halal recipes|Baklava]]
+[[Category:Baking recipes]]
+[[Category:Recipes with metric units]]
+[[Category:Recipes with images]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using white sugar]]
+[[Category:Recipes using lemon juice]]
+[[Category:Recipes using phyllo]]
+[[Category:Turkish recipes]]
