@@ -110,7 +110,10 @@ let busy = false;
 
 function syncControls(): void {
   const length = [...input.value.trim()].length;
+  // Code points, as the API counts them; HTML maxlength would count UTF-16
+  // units and stop an emoji-heavy question at 500 characters.
   counter.textContent = `${[...input.value].length} / ${MAX_LENGTH}`;
+  counter.classList.toggle("over", length > MAX_LENGTH);
   submit.disabled = busy || length === 0 || length > MAX_LENGTH;
   submit.textContent = busy ? "Asking…" : "Ask";
   input.readOnly = busy;

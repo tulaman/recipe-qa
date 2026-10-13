@@ -103,6 +103,11 @@ textarea {
   color: var(--muted);
 }
 
+.counter.over {
+  color: var(--error);
+  font-weight: 600;
+}
+
 button[type="submit"] {
   font: inherit;
   font-weight: 600;
