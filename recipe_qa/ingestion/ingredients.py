@@ -20,7 +20,7 @@ from recipe_qa.ingestion.wikitext import to_plain
 _FRACTIONS = "½¼¾⅓⅔⅛⅜⅝⅞"
 _NUMBER = rf"(?:\d+(?:[.,/]\d+)?[{_FRACTIONS}]?|[{_FRACTIONS}])"
 _QUANTITY = re.compile(rf"^{_NUMBER}(?:(?:–|-|—){_NUMBER})?(?:[a-z]{{1,2}})?$")
-_OPTIONAL = re.compile(
+OPTIONAL_MARKER = re.compile(
     r"\boptional\b|\bif desired\b|\bif you like\b|\bif available\b|\bif using\b", re.IGNORECASE
 )
 _TO_TASTE = re.compile(r"\b(?:or\s+)?(?:to|according to) taste\b")
@@ -67,7 +67,7 @@ def normalize_name(plain: str) -> str:
     text = re.sub(r"^\s*optional\s*:?", " ", text)
     text = text.split(",")[0]
     text = _TO_TASTE.sub(" ", text)
-    text = _OPTIONAL.sub(" ", text)
+    text = OPTIONAL_MARKER.sub(" ", text)
     text = re.sub(r"\bfreshly[- ]", " ", text)
 
     tokens = text.split()
@@ -83,6 +83,6 @@ def parse_ingredient_line(wikitext: str, group: str | None = None) -> Ingredient
     return Ingredient(
         raw=plain,
         normalized=normalize_name(plain),
-        optional=bool(_OPTIONAL.search(plain)),
+        optional=bool(OPTIONAL_MARKER.search(plain)),
         group=group,
     )
