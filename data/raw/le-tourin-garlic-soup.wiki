@@ -1,0 +1,38 @@
+{{recipesummary|category=Soup recipes|servings=2|time=30 minutes|difficulty=2
+}}{{recipe}} | [[Cookbook:Soup|Soup]] | [[Cookbook:Cuisine of France|Cuisine of France]]
+
+'''Le tourin''' is a type of garlic [[Cookbook:Soup|soup]]. This recipe is from the village of Le Fleix in Dordogne.
+
+==Ingredients==
+*10–12 cloves of [[Cookbook:Garlic|garlic]], [[Cookbook:Chop|chopped]]
+*1 [[Cookbook:Tablespoon|tablespoon]] [[Cookbook:Olive oil|olive oil]]
+*1 tablespoon [[Cookbook:Flour|flour]]
+*4 [[Cookbook:Cup|cups]] [[Cookbook:Water|water]], or as needed
+*1 [[Cookbook:Egg|egg]], [[Cookbook:Separating Eggs|separated]]
+*[[Cookbook:Pepper|Pepper]] to taste
+*1 [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Vinegar|vinegar]]
+*[[Cookbook:Salt|Salt]] to taste
+
+==Procedure==
+#In a [[Cookbook:Frying Pan|frying pan]], [[Cookbook:Brown|brown]] the chopped garlic in the olive oil.
+#Add the flour. Mix well, then cook for a few minutes to remove the floury taste.
+#Gradually stir in the water, and cook for 10 minutes.
+#Beat the egg white in a small bowl. Gradually whisk in a ladleful of the soup to [[Cookbook:Tempering|temper]] it, then stir the mixture back into the soup pot.
+#Combine the egg yolk, pepper, and vinegar in a small bowl. Like before, gradually temper the yolks with a ladleful of soup.
+#Remove the soup from the heat, and stir in the egg yolk mixture. Season to taste with salt.
+#Place thin slices of bread in each soup bowl, and pour the soup on top. Serve hot.
+
+== Notes, tips, and variations ==
+
+* You can optionally use an equal mixture of chopped onions and garlic.
+
+[[Category:Recipes for soup|Le Tourin]]
+[[Category:Vegetarian recipes|Le Tourin]]
+[[Category:French recipes|Le Tourin]]
+[[Category:Recipes using garlic|{{PAGENAME}}]]
+[[Category:Boiled recipes]]
+[[Category:Recipes using egg]]
+[[Category:Recipes using salt]]
+[[Category:Recipes using pepper]]
+[[Category:Recipes using vinegar]]
+[[Category:Recipes using wheat flour]]

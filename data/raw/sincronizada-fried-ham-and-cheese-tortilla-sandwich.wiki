@@ -1,0 +1,34 @@
+{{recipe summary
+| category    = Recipes for sandwiches
+| yield       =
+| origin      = Mexico
+| servings    =
+| time        = <10 minutes
+| difficulty  = 2
+| image       = 
+| energy      =
+| note        =
+}}
+{{Recipe}}
+
+== Ingredients ==
+* 2 [[Cookbook:Tortilla|tortillas]]
+* 1 [[Cookbook:Slicing|slice]] of deli [[Cookbook:Ham|ham]]
+* 1 slice of [[Cookbook:Queso Fresco|queso fresco]]
+* [[Cookbook:Oil and Fat|Oil]]
+
+== Procedure ==
+# Heat up some oil in a pan over medium heat.
+# On a cutting board, with two tortillas, place a slice of deli ham and then queso fresco in the middle, and place another tortilla on top.
+# When the oil is hot, place the raw sincronizada on the pan and let the first side brown for a few minutes until the outside becomes crispy.
+# Once the first side is golden brown, flip the sincronizada over and brown the other side to crisp up in the same manner.
+# After a few more minutes, place the sincronizada on a plate with napkins, and enjoy.
+
+== Notes, tips, and variations ==
+* When making two sincronizadas, you must double the amount of ingredients used (e.g. 4 tortillas and 2 slices each of deli ham and queso fresco), while for each sincronizada, the amount of tortillas and filling used remains the same as the instructions above.
+
+[[Category:Mexican recipes]]
+[[Category:Recipes using ham]]
+[[Category:Recipes using cheese]]
+[[Category:Recipes using tortilla]]
+[[Category:Recipes using oil and fat]]

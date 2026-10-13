@@ -1,0 +1,33 @@
+{{Recipe summary
+| Category = Potato recipes
+| Difficulty = 2
+}}
+
+{{recipe}} | [[Cookbook:Cuisine of India|Cuisine of India]] | [[Cookbook:Vegan cuisine|Vegan Cuisine]]
+
+This dish is extremely creamy and rich; don't expect to be able to eat much of it. It goes very well with [[Cookbook:Indian Beans|Indian beans]] and [[Cookbook:Indian Rice|Indian rice]].
+
+==Ingredients==
+* 6 small [[Cookbook:Potato|potatoes]], peeled and cut in half
+* 2 small cans [[Cookbook:coconut|coconut milk]]
+* ½ can [[Cookbook:Tomato|tomatoes]]
+* 2 cloves [[Cookbook:Garlic|garlic]], [[Cookbook:Mince|minced]]
+* ½ [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Red pepper flakes|red pepper flakes]]
+* [[Cookbook:Olive oil|Olive oil]]
+* [[Cookbook:Salt|Salt]] to taste
+
+==Procedure==
+# Sauté the garlic in olive oil.
+# Add tomatoes. Cook for 10 minutes, until the oil and tomatoes separate (they will bubble).
+# Stir in the coconut milk.
+# Add ½ teaspoon red pepper, and salt to taste. Boil it all together.
+# Add the potatoes. Cook over low-medium heat until the potatoes are done. They will become fairly soft; check with a fork.  
+
+[[Category:Vegan recipes|{{PAGENAME}}]]
+[[Category:Indian recipes|{{PAGENAME}}]]
+[[Category:Recipes using potato|{{PAGENAME}}]]
+[[Category:Recipes using coconut milk]]
+[[Category:Boiled recipes]]
+[[Category:Side dish recipes]]
+[[Category:Recipes using chile flake]]
+[[Category:Recipes using garlic]]

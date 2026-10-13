@@ -1,0 +1,39 @@
+{{recipesummary
+| Category = Ethiopian recipes
+| Servings = 6–8
+| Time = Fermentation: 12–24 hours<br/>Cooking: 5 minutes per injera
+| Rating = 2
+| Image = [[Image:Alicha 1.jpg|300px]]
+}}
+
+{{recipe}} | [[Cookbook:Cuisine of Ethiopia|Cuisine of Ethiopia]]
+             
+'''Injera''' is a [[Cookbook:Flatbread|flatbread]] eaten in [[Cookbook:Cuisine of Ethiopia|Ethiopia]] and Eritrea. It is made with [[Cookbook:teff|teff]] flour. Teff is a tiny round grain that is grown in the highlands of Eritrea and highlands of Ethiopia. While teff is very nutritious, pure teff flour contains no [[Cookbook:Gluten|gluten]], and little else in the way of binding proteins. This makes teff ill-suited for making raised bread; however injera still takes advantage of the special properties of [[Cookbook:Fermentation|fermentation]], which gives it an airy, bubbly texture, and also a sour taste.
+
+==Ingredients==
+
+* 1 [[Cookbook:Cup|cup]] [[Cookbook:Teff|teff flour]]
+* 1½ cups warm but not hot [[Cookbook:Water|water]]
+* 1 [[Cookbook:Pinch|pinch]] of [[Cookbook:Salt|salt]]
+* [[Cookbook:Oil|Oil]] for frying
+* Fermentation starter (optional; see notes)
+
+==Procedure==
+[[Image:Falasha gondar injera 2006.jpg|right|thumb|Making injera]]
+# Mix the flour with the water, and the salt. Add your fermentation starter if using one.
+# Set aside to ferment overnight, or at least 12 hours. There should be bubbles on the surface from fermenting, before you use it.
+# Heat a large, flat [[Cookbook:Frying Pan|pan]] until it is hot enough to make a droplet of water sizzle. Oil it very lightly, just enough to make the pan shine.
+# Pour or [[Cookbook:Ladle|ladle]] some batter onto the pan, spiralling outwards from the centre. Only a thin layer is required—a little thicker than a [[Cookbook:Crêpe|crêpe]] but not by much.
+# As it cooks, the surface of the injera will become covered in holes or pits. When the entire injera has changed colour and the edges start to lift from the pan, remove it and set aside, then pour the next injera and repeat until finished.
+
+==Notes, tips and variations==
+* If you can't get it to ferment by itself, try a good fermentation starter like a teaspoonful of [[Cookbook:Kefir|kefir]]. [[Cookbook:Yeast|Baker's yeast]] alone will not make for good flavour, as bacteria are needed also, but a teaspoonful of [[Cookbook:Yoghurt|yoghurt]] plus a pinch of yeast might do the trick if you can't get kefir. Note that fermentation starter may contain gluten.
+* Traditional injera is made with teff, but if this is difficult to get, it can be made with [[Cookbook:Sorghum|sorghum]] or [[Cookbook:Flour|wheat flour]].
+* Since teff is often quite expensive outside of Africa, it is often mixed with wheat flour to give the injera some of the teff flavour but for less expense. Mix ¼ cup of teff flour with ¾ cup of sorghum or wheat flour, for the recipe above.
+
+[[Category:Recipes for flatbread]]
+[[Category:Ethiopian recipes|{{PAGENAME}}]]
+[[Category:Gluten-free recipes|{{PAGENAME}}]]
+[[Category:Recipes using teff flour]]
+[[Category:Vegan recipes]]
+[[Category:Halal recipes]]

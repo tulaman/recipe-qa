@@ -1,0 +1,34 @@
+{{recipesummary|category=Soup recipes|servings=6|time=10 minutes|difficulty=1}}
+
+{{recipe}} | [[Cookbook:Soups|Soups]]
+
+'''Mexican tomato soup''' is a very simple dish that can be made hot if wanted. It is very nutritious for a soup too.
+
+==Ingredients==
+* About ½ [[Cookbook:Liter|litre]] tomato sauce, tomato purée, or similar
+* 2 large [[Cookbook:Onion|onions]] or equivalent
+* 2 red [[Cookbook:Bell Pepper|bell peppers]]
+* 2 [[Cookbook:Tomato|tomatoes]]
+* Onion or [[Cookbook:Leek|leek]] greens
+* 1 can of sweet [[Cookbook:Corn|corn]]
+* ¼ [[Cookbook:Cup|cup]] (60 [[Cookbook:Milliliter|ml]]) [[Cookbook:Vegetable oil|vegetable]] or [[Cookbook:Olive Oil|olive oil]]
+* [[Cookbook:Salt|Salt]]
+* [[Cookbook:Sugar|Sugar]]
+* More vegetables according to your taste
+
+==Procedure==
+#Cut onion fine and [[Cookbook:Frying|fry]] lightly in a large [[Cookbook:Saucepan|saucepan]] with a bit of oil.
+#Add vegetables, roughly in the order you find logical (ie, tomatoes don't take long, peppers can be there from the start).
+#Add about ½ teaspoon salt, adjusting to taste. The salt will extract water from the vegetables and make them 'stew' faster. You can cover the pot if it goes slowly—once again, this slows the evaporation and allows the vegetables to cook in the water they lose themselves.
+#Add tomato sauce and corn.
+#Add salt and sugar to taste. Be bold; tomato sauce takes a '''lot''' of salt and at least a heaping teaspoon of sugar to taste right. If unsure, separate a small amount and try adding more salt—you will see the tastes changes significantly.
+#Serve with tortilla chips, or toasted bread if not available.
+
+[[Category:Recipes for soup]]
+[[Category:Recipes using tomato juice]]
+[[Category:Mexican recipes]]
+[[Category:Recipes_with_metric_units]]
+[[Category:Recipes using red bell pepper]]
+[[Category:Recipes using sugar]]
+[[Category:Recipes using corn]]
+[[Category:Recipes using leek]]

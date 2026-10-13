@@ -1,0 +1,46 @@
+__NOTOC__
+{{recipesummary|category=Sauce recipes|time=10 minutes|difficulty=2
+}}
+
+{{recipe}}
+
+'''Neapolitan anchovy sauce''' is a delicious, creamy [[Cookbook:Sauces|sauce]], perfect for meat or vegetables.
+
+{{decameron}}
+
+==Ingredients==
+* 3 [[Cookbook:Anchovy|anchovies]]
+* 1 [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:fennel|fennel]], [[Cookbook:Chopping|chopped]]
+* 1 [[Cookbook:Pinch|pinch]] [[Cookbook:Cinnamon|cinnamon]]
+* 1 teaspoon [[Cookbook:Parsley|parsley]], chopped 
+* 1 teaspoon [[Cookbook:Marjoram|marjoram]], chopped 
+* 1 teaspoon [[Cookbook:Flour|flour]]
+* 1 clove [[Cookbook:Garlic|garlic]], split
+* 1 dash of [[Cookbook:Lemon Juice|lemon juice]]
+* 1 dash of [[Cookbook:Vinegar|vinegar]]
+* ½ [[Cookbook:Gill|gill]] [[Cookbook:Cream|cream]], [[Cookbook:Boiling|boiled]]
+* Bones of 1 [[Cookbook:Fish|fish]]
+
+==Procedure==
+# Wash anchovies in vinegar; bone and pound with fennel and a cinnamon using a [[Cookbook:Mortar and Pestle|mortar and pestle]].
+# Mix in parsley and marjoram, a squeeze of lemon juice, flour, cream, and the bones of the fish for which you will use this sauce.
+# Pass through a [[Cookbook:Sieve|sieve]], add garlic, and [[Cookbook:Boiling|boil]]. 
+
+==Notes, tips, and variations==
+
+* If the fish you are using is cooked in the oven, add a little of the liquor in which it has been cooked to the sauce.
+* Take out the garlic before serving.
+* Instead of anchovies you may use caviar, pickled tunny, or any other pickled fish.
+
+[[Category:Recipes for sauces and condiments|{{PAGENAME}}]]
+[[Category:Italian recipes|{{PAGENAME}}]]
+[[Category:Recipes using anchovy]]
+[[Category:Recipes using ground cinnamon]]
+[[Category:Recipes using lemon juice]]
+[[Category:Recipes using cream]]
+[[Category:Recipes using marjoram]]
+[[Category:Recipes using garlic]]
+[[Category:Recipes using vinegar]]
+[[Category:Recipes using fennel]]
+[[Category:Recipes using fish]]
+[[Category:Recipes using wheat flour]]

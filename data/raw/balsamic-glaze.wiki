@@ -1,0 +1,31 @@
+{{recipesummary|category=Sauce recipes|yield=1 cup of 1 tablespoon servings|time=½ hour|difficulty=2
+}}{{recipe}} | [[Cookbook:Cuisine of the United States|American cuisine]] | [[Cookbook:Vegetarian cuisine|Vegetarian Cuisine]]
+
+'''Balsamic glaze''' is an excellent drizzle [[Cookbook:Sauces|sauce]] for [[Cookbook:Brassicas|cruciferous vegetables]] like [[Cookbook:Broccoli|broccoli]], [[Cookbook:Cabbage|cabbage]], [[Cookbook:Cauliflower|cauliflower]], [[Cookbook:Chard|chard]], [[Cookbook:Kale|kale]], [[Cookbook:Mustard|mustard greens]], [[Cookbook:Rutabaga|rutabagas]], and [[Cookbook:Turnip|turnips]].
+
+==Ingredients==
+* ¼ [[Cookbook:Cup|cup]] [[Cookbook:Vinegar|balsamic vinegar]]
+* 1 [[Cookbook:Tablespoon|tablespoon]] [[Cookbook:Honey|honey]], or to taste
+* 1 [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Mincing|minced]] [[Cookbook:Garlic|garlic]]
+* 1 teaspoon minced peeled [[Cookbook:Ginger|ginger]]
+* 1 teaspoon extra-virgin [[Cookbook:Olive oil|olive oil]]
+* 1 [[Cookbook:Tomato|tomato]], seeded and [[Cookbook:Chop|chopped]]
+* [[Cookbook:Salt|Salt]] to taste
+* [[Cookbook:Black Pepper|Freshly-ground black pepper]] to taste
+
+==Procedure==
+# Combine ingredients in a [[Cookbook:Blender|blender]] and blend until just [[Cookbook:Puree|pureed]].
+# Transfer to a nonstick [[Cookbook:Saucepan|saucepan]].
+# Bring mixture to a [[Cookbook:Boil|boil]], then immediately reduce heat to moderate.
+# Cook, stirring frequently, until sauce is slightly [[Cookbook:Syrup|syrupy]].
+# Check taste and if glaze seems too acidic, stir in slightly more honey.
+# Add salt and pepper to taste, if desired.
+# Drizzle over hot, cooked vegetables and serve immediately, or to store, covered, in refrigerator up to 3 days.
+# Reheat and chill glaze before using.
+
+[[Category:Recipes using fresh ginger]]
+[[Category:Recipes for sauces and condiments]]
+[[Category:Recipes using vinegar]]
+[[Category:Vegetarian recipes]]
+[[category:Gluten-free recipes]]
+[[Category:Recipes using honey]]

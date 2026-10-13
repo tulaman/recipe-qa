@@ -1,0 +1,88 @@
+{{Recipesummary|
+|Category=Salsa recipes
+|Servings=4
+|Energy=81 Cal (339 kJ)
+|Time=5 minutes
+|Difficulty=1
+|Rating=1
+|Image=[[Image:Eargon Salsa with Broccoli.jpg|300px]]
+}}
+
+{{Nutrition Summary|
+|ServingSize=1/4 of recipe (117 g)
+|Servings=4
+|Cals=81
+|FatCals=4.5
+|TotalFat=0.5 g
+|SatFat=0 g
+|Cholesterol=0 mg
+|Sodium=84 mg
+|Carbs=18 g
+|Fiber=4 g
+|Sugars=11 g
+|Protein=4 g
+|Calcium=3%
+|Iron=14%
+|Copper=16%
+|Magnesium=9%
+|Manganese=17%
+|Phosphorus=8%
+|Potassium=25%
+|Selenium=7%
+|Zinc=4%
+|Folate=4%
+|Thiamine=5%
+|Riboflavin=8%
+|Niacin=13%
+|PanthothenicAcid=1%
+|Pyridoxine=14%
+|Cyanocobalamin=0%
+|VitaminA=28%
+|VitaminC=42%
+|VitaminD=0%
+|VitaminE=18%
+|VitaminK=13%
+}}
+
+__NOTOC__
+
+{{recipe}}| Vegan recipes | Sauce recipes
+
+'''Eärgon salsa''' is an easy-to-make, low sodium hot sauce that nicely complements fresh vegetables like broccoli, carrots, and celery. Easy variations using hotter peppers such as seranos and habaneros are given below.
+
+==Ingredients==
+* 4 fresh [[Cookbook:Jalapeño|jalapeño]] peppers
+* 4 [[Cookbook:Tablespoon|tablespoons]] distilled white [[Cookbook:Vinegar|vinegar]]
+* 4 [[Cookbook:Tablespoon|tablespoons]] [[Cookbook:Mince|minced]] [[Cookbook:Garlic|garlic]]
+* 1 can (12 [[Cookbook:Ounce|ounces]]) unsalted tomato paste
+
+==Procedure==
+#Slice peppers crosswise to form small rings, and put in a small container.
+#Add garlic, vinegar, and tomato paste.
+#Stir and serve.
+
+==Notes, tips, and variations==
+*4 seranno peppers can be substituted for the 4 jalapeños for a spicier sauce.
+*To try the habanero version, use 2 finely-[[Cookbook:Chopping|chopped]] habanero peppers and increase tomato paste from 12 oz to 18 oz. Be careful.
+* This recipe is easy to customize. Some options include adding spinach, cilantro, black pepper, and chopped onions.
+* The peppers, vinegar, and garlic can be combined beforehand and stored in an airtight container in the fridge for several days.
+* Can be easily stored in a closed container in refrigerator for a week or ten days.
+
+[[Category:Low-sodium recipes|{{PAGENAME}}]]
+[[Category:Vegan recipes|{{PAGENAME}}]]
+[[Category:Mexican recipes|{{PAGENAME}}]]
+[[Category:Recipes using tomato|{{PAGENAME}}]]
+[[Category:Recipes using jalapeño chile|{{PAGENAME}}]]
+[[Category:Recipes for salsa|{{PAGENAME}}]]
+
+==Nutrition==
+This salsa is a good source of vitamins and minerals. One serving provides 42% of a day's recommended Vitamin C, 28% of Vitamin A, 18% of Vitamin E, 14% of pyridoxine, 13% of niacin and vitamin K. In terms of minerals, it provides 25% of a day's potassium, 17% of manganese, 16% of copper, and 14% of iron. Additionally, one serving also has 4 grams of both dietary fiber and protein.
+
+==Warnings==
+
+* Be very careful not to touch your eyes, nose, or mouth after chopping or handling the chili peppers—the pain can be intense. Wash your hands thoroughly after handling.
+
+==External links==
+*[http://www.ehow.com/how_2213822_make-tomato-paste.html How-to: Homemade tomato paste]
+
+[[Category:Recipes using garlic]]

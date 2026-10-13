@@ -1,0 +1,37 @@
+{{Recipe summary
+| Category = Indian recipes
+| Difficulty = 1
+}}
+
+{{recipe}} | [[Cookbook:Cuisine of India|Cuisine of India]] | [[Cookbook:Vegan cuisine|Vegan cuisine]]
+
+This is excellent with [[Cookbook:Indian Potatoes|Indian potatoes]] and [[Cookbook:Indian Rice|Indian rice]].
+
+==Ingredients==
+* 1 can [[Cookbook:Lentil|lentils]]
+* 1 can [[Cookbook:Kidney Bean|kidney beans]]
+* 1 [[Cookbook:Onion|onion]]
+* ½ can [[Cookbook:Tomato|tomatoes]]
+* ½ [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Paprika|paprika]]
+* ½ teaspoon [[Cookbook:Salt|salt]]
+* ½ teaspoon [[Cookbook:Sugar|sugar]]
+* ¼ teaspoon [[Cookbook:Cumin|cumin]]
+* 1 [[Cookbook:Pinch|pinch]] [[Cookbook:Turmeric|turmeric]]
+
+==Procedure==
+
+# [[Cookbook:Chopping|Chop]] and [[Cookbook:Sautéing|sauté]] the onion.
+# Add the tomatoes.
+# Add all the spices.
+# Add the lentils and kidney beans.
+# Cook everything for 20 minutes over medium heat.
+
+[[Category:Vegan recipes|{{PAGENAME}}]]
+[[Category:Recipes using kidney bean]]
+[[Category:Recipes using lentil|{{PAGENAME}}]]
+[[Category:Indian recipes|{{PAGENAME}}]]
+[[Category:Boiled recipes]]
+[[Category:Side dish recipes]]
+[[Category:Indian recipes]]
+[[Category:Recipes using sugar]]
+[[Category:Recipes using cumin]]

@@ -1,0 +1,34 @@
+{{Recipe summary
+| Category = Fruit recipes
+| Difficulty = 3
+}}
+
+{{recipe}}
+
+'''Caramelized pineapple''' is crispy on the outside, sweet, and fruity.
+
+== Ingredients ==
+* 2 [[Cookbook:Cup|cups]] [[Cookbook:Dice|diced]] [[Cookbook:Pineapple|pineapple]]
+* ½ cup dark [[Cookbook:Brown Sugar|brown sugar]], divided
+* ½ cup [[Cookbook:Heavy Cream|heavy cream]]
+* 3 [[Cookbook:Tablespoon|tbsp]] dark [[Cookbook:Rum|rum]]
+* 1 [[Cookbook:Vanilla Bean|vanilla bean]], split and scraped
+
+== Procedure ==
+#Combine vanilla bean and liquid ingredients except rum and ¼ cup brown sugar.
+#Heat over medium heat until sugar is dissolved and has thickened slightly, 15–30 minutes.
+#Remove vanilla pod and let the sugar mixture sit at room temperature for 30 minutes.
+#Dip pineapple into sugar mixture then dredge in remaining sugar, adding more as needed.
+#Place pineapple on a greased [[Cookbook:Baking Sheet|baking sheet]] and place under [[Cookbook:Broiler|broiler]], shaking constantly until well browned.
+#Remove pineapple; keep warm.
+#Place baking sheet on two burners and heat over high heat. Add rum and ignite. Scrape browned bits off of pan and boil rum until reduced by half.
+#Add rum to remaining sugar mixture and stir. Serve pineapple with remaining sugar mixture on the side.
+
+[[Category:Recipes using pineapple]]
+[[Category:Recipes using vanilla]]
+[[Category:Recipes using rum]]
+[[Category:Recipes for dessert]]
+[[Category:Boiled recipes]]
+[[Category:Broiled recipes]]
+[[Category:Recipes using dark brown sugar]]
+[[Category:Recipes using heavy cream]]

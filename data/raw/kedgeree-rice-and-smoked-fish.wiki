@@ -1,0 +1,54 @@
+__NOTOC__{{recipesummary
+| category = Rice recipes
+| servings = 3–4
+| time = 30–40 minutes
+| difficulty = 3
+| Image = [[Image:Kedgeree.jpg|300px]]
+}}{{recipe}} | [[Cookbook:Cuisine of the United Kingdom|Cuisine of the United Kingdom]]
+
+'''Kedgeree''' (or occasionally kitcherie, kitchari or kitchiri) is a dish consisting of flaked [[cookbook:fish|fish]] (usually [[Cookbook:Smoking|smoked]] haddock), boiled [[Cookbook:rice|rice]], [[cookbook:egg|eggs]] and [[cookbook:butter|butter]]. It originated amongst the British colonials in [[cookbook:cuisine of India|India]] hence was introduced to the [[cookbook:Cuisine of the United Kingdom|United Kingdom]] as a popular English breakfast in Victorian times, part of the then-fashionable Anglo-Indian cuisine. During that time, fish was often served for colonial breakfasts so that fish caught in the early morning could be eaten while it was still fresh. It is rarely eaten for breakfast now, but is still a popular dish.
+ 
+==Ingredients==
+
+* 1–2 [[Cookbook:Cup|cups]] Basmati or long-grain white rice (see notes)
+* 2–4 cups decent quality low-sodium [[Cookbook:Chicken|chicken]] [[Cookbook:Stock|stock]]
+* 1 [[Cookbook:Bay Leaf|bay leaf]]
+* 500 [[Cookbook:Gram|g]] (1 [[Cookbook:Pound|lb]]) smoked [[Cookbook:Haddock|haddock]]
+* 3 medium [[Cookbook:shallot|shallot]]s or 1 medium [[cookbook:onion|onion]], chopped fairly fine
+* Liberal amounts of unsalted [[Cookbook:Butter|butter]]
+* As much [[cookbook:garlic|garlic]] as you can handle, [[Cookbook:Mincing|minced]] or put through a [[cookbook:Garlic Press|garlic press]]
+* 6 [[cookbook:Hard Boiled Eggs|hard boiled egg]]s, [[Cookbook:Chopping|chopped]] fairly fine
+* At least 3 [[Cookbook:Teaspoon|tsp]] of prepared English [[cookbook:mustard|mustard]] (1&frac12; tsp of dry mustard)
+* Enough finely-chopped [[cookbook:parsley|parsley]] or [[cookbook:cilantro|cilantro]] to add interest and colour
+* Fresh-ground [[cookbook:Pepper|pepper]]
+* [[cookbook:Curry Powder|Curry powder]] (optional)
+* [[cookbook:Cream|Heavy cream]]
+* [[cookbook:Salt|Salt]]
+
+==Procedure==
+#Cook the rice in one and a half the amount of chicken stock with the bay leaf. When it is done and keeping warm, discard the bay leaf, fluff the rice with [[Cookbook:Chopstick|chopsticks]], and place the raw smoked haddock slab on top. Close the lid and let the haddock steam on warm for 15 minutes.
+# Remove the haddock, and flake with forks to get rid of '''every last''' trace of bone. Place the haddock back with the rice.
+# [[cookbook:Sauté|Sauté]] the shallots in excess butter until light brown. Add the garlic, and cook for 1 minute more, making sure to not brown it. Transfer mixture to the rice.
+# Add the eggs, mustard, parsley, pepper, curry powder, and enough cream to make everything just slightly creamy. Mix it all up, gently and thoroughly (chopsticks are perfect for this). Season with salt to taste.
+# Serve immediately or later—it keeps well.
+
+==Notes, tips, and variations==
+
+* A [[cookbook:Rice Cooker|rice cooker]] is not essential, but makes the whole thing brainless. 1 cup of rice will yield a dish that is dense with egg and haddock; 2 cups will give you a dish with a more Asian proportion of rice.
+* The addition of 3–4 [[Cookbook:Clove|cloves]] and a few cardamom seeds to the rice whilst it is cooking, plus the addition of a level teaspoon of cumin powder to the finished product, gives the rice a wonderful aroma.
+* Leftovers may be served in kedgeree [[Cookbook:Omelette|omelettes]] with a dribble of [[cookbook:soy sauce|soy sauce]] or Worcestershire sauce.
+* Haddock is traditional. Smoked anything can substitute it.
+* Cartoned organic stock is much superior, but home-made still beats all comers.
+
+[[Category:Recipes using rice]]
+[[Category:Indian recipes]]
+[[Category:English recipes]]
+[[Category:Recipes using bay leaf]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using cilantro]]
+[[Category:Recipes using heavy cream]]
+[[Category:Recipes using curry powder]]
+[[Category:Recipes using hard-cooked egg]]
+[[Category:Recipes using haddock]]
+[[Category:Recipes using garlic]]
+[[Category:Recipes using English mustard]]

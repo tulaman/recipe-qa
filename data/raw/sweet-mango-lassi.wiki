@@ -1,0 +1,26 @@
+{{Recipe summary
+| Category = Beverage recipes
+| Servings = 6
+| Difficulty = 1
+}}
+
+{{Recipe}}
+
+== Ingredients ==
+* 1 [[Cookbook:Litre|L]] (4 [[Cookbook:Cup|cups]]) [[Cookbook:Mango|mango]] nectar (strained puréed mango)
+* 500 [[Cookbook:ML|ml]] (2 cups) full-fat [[Cookbook:Yogurt|yoghurt]]
+* 500 ml (2 cups) chilled [[Cookbook:Milk|milk]]
+* 250 ml (1 cup) [[Cookbook:Sugar|sugar]]
+
+== Procedure ==
+# Mix sugar with the mango nectar until dissolved.
+# Gradually add the milk to the yoghurt.
+# Mix together the mango and yoghurt mixtures.
+
+[[Category:Indian recipes]]
+[[Category:South Asian recipes]]
+[[Category:Recipes for lassi]]
+[[Category:Recipes using yogurt]]
+[[Category:Recipes using milk]]
+[[Category:Recipes using mango]]
+[[Category:Recipes using sugar]]

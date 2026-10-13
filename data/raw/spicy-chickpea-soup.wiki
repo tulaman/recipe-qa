@@ -1,0 +1,33 @@
+{{recipesummary|category=Soup recipes|servings=4|time=20 minutes|difficulty=2
+}}{{recipe}} | [[Cookbook:Legumes|Legumes]] | [[Cookbook:Soups|Soups]]
+==Ingredients==
+
+* 2 cans (32 [[Cookbook:Ounce|ounces]]) [[Cookbook:Chickpea|chickpeas]], drained
+* 1 can (14 ounces) light [[Cookbook:Coconut|coconut milk]]
+* 1 [[Cookbook:Cup|cup]] low-sodium chicken [[Cookbook:Broth|broth]]
+* ½ cup prepared [[Cookbook:Salsa|salsa]]
+* 1½ [[Cookbook:Teaspoon|teaspoons]] [[Cookbook:Garam Masala|garam masala]]
+* 1 teaspoon ground [[Cookbook:Ginger|ginger]]
+* 2 [[Cookbook:Tablespoon|tablespoons]] frozen [[Cookbook:Apple|apple]] juice concentrate
+* ¼ cup packed [[Cookbook:Cilantro|cilantro leaves]]
+
+==Procedure==
+
+# [[Cookbook:Purée|Purée]] all ingredients in a blender until smooth.
+# Heat in a large [[Cookbook:Saucepan|saucepan]] or [[Cookbook:Dutch Oven|Dutch oven]], and bring to a [[Cookbook:Simmering|simmer]].
+# Simmer, stirring often, 4–5 minutes, to blend flavors.
+
+== Notes, tips, and variations ==
+
+* Garnish with ¼ cup plain [[Cookbook:Yogurt|yogurt]] and ¼ cup thinly [[Cookbook:Slicing|sliced]] [[Cookbook:Green onion|green onions]].
+* Replace the chicken broth with vegetable stock for a vegan dish.
+
+[[Category:Recipes for soup]]
+[[Category:Recipes using chickpea]]
+[[Category:Recipes using coconut milk]]
+[[Category:Recipes using ground ginger]]
+[[Category:Boiled recipes]]
+[[Category:Recipes using cilantro]]
+[[Category:Recipes using garam masala]]
+[[Category:Recipes using chicken broth and stock]]
+[[Category:Recipes using apple juice]]

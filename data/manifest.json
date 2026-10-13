@@ -1,0 +1,357 @@
+{
+  "corpus_version": "ea3bcd59ee810461e40230c5edef75915b8b2b36314131b38b7af974cdbaf878",
+  "source": "English Wikibooks Cookbook (https://en.wikibooks.org), CC BY-SA 4.0",
+  "recipe_count": 50,
+  "recipes": [
+    {
+      "id": "agnolotti-pasta-soup-agnolotti-in-brodo",
+      "title": "Agnolotti Pasta Soup (Agnolotti in Brodo)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Agnolotti_Pasta_Soup_(Agnolotti_in_Brodo)",
+      "revid": 4525803,
+      "content_hash": "beaed861228b8ed216fcb7d891ecd72b5b9405f9211e389fe84310e73742824f"
+    },
+    {
+      "id": "apple-crisp-i",
+      "title": "Apple Crisp I",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Apple_Crisp_I",
+      "revid": 4587326,
+      "content_hash": "ca3bd7df3f1d97d5d2c2676e143260bd2f5ad11d76e13e750fc80a6412d35aff"
+    },
+    {
+      "id": "baklava-i",
+      "title": "Baklava I",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_I",
+      "revid": 4617976,
+      "content_hash": "2efc6874047daa665a2e1de86a0fbb1eff660feadf67e413428467380019c7c6"
+    },
+    {
+      "id": "baklava-ii",
+      "title": "Baklava II",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_II",
+      "revid": 4629321,
+      "content_hash": "800c24d115b85823ddd5246c988bb61b410683eac4fd7e514c448e695518ba76"
+    },
+    {
+      "id": "balsamic-glaze",
+      "title": "Balsamic Glaze",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Balsamic_Glaze",
+      "revid": 4518849,
+      "content_hash": "7e6455d3c515785c3dbdc5bdf33ded1041b12eb1abe2d90b08eef932e4cac0b8"
+    },
+    {
+      "id": "brazilian-black-bean-soup",
+      "title": "Brazilian Black Bean Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Brazilian_Black_Bean_Soup",
+      "revid": 4518355,
+      "content_hash": "06bd8cce77564f283ddd28c6c3fefdc88f0caffca2ee70e75457856c612076e9"
+    },
+    {
+      "id": "caramelized-pineapple",
+      "title": "Caramelized Pineapple",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Caramelized_Pineapple",
+      "revid": 4516793,
+      "content_hash": "aedcb2d8569d33f91f52c8cb4d2e4d7fdf99040598711e1e0cae3ba32e0525b4"
+    },
+    {
+      "id": "carbonara-pasta",
+      "title": "Carbonara Pasta",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Carbonara_Pasta",
+      "revid": 4627110,
+      "content_hash": "0919c51405a61f46bb2ffa1f8d8b9648485546760e6665086a9ae5e6bca1eca3"
+    },
+    {
+      "id": "chicken-and-pasta-alfredo",
+      "title": "Chicken and Pasta Alfredo",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Chicken_and_Pasta_Alfredo",
+      "revid": 4605275,
+      "content_hash": "f70621d58ffb31e2f434c588623f6bff46c2207b7dcad340d2c22c696d9e933a"
+    },
+    {
+      "id": "chilaquiles",
+      "title": "Chilaquiles",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Chilaquiles",
+      "revid": 4511728,
+      "content_hash": "3fa9205a09b545c9f1966838636d4f36d8a7d27512cebd4f85f32f2b207478ea"
+    },
+    {
+      "id": "chow-mein",
+      "title": "Chow Mein",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Chow_Mein",
+      "revid": 4513940,
+      "content_hash": "c5f7aa285997ba61a670eb67171dcb3c364e3e92d1e5377f6a49d4a15886f494"
+    },
+    {
+      "id": "chunky-guacamole",
+      "title": "Chunky Guacamole",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Chunky_Guacamole",
+      "revid": 4523970,
+      "content_hash": "c31308f424a3568c0799b49d32667ea6243e328da4055fc1818e2e2add97362f"
+    },
+    {
+      "id": "danish-braised-cabbage-rdkal",
+      "title": "Danish Braised Cabbage (Rødkål)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Danish_Braised_Cabbage_(R%C3%B8dk%C3%A5l)",
+      "revid": 4630335,
+      "content_hash": "369bf367a5bf88c11403f03d54417273eb51ac0497cef05c1fbebfba62acf778"
+    },
+    {
+      "id": "eargon-salsa",
+      "title": "Eärgon Salsa",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:E%C3%A4rgon_Salsa",
+      "revid": 4518824,
+      "content_hash": "d293cf987efc4efd748e63db14704c06c5f12a6c63998c75fe4752d9884ad0b9"
+    },
+    {
+      "id": "gambian-superkanja-soup",
+      "title": "Gambian Superkanja Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Gambian_Superkanja_Soup",
+      "revid": 4629621,
+      "content_hash": "a1ad20ddd992be4b0a6b151ecf92c44006eb4000800a1090a0e5ace9e07ea5a2"
+    },
+    {
+      "id": "guacamole-i",
+      "title": "Guacamole I",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Guacamole_I",
+      "revid": 4636788,
+      "content_hash": "26c707ae11d7dab2a7cb8179d5414d0f1d1865ae584f4e9f2b5220ec9711f06d"
+    },
+    {
+      "id": "henry-thiele-s-pancake",
+      "title": "Henry Thiele's Pancake",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Henry_Thiele%27s_Pancake",
+      "revid": 4522818,
+      "content_hash": "0798670e6344e263a4d4285e37e1113cb2bb754118af22be9e6b3397afc9c00c"
+    },
+    {
+      "id": "homemade-tempeh",
+      "title": "Homemade Tempeh",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Homemade_Tempeh",
+      "revid": 4514342,
+      "content_hash": "805521330b1360efe4799acf0a1a84dd1936a0cbf2f57b67656561fc0876236f"
+    },
+    {
+      "id": "idli-steamed-rice-and-black-gram-bread",
+      "title": "Idli (Steamed Rice and Black Gram Bread)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Idli_(Steamed_Rice_and_Black_Gram_Bread)",
+      "revid": 4515105,
+      "content_hash": "9e4661af7cd3e9e3f72384e0b3bababce2eacb3815bb02c64817fa402bef677d"
+    },
+    {
+      "id": "indian-beans",
+      "title": "Indian Beans",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Indian_Beans",
+      "revid": 4515479,
+      "content_hash": "9d53f004358dfd00b6dd10e8707949a385d83319156129399de212b79b0730e4"
+    },
+    {
+      "id": "indian-potatoes",
+      "title": "Indian Potatoes",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Indian_Potatoes",
+      "revid": 4510668,
+      "content_hash": "7df2370bb52f919a983a83b500e08daecd8df80397fb031a38b4bef777c47efe"
+    },
+    {
+      "id": "indulgent-chocolate-torte",
+      "title": "Indulgent Chocolate Torte",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Indulgent_Chocolate_Torte",
+      "revid": 4587341,
+      "content_hash": "b200734c362cb1a40119fb7357d6519f502132d371fbe0f7d5f1930bc795d8e9"
+    },
+    {
+      "id": "injera-ethiopian-teff-flatbread",
+      "title": "Injera (Ethiopian Teff Flatbread)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Injera_(Ethiopian_Teff_Flatbread)",
+      "revid": 4630269,
+      "content_hash": "83d7419c0631abf648dac74f1388c7544daa2dbcc354d9308ff4db9203672d6b"
+    },
+    {
+      "id": "italian-rice-pilaf",
+      "title": "Italian Rice Pilaf",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pilaf",
+      "revid": 4514571,
+      "content_hash": "06452b28339d7d9c5c2ea61f2a1a37a32b221d5bacf52235f2971e852d164514"
+    },
+    {
+      "id": "italian-rice-pudding",
+      "title": "Italian Rice Pudding",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pudding",
+      "revid": 4517883,
+      "content_hash": "b5da57fd977ba157801c0d2dee3d635a11316fa276282b5d1fef2f279fc673ba"
+    },
+    {
+      "id": "kachumbari",
+      "title": "Kachumbari",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Kachumbari",
+      "revid": 4640040,
+      "content_hash": "f89838ac36f2ed5ae8bef50bd439b80e8e0a4aec747c3ca18560fbefbe3b8004"
+    },
+    {
+      "id": "kashmiri-pulao",
+      "title": "Kashmiri Pulao",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao",
+      "revid": 4522413,
+      "content_hash": "8a2f7ab6e3e106f001a789cdf24bde25f68ca43733c8439969dcad2e065dff1b"
+    },
+    {
+      "id": "kedgeree-rice-and-smoked-fish",
+      "title": "Kedgeree (Rice and Smoked Fish)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Kedgeree_(Rice_and_Smoked_Fish)",
+      "revid": 4613704,
+      "content_hash": "bce6b17604df626bbd4b417f4f7275f952b6917d46881aa9e9ed038b5b3c8ccb"
+    },
+    {
+      "id": "kheer-rice-pudding",
+      "title": "Kheer (Rice Pudding)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Kheer_(Rice_Pudding)",
+      "revid": 4587270,
+      "content_hash": "18f09c99b6de6992626f836b58ea6c46f809d3ddf2cf5a727b2d844588f9cbe7"
+    },
+    {
+      "id": "kuih-bakul-malaysian-sweet-browned-rice-cake",
+      "title": "Kuih Bakul (Malaysian Sweet Browned Rice Cake)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Kuih_Bakul_(Malaysian_Sweet_Browned_Rice_Cake)",
+      "revid": 4587519,
+      "content_hash": "f4d75cce184ee911145b35ea44ce1e8bd6f950f81a369d71812b6bb43765258d"
+    },
+    {
+      "id": "le-tourin-garlic-soup",
+      "title": "Le Tourin (Garlic Soup)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)",
+      "revid": 4518429,
+      "content_hash": "633efbd3aec76f09b4f6fde818540e83da44a61895601d08672b6cd1a79f33c3"
+    },
+    {
+      "id": "machacado-con-huevo-eggs-with-shredded-beef",
+      "title": "Machacado con Huevo (Eggs with Shredded Beef)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Machacado_con_Huevo_(Eggs_with_Shredded_Beef)",
+      "revid": 4515177,
+      "content_hash": "e12a341e99d1c31d7f481849c2da4f5d43432c0a2b6c38fd1d2ccdd4591d1ae3"
+    },
+    {
+      "id": "mango-chutney-chunky",
+      "title": "Mango Chutney (Chunky)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Mango_Chutney_(Chunky)",
+      "revid": 4519081,
+      "content_hash": "70b31e527fc08fd527bd8927f13c8a3ee2c93b125bc4a3b73588d788c9888906"
+    },
+    {
+      "id": "mexican-chocolate-cake-with-mocha-buttercream",
+      "title": "Mexican Chocolate Cake with Mocha Buttercream",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Chocolate_Cake_with_Mocha_Buttercream",
+      "revid": 4524817,
+      "content_hash": "743a495c7665abcc1630361b8aab501519d2c1a7942e49aef91b92aa4dcd2ddc"
+    },
+    {
+      "id": "mexican-tomato-soup",
+      "title": "Mexican Tomato Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup",
+      "revid": 4524818,
+      "content_hash": "27628599207e0c7ae64d8d6fb92ad8324006948ee6caa7e82a79686fc878f98e"
+    },
+    {
+      "id": "neapolitan-anchovy-sauce",
+      "title": "Neapolitan Anchovy Sauce",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Neapolitan_Anchovy_Sauce",
+      "revid": 4518983,
+      "content_hash": "4d02200384382bd249b96aeade50e3b77e1005425e55003735f71f1e81ace3d9"
+    },
+    {
+      "id": "pizza-soup",
+      "title": "Pizza Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Pizza_Soup",
+      "revid": 4518486,
+      "content_hash": "c239272cba29639b4e88fa26551fa72857d3adf7dfb0240be14f62b3045f644d"
+    },
+    {
+      "id": "qabuli-central-asian-rice-pilaf",
+      "title": "Qabuli (Central Asian Rice Pilaf)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Qabuli_(Central_Asian_Rice_Pilaf)",
+      "revid": 4515561,
+      "content_hash": "e36fe2f81b509d99721794d4da6938ee55ec5d5456a2b91ba50717fc71e61218"
+    },
+    {
+      "id": "rice-pudding",
+      "title": "Rice Pudding",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Rice_Pudding",
+      "revid": 4522360,
+      "content_hash": "6736a19fb12efeb467b0e6830ee3e68a93a013b0102a48fd6ddde420d6b9b218"
+    },
+    {
+      "id": "rosogulla-bengali-milk-balls-in-syrup",
+      "title": "Rosogulla (Bengali Milk Balls in Syrup)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Rosogulla_(Bengali_Milk_Balls_in_Syrup)",
+      "revid": 4630286,
+      "content_hash": "4c8d26c047498c08f74d1575147004c42aaf415b48c16cb9154b4a94a6b2ec02"
+    },
+    {
+      "id": "rustic-beer-bread",
+      "title": "Rustic Beer Bread",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Rustic_Beer_Bread",
+      "revid": 4503226,
+      "content_hash": "281e0df47476ea1de0712334f47431d1bff62d1df040c4ac7eb9c59533bf7a42"
+    },
+    {
+      "id": "sincronizada-fried-ham-and-cheese-tortilla-sandwich",
+      "title": "Sincronizada (Fried Ham and Cheese Tortilla Sandwich)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Sincronizada_(Fried_Ham_and_Cheese_Tortilla_Sandwich)",
+      "revid": 4592091,
+      "content_hash": "3f916b532507ae0288ddd1d2a05c34e6683611de5a95f7eaad73196807a3a727"
+    },
+    {
+      "id": "southwestern-black-beans-and-rice",
+      "title": "Southwestern Black Beans and Rice",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Southwestern_Black_Beans_and_Rice",
+      "revid": 4525238,
+      "content_hash": "8b695510edaea34a53458ae1858f79e7162baa71ac4347e837e571b5fedf27e1"
+    },
+    {
+      "id": "spaghetti-alla-carbonara",
+      "title": "Spaghetti alla Carbonara",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Spaghetti_alla_Carbonara",
+      "revid": 4640105,
+      "content_hash": "54f78827dd27f289f1c498132b2d9cd0072442837b35b16fbf27b745c82201b9"
+    },
+    {
+      "id": "spaghetti-alla-puttanesca",
+      "title": "Spaghetti alla Puttanesca",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Spaghetti_alla_Puttanesca",
+      "revid": 4622379,
+      "content_hash": "d95a44a8ba1cc3d9e31504d642b65499b4670723886481a79f06d7d8368be589"
+    },
+    {
+      "id": "spicy-chickpea-soup",
+      "title": "Spicy Chickpea Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Spicy_Chickpea_Soup",
+      "revid": 4518530,
+      "content_hash": "0fb9bd7310364dbf11c38c9543408fb51d724ea433df896c138c26a4d7932019"
+    },
+    {
+      "id": "spicy-tomato-soup",
+      "title": "Spicy Tomato Soup",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Spicy_Tomato_Soup",
+      "revid": 4525247,
+      "content_hash": "68c062eb6f6b13947526818aa0cef67d98c6933eee73b2c7ea00cab25d080bc5"
+    },
+    {
+      "id": "summer-rolls",
+      "title": "Summer Rolls",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Summer_Rolls",
+      "revid": 4630369,
+      "content_hash": "efdc5c5471191efaed75e9208a96fb80b77790c4916a8bc3d7d6e3158d2a57f0"
+    },
+    {
+      "id": "sweet-mango-lassi",
+      "title": "Sweet Mango Lassi",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Sweet_Mango_Lassi",
+      "revid": 4511034,
+      "content_hash": "f2d7c4035f01034edf1ffb0e51a549eff4445ce8e96611dc00c6b413981e295c"
+    },
+    {
+      "id": "white-bean-soup-with-basil-rosemary-and-garlic-croutons",
+      "title": "White Bean Soup with Basil, Rosemary, and Garlic Croutons",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:White_Bean_Soup_with_Basil,_Rosemary,_and_Garlic_Croutons",
+      "revid": 4534251,
+      "content_hash": "a1f8b960c4e4360f25873ed7634070465c46bf4d3d2fbb4f8cc56061895a0181"
+    }
+  ]
+}

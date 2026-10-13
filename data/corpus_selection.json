@@ -1,0 +1,535 @@
+{
+  "generated_at": "2026-10-13T14:03:48Z",
+  "source": "English Wikibooks Cookbook (https://en.wikibooks.org), CC BY-SA 4.0",
+  "rules": [
+    "Anchors (golden-set targets) are always included and must pass the quality filter.",
+    "Per variety group, candidates are ordered by sha256(seed + title) and taken alternately from timed and untimed pages until the group quota is met; then groups take turns adding one page each until the corpus has 50 pages.",
+    "Quality filter: Cookbook recipe page, not a disambiguation page, >= 3 ingredients, >= 2 steps, no {{incomplete recipe}}, recipe text <= 8000 chars, no diet category contradicted by its ingredient list.",
+    "Seed: recipe-qa/2026-10-13. Quotas: soup=6, dessert=6, italian=6, indian=6, mexican=6, vegetarian=6, vegan=5, gluten_free=5."
+  ],
+  "overlap_groups": {
+    "carbonara": [
+      "spaghetti-alla-carbonara",
+      "carbonara-pasta"
+    ],
+    "rice pudding": [
+      "rice-pudding",
+      "kheer-rice-pudding",
+      "italian-rice-pudding"
+    ],
+    "tomato soup": [
+      "spicy-tomato-soup",
+      "mexican-tomato-soup"
+    ],
+    "baklava": [
+      "baklava-i",
+      "baklava-ii"
+    ],
+    "guacamole": [
+      "guacamole-i",
+      "chunky-guacamole"
+    ]
+  },
+  "recipes": [
+    {
+      "title": "Cookbook:Agnolotti Pasta Soup (Agnolotti in Brodo)",
+      "page_id": 161251,
+      "revid": 4525803,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "63901a5b0407643dcccfd3095e8057c98aa5cf079db6f0ca256791d9bb2e678f",
+      "reasons": [
+        "quota: italian"
+      ]
+    },
+    {
+      "title": "Cookbook:Apple Crisp I",
+      "page_id": 93175,
+      "revid": 4587326,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "5be4864521bd4de2ef6e47779486569b1871c6dea9aa828af577abf1965d8861",
+      "reasons": [
+        "top-up: vegetarian"
+      ]
+    },
+    {
+      "title": "Cookbook:Baklava I",
+      "page_id": 18354,
+      "revid": 4617976,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "2b31fe1ac21d99d1f01cc255d5020b58f49abc53018f5f6dcae2d36eb6bca73a",
+      "reasons": [
+        "anchor: nut question target (walnuts; messy sections)"
+      ]
+    },
+    {
+      "title": "Cookbook:Baklava II",
+      "page_id": 479673,
+      "revid": 4629321,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "e51ea4e2f542f8e4434e7423085923e7161d594fb316520c0af642061f4033ef",
+      "reasons": [
+        "anchor: second baklava (any nuts; overlap)"
+      ]
+    },
+    {
+      "title": "Cookbook:Balsamic Glaze",
+      "page_id": 110600,
+      "revid": 4518849,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "19f4432e2e7eb66cbd981ea536377ca60708f275e0e4250ecc19110396fe9364",
+      "reasons": [
+        "top-up: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Brazilian Black Bean Soup",
+      "page_id": 30142,
+      "revid": 4518355,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "62cc740b00bace1ea78fe21236b143d700d0a706cfd85468deb1df3739148669",
+      "reasons": [
+        "quota: soup"
+      ]
+    },
+    {
+      "title": "Cookbook:Caramelized Pineapple",
+      "page_id": 199532,
+      "revid": 4516793,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "f7f174c8fdb37eae71542e802d18121c8d52428af52b03f9bc849eff0325bce0",
+      "reasons": [
+        "top-up: dessert"
+      ]
+    },
+    {
+      "title": "Cookbook:Carbonara Pasta",
+      "page_id": 124621,
+      "revid": 4627110,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "57d6c638420ff0e12ef173e8ded8d75cbe67ecb5e91239abf1701207d459819d",
+      "reasons": [
+        "anchor: second carbonara (overlap / conflicting recipe)"
+      ]
+    },
+    {
+      "title": "Cookbook:Chicken and Pasta Alfredo",
+      "page_id": 205015,
+      "revid": 4605275,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "59ef174b952b24ba4cc3c45367db6bd6a90ffe38e8500081dcf32f7154025ff6",
+      "reasons": [
+        "quota: italian"
+      ]
+    },
+    {
+      "title": "Cookbook:Chilaquiles",
+      "page_id": 34643,
+      "revid": 4511728,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "4fe168874f40d80f69b8b5b85f0ea136c5891aa0c4ba83effa8c8bc21ce1e26f",
+      "reasons": [
+        "quota: mexican"
+      ]
+    },
+    {
+      "title": "Cookbook:Chow Mein",
+      "page_id": 156848,
+      "revid": 4513940,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "c55562a53b77d03f0491fcc7d80a9e42e5069ca606d76353ec56e889f4b9cbb4",
+      "reasons": [
+        "top-up: vegetarian"
+      ]
+    },
+    {
+      "title": "Cookbook:Chunky Guacamole",
+      "page_id": 106987,
+      "revid": 4523970,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "57175f64a754b6cab3889110dec4e0df63cb77f58af7e8097eb78aa171d2bc4b",
+      "reasons": [
+        "anchor: guacamole variant"
+      ]
+    },
+    {
+      "title": "Cookbook:Danish Braised Cabbage (Rødkål)",
+      "page_id": 71805,
+      "revid": 4630335,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "0b7dcbccdd50c26bb39586ad546059cf0d827f39c1065acda8668507f54dbcbd",
+      "reasons": [
+        "quota: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Eärgon Salsa",
+      "page_id": 245915,
+      "revid": 4518824,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "a8d533fb2e8c06ee47a12d7cf59d4eddde82b67f5bc059d5e507440a21845705",
+      "reasons": [
+        "quota: mexican"
+      ]
+    },
+    {
+      "title": "Cookbook:Gambian Superkanja Soup",
+      "page_id": 456831,
+      "revid": 4629621,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "2b5965a575109fe76172c3184feede0374322fe63500ad75b5cd8d332800a718",
+      "reasons": [
+        "top-up: soup"
+      ]
+    },
+    {
+      "title": "Cookbook:Guacamole I",
+      "page_id": 4029,
+      "revid": 4636788,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "2724c2d4ea7d374ec63df3008e46cd6a8d7849f074bb3bc6ddf6c1a1bdc066f6",
+      "reasons": [
+        "anchor: guacamole variant"
+      ]
+    },
+    {
+      "title": "Cookbook:Henry Thiele's Pancake",
+      "page_id": 263677,
+      "revid": 4522818,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "7df7268569e9c890462f8ebdd783a1dab0bf4dfa03e00323e74dfe2c38b68ca9",
+      "reasons": [
+        "quota: vegetarian"
+      ]
+    },
+    {
+      "title": "Cookbook:Homemade Tempeh",
+      "page_id": 26847,
+      "revid": 4514342,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "d1e1894499a1265626e795642ce246e1da8c5729f2d66fd1ae75a92c5bcf7d91",
+      "reasons": [
+        "quota: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Idli (Steamed Rice and Black Gram Bread)",
+      "page_id": 30871,
+      "revid": 4515105,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "773fc88248a0370f5da81df97797f763a8bd9d7fd6cc830fe8e59ad618556ca6",
+      "reasons": [
+        "quota: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Indian Beans",
+      "page_id": 13951,
+      "revid": 4515479,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "573a42d33dc65289f68dd8007ede1a18f16fd9dd8c167ef751ffb1e3d30cf74b",
+      "reasons": [
+        "quota: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Indian Potatoes",
+      "page_id": 13953,
+      "revid": 4510668,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "361c7fd71a1eeb63b3b3eb088605a866ea904f795f88853bb2d70a32103b87be",
+      "reasons": [
+        "top-up: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Indulgent Chocolate Torte",
+      "page_id": 106071,
+      "revid": 4587341,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "5b09d8d5ca40b958ecb957123ec563113f3c50911470a13e35bb17db30f40a85",
+      "reasons": [
+        "top-up: dessert"
+      ]
+    },
+    {
+      "title": "Cookbook:Injera (Ethiopian Teff Flatbread)",
+      "page_id": 22339,
+      "revid": 4630269,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "724750964d1fe158e33cdf7e5ade118dce36516bf21570eac3dac28df7fa6d54",
+      "reasons": [
+        "quota: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Italian Rice Pilaf",
+      "page_id": 203926,
+      "revid": 4514571,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "49304e78b4a9e5bd663b9ed4a2bfd1cf3edf16003249d1b90151d5552d0bea54",
+      "reasons": [
+        "top-up: italian"
+      ]
+    },
+    {
+      "title": "Cookbook:Italian Rice Pudding",
+      "page_id": 108056,
+      "revid": 4517883,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "40362a8c873d9e7b866e941a2cc2241632ab2c773e842f2232e5d174e00f8611",
+      "reasons": [
+        "anchor: rice pudding variant (Italian)"
+      ]
+    },
+    {
+      "title": "Cookbook:Kachumbari",
+      "page_id": 483723,
+      "revid": 4640040,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "f2e6729ac5a659bbd3e99866bb804295a26959f52923e278bb6eba27d477b49f",
+      "reasons": [
+        "quota: vegetarian"
+      ]
+    },
+    {
+      "title": "Cookbook:Kashmiri Pulao",
+      "page_id": 7288,
+      "revid": 4522413,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "343ba52f845d4f337df08c0842ced589ec6020a7f6254bb3135348f6f07bb1e8",
+      "reasons": [
+        "top-up: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Kedgeree (Rice and Smoked Fish)",
+      "page_id": 141255,
+      "revid": 4613704,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "9a9201339593f5868343124acdbd96caca8660291b2a1013a25b3d0723a1d3f3",
+      "reasons": [
+        "quota: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Kheer (Rice Pudding)",
+      "page_id": 26777,
+      "revid": 4587270,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "99b4ad43761bb86e0090e446d481346aa7f325c9474a01117fbf7d54891db86d",
+      "reasons": [
+        "anchor: rice pudding variant (Indian)"
+      ]
+    },
+    {
+      "title": "Cookbook:Kuih Bakul (Malaysian Sweet Browned Rice Cake)",
+      "page_id": 469026,
+      "revid": 4587519,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "43abcbba5476252c76b6ad850f82b9241dcb715bd8c4a70972130d3c4b8a81c3",
+      "reasons": [
+        "quota: dessert"
+      ]
+    },
+    {
+      "title": "Cookbook:Le Tourin (Garlic Soup)",
+      "page_id": 4937,
+      "revid": 4518429,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "1d8fa4d3b8d3b2454ce101e96036e0eb861f5c7573afa40690241760f0280cce",
+      "reasons": [
+        "quota: soup"
+      ]
+    },
+    {
+      "title": "Cookbook:Machacado con Huevo (Eggs with Shredded Beef)",
+      "page_id": 96882,
+      "revid": 4515177,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "b0e4d5d3430612192d35920923b9a242de91b17d716ef52fd09d75941996d299",
+      "reasons": [
+        "top-up: mexican"
+      ]
+    },
+    {
+      "title": "Cookbook:Mango Chutney (Chunky)",
+      "page_id": 168353,
+      "revid": 4519081,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "d089832396dcbea1625cd0345758690f2c6d8b8923b3c9460a7c532a502546ee",
+      "reasons": [
+        "quota: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Mexican Chocolate Cake with Mocha Buttercream",
+      "page_id": 111778,
+      "revid": 4524817,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "cdaa858898a72c71da137fa05abb689d9df6f9c00bb39aead0d770510edbea8a",
+      "reasons": [
+        "top-up: mexican"
+      ]
+    },
+    {
+      "title": "Cookbook:Mexican Tomato Soup",
+      "page_id": 72236,
+      "revid": 4524818,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "56106e673f9c7363dbfb21959d97e27bc3f09475a3045fb1c316fb968bdec092",
+      "reasons": [
+        "anchor: tomato soup variant"
+      ]
+    },
+    {
+      "title": "Cookbook:Neapolitan Anchovy Sauce",
+      "page_id": 38396,
+      "revid": 4518983,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "4ab868b71a43a478af524b85852927ff34fbb8975809beb522fd35af780c2a8a",
+      "reasons": [
+        "top-up: italian"
+      ]
+    },
+    {
+      "title": "Cookbook:Pizza Soup",
+      "page_id": 151525,
+      "revid": 4518486,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "1af1d36ad63187d5d239c6697bf8ae00a908787a726050334b8e9ad818cd9585",
+      "reasons": [
+        "quota: soup"
+      ]
+    },
+    {
+      "title": "Cookbook:Qabuli (Central Asian Rice Pilaf)",
+      "page_id": 77719,
+      "revid": 4515561,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "5c341ce84e1c4d36909788a146be006d165dd62b8f948a7d4c34e8ce3a6a1e3e",
+      "reasons": [
+        "top-up: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Rice Pudding",
+      "page_id": 29475,
+      "revid": 4522360,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "7647276c542d9a9fb4929065ed451f76ee9e14c908ca8ffd3810dbe941eecdba",
+      "reasons": [
+        "anchor: rice pudding variant (no time, optional items)"
+      ]
+    },
+    {
+      "title": "Cookbook:Rosogulla (Bengali Milk Balls in Syrup)",
+      "page_id": 173614,
+      "revid": 4630286,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "25d228d391dcb094f821eecce8e1deae12da6dbfbca2d7c623e488e93487565d",
+      "reasons": [
+        "quota: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:Rustic Beer Bread",
+      "page_id": 146578,
+      "revid": 4503226,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "22c04586598fd1cf463e70e6e575e9f9b406ab5f43fe8252440026df8d91872e",
+      "reasons": [
+        "top-up: vegan"
+      ]
+    },
+    {
+      "title": "Cookbook:Sincronizada (Fried Ham and Cheese Tortilla Sandwich)",
+      "page_id": 479461,
+      "revid": 4592091,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "1b0025c3476b8ab12029832b6b47c5437ee2cd2d0266cc9f9d006c21265967b1",
+      "reasons": [
+        "quota: mexican"
+      ]
+    },
+    {
+      "title": "Cookbook:Southwestern Black Beans and Rice",
+      "page_id": 202116,
+      "revid": 4525238,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "d9b5b2d54b569116b740e956ce10cd97ace57d945354779d7eba06dc83374a6c",
+      "reasons": [
+        "top-up: vegan"
+      ]
+    },
+    {
+      "title": "Cookbook:Spaghetti alla Carbonara",
+      "page_id": 22971,
+      "revid": 4640105,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "050e02621a52173c34d8526191ec8ca678381bbd4a50c7290eed98a5527d08bc",
+      "reasons": [
+        "anchor: paraphrase target (creamy pasta, cured pork)"
+      ]
+    },
+    {
+      "title": "Cookbook:Spaghetti alla Puttanesca",
+      "page_id": 190227,
+      "revid": 4622379,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "fe631fd287f76e3d103ff5b16626a3d78f9d994ac5df836a7c0fa7a7954c9263",
+      "reasons": [
+        "quota: italian"
+      ]
+    },
+    {
+      "title": "Cookbook:Spicy Chickpea Soup",
+      "page_id": 126780,
+      "revid": 4518530,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "f6ccc7c3b869acfba6831d9c76e36fd27b4a5614dd5b19ce28aa05d7e8c7df42",
+      "reasons": [
+        "quota: soup"
+      ]
+    },
+    {
+      "title": "Cookbook:Spicy Tomato Soup",
+      "page_id": 108458,
+      "revid": 4525247,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "943a5eab0907dac74d1482896dcf4c2668711dd453cf9f9468ace116ef469f14",
+      "reasons": [
+        "anchor: tomato soup variant"
+      ]
+    },
+    {
+      "title": "Cookbook:Summer Rolls",
+      "page_id": 106607,
+      "revid": 4630369,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "ee4403be9157b33ba91a4b095b69db85e29ddffce7e74737423e98362ddc3d24",
+      "reasons": [
+        "quota: gluten_free"
+      ]
+    },
+    {
+      "title": "Cookbook:Sweet Mango Lassi",
+      "page_id": 455788,
+      "revid": 4511034,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "04b4544d9a4b56b56d997b8d58b130afcbc52d161b009d9cc20bdab17334c129",
+      "reasons": [
+        "quota: indian"
+      ]
+    },
+    {
+      "title": "Cookbook:White Bean Soup with Basil, Rosemary, and Garlic Croutons",
+      "page_id": 127703,
+      "revid": 4534251,
+      "fetched_at": "2026-10-13T14:03:48Z",
+      "wikitext_sha256": "d564f1a38700dcf07e01c52afcf869aa1e294aa88732d8d493cc3618d5418c62",
+      "reasons": [
+        "top-up: soup"
+      ]
+    }
+  ]
+}
