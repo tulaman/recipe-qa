@@ -37,7 +37,24 @@ MANIFEST = load_manifest(ROOT / "data" / "manifest.json")
 ID_BY_URL = {r.url: r.id for r in MANIFEST.recipes}
 
 
+def recorded_body(response: httpx.Response | None) -> object:
+    """The response as JSON, or its raw text when a proxy answered with HTML."""
+    if response is None or not response.content:
+        return None
+    try:
+        return response.json()
+    except ValueError:
+        return response.text[:2000]
+
+
 def check_endpoints(client: httpx.Client) -> list[str]:
+    try:
+        return _check_endpoints(client)
+    except (httpx.HTTPError, ValueError) as exc:
+        return [f"endpoints: {type(exc).__name__}: {exc}"]
+
+
+def _check_endpoints(client: httpx.Client) -> list[str]:
     failures = []
     health = client.get("/healthz")
     if health.status_code != 200 or health.json().get("status") != "ok":
@@ -92,27 +109,33 @@ def run(base_url: str, cases_path: Path, contract_only: bool) -> int:
         endpoint_failures = check_endpoints(client)
         for case in cases:
             started = time.perf_counter()
-            response = client.post("/ask", json={"question": case["question"]})
+            try:
+                response = client.post("/ask", json={"question": case["question"]})
+            except httpx.HTTPError as exc:
+                # One unreachable case must not cost the report for the others.
+                response, failures = None, [f"request failed: {type(exc).__name__}: {exc}"]
             elapsed_ms = round((time.perf_counter() - started) * 1000)
-            body, failures = check_contract(response)
-            if body is not None and not contract_only:
-                failures += check_expectations(body, case.get("expect", {}))
+            if response is not None:
+                body, failures = check_contract(response)
+                if body is not None and not contract_only:
+                    failures += check_expectations(body, case.get("expect", {}))
             results.append(
                 {
                     "id": case["id"],
                     "question": case["question"],
-                    "status": response.status_code,
+                    "status": response.status_code if response is not None else None,
                     "client_latency_ms": elapsed_ms,
                     "passed": not failures,
                     "failures": failures,
-                    "response": response.json() if response.content else None,
+                    "response": recorded_body(response),
                 }
             )
 
     width = max(len(r["id"]) for r in results)
     for r in results:
         mark = "PASS" if r["passed"] else "FAIL"
-        print(f"{mark}  {r['id']:<{width}}  {r['status']}  {r['client_latency_ms']:>6} ms")
+        status = r["status"] or "---"
+        print(f"{mark}  {r['id']:<{width}}  {status}  {r['client_latency_ms']:>6} ms")
         for failure in r["failures"]:
             print(f"      - {failure}")
     for failure in endpoint_failures:
