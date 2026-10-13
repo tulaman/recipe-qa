@@ -184,3 +184,30 @@ def test_category_vouches_for_what_the_check_cannot_decide() -> None:
 def test_category_vouches_when_no_ingredients_were_parsed() -> None:
     diet = derive_diet(["Vegan recipes"], [])
     assert (diet.vegan.value, diet.vegan.status) == (True, "explicit")
+
+
+@pytest.mark.parametrize(
+    "ingredient",
+    [
+        "vegetable oil and stock",
+        "stock with a mushroom garnish",
+        "water or broth, plus vegetable peelings",
+    ],
+)
+def test_qualifier_must_modify_the_stock_itself(ingredient: str) -> None:
+    diet = derive_diet([], ing("onion", ingredient))
+    assert (diet.vegetarian.value, diet.vegetarian.status) == (None, "unknown")
+
+
+@pytest.mark.parametrize(
+    "ingredient",
+    [
+        "low-sodium vegetable broth",
+        "vegetable bouillon cube",
+        "2 cups mushroom stock",
+        "stock (vegetable or mushroom)",
+    ],
+)
+def test_qualified_stock_is_not_ambiguous(ingredient: str) -> None:
+    diet = derive_diet([], ing("onion", ingredient))
+    assert (diet.vegetarian.value, diet.vegetarian.status) == (True, "derived")
