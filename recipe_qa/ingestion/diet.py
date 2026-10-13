@@ -1,12 +1,16 @@
 """Diet metadata with provenance (SPEC §4).
 
-vegetarian: explicit if the page is in "Vegetarian recipes" or "Vegan
-    recipes". Otherwise derived from the ingredient list: any ingredient
-    matching MEAT_AND_FISH → False; else any unqualified stock/broth →
-    unknown; else True. Optional ingredients count.
-vegan: explicit if the page is in "Vegan recipes". Otherwise derived:
-    follows vegetarian when that is False or unknown; then any ingredient
-    matching ANIMAL_PRODUCTS → False; else True.
+The ingredient check always runs; an explicit category only decides what
+the check cannot (SPEC §4 v0.2).
+
+vegetarian: any ingredient matching MEAT_AND_FISH → False (derived, even
+    against a "Vegetarian recipes"/"Vegan recipes" category, which the
+    evidence names). Else explicit category → True. Else unqualified
+    stock/broth or no parsed ingredients → unknown; else True (derived).
+    Optional ingredients count.
+vegan: vegetarian False → False. Any ingredient matching ANIMAL_PRODUCTS →
+    False (derived, even against "Vegan recipes"). Else explicit category →
+    True. Else follows vegetarian when that is unknown; else True (derived).
 gluten_free: explicit category "Gluten-free recipes" only, else unknown.
     Hidden gluten (soy sauce, stock cubes, oats) is too easy to miss.
 
@@ -87,14 +91,22 @@ def _ambiguous_stock(ingredients: list[Ingredient]) -> str | None:
     return None
 
 
+def _explicit(categories: list[str], names: tuple[str, ...]) -> str | None:
+    return next((f"Category:{c}" for c in names if c in categories), None)
+
+
+def _overriding(evidence: str, category: str | None) -> str:
+    return f"{evidence}; overrides {category}" if category else evidence
+
+
 def _vegetarian(categories: list[str], ingredients: list[Ingredient]) -> Fact[bool]:
-    for category in VEGETARIAN_CATEGORIES:
-        if category in categories:
-            return Fact(value=True, status="explicit", evidence=f"Category:{category}")
+    category = _explicit(categories, VEGETARIAN_CATEGORIES)
+    if meat := _first_match(_MEAT, ingredients):
+        return Fact(value=False, status="derived", evidence=_overriding(meat, category))
+    if category:
+        return Fact(value=True, status="explicit", evidence=category)
     if not ingredients:
         return Fact.unknown("no ingredient list parsed")
-    if meat := _first_match(_MEAT, ingredients):
-        return Fact(value=False, status="derived", evidence=meat)
     if stock := _ambiguous_stock(ingredients):
         return Fact.unknown(stock)
     return Fact(
@@ -107,14 +119,15 @@ def _vegetarian(categories: list[str], ingredients: list[Ingredient]) -> Fact[bo
 def _vegan(
     categories: list[str], ingredients: list[Ingredient], vegetarian: Fact[bool]
 ) -> Fact[bool]:
-    if VEGAN_CATEGORY in categories:
-        return Fact(value=True, status="explicit", evidence=f"Category:{VEGAN_CATEGORY}")
-    if vegetarian.status == "unknown":
-        return Fact.unknown(vegetarian.evidence)
+    category = _explicit(categories, (VEGAN_CATEGORY,))
     if vegetarian.value is False:
         return Fact(value=False, status="derived", evidence=vegetarian.evidence)
     if animal := _first_match(_ANIMAL, ingredients):
-        return Fact(value=False, status="derived", evidence=animal)
+        return Fact(value=False, status="derived", evidence=_overriding(animal, category))
+    if category:
+        return Fact(value=True, status="explicit", evidence=category)
+    if vegetarian.status == "unknown":
+        return Fact.unknown(vegetarian.evidence)
     return Fact(
         value=True,
         status="derived",
@@ -141,8 +154,9 @@ def category_conflicts(categories: list[str], ingredients: list[Ingredient]) -> 
     """Explicit diet categories that the ingredient list contradicts.
 
     Wikibooks categories are user-maintained: about 6 % of pages in the
-    vegetarian/vegan categories list meat, dairy or honey. SPEC §4 trusts an
-    explicit category, so corpus selection excludes these pages instead.
+    vegetarian/vegan categories list meat, dairy or honey. derive_diet()
+    already overrides such a category; selection also uses this to exclude
+    these pages as low-quality data.
     """
     derived = derive_diet([], ingredients)
     conflicts = []
