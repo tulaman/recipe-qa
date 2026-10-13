@@ -37,16 +37,38 @@ class InvalidRequest(Exception):
 
 
 class RateLimiter:
-    """Sliding one-minute window per client key, in process memory."""
+    """Sliding one-minute window per client key, in process memory.
+
+    Clients with no request inside the window are dropped at most once a
+    window, so memory is bounded by the clients active in the last two
+    minutes, not by every address ever seen.
+    """
+
+    WINDOW_S = 60.0
 
     def __init__(self, per_minute: int) -> None:
         self._per_minute = per_minute
         self._hits: defaultdict[str, deque[float]] = defaultdict(deque)
+        self._last_sweep: float | None = None
+
+    def tracked_clients(self) -> int:
+        return len(self._hits)
+
+    def _sweep(self, now: float) -> None:
+        if self._last_sweep is None:
+            self._last_sweep = now
+        if now - self._last_sweep < self.WINDOW_S:
+            return
+        cutoff = now - self.WINDOW_S
+        for key in [k for k, hits in self._hits.items() if not hits or hits[-1] <= cutoff]:
+            del self._hits[key]
+        self._last_sweep = now
 
     def allow(self, key: str, now: float | None = None) -> bool:
         now = time.monotonic() if now is None else now
+        self._sweep(now)
         hits = self._hits[key]
-        while hits and hits[0] <= now - 60:
+        while hits and hits[0] <= now - self.WINDOW_S:
             hits.popleft()
         if len(hits) >= self._per_minute:
             return False
