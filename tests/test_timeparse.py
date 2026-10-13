@@ -38,6 +38,7 @@ from recipe_qa.ingestion.timeparse import parse_total_minutes
         # A parenthetical breakdown or "including" note does not change the total.
         ("90 minutes (40 minutes active kitchen time, 50 minutes cooking time)", 90),
         ("2 hours (including resting and baking)", 120),
+        ("30 minutes, including prep time", 30),
     ],
 )
 def test_single_stated_time_is_explicit(raw: str, minutes: int) -> None:
@@ -56,6 +57,10 @@ def test_single_stated_time_is_explicit(raw: str, minutes: int) -> None:
         ("Prep: ~15 minutes<br/>Baking: 20-25 minutes", 40),
         ("30 minutes + 24 hours", 1470),
         ("15 minutes + 1 hour standing", 75),
+        ("15 minutes + 1 hour refrigeration", 75),
+        ("Prep: 1 hour<br>Chilling: 4 hours", 300),
+        # Malformed line break seen on real pages.
+        ("Prep: 15 minutes</br>Cooking: 15 minutes", 30),
     ],
 )
 def test_stages_are_summed_and_marked_derived(raw: str, minutes: int) -> None:
@@ -86,8 +91,11 @@ def test_explicit_total_line_wins_over_stages() -> None:
         "3–6 days",
         "1 month",
         "Prep: 15 minutes<br/>Fermentation: 2–3 days",
+        # One stage only; the others are not stated.
+        "Prep: 10 minutes",
         # No unit.
         "30",
+        "1 hour 30",
         "quick",
     ],
 )
