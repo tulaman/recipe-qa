@@ -14,8 +14,15 @@ stage lands; nothing here claims to be done before it is.
 
 ## Public URLs
 
-- UI: _TBD_
-- API: _TBD_ (`POST /ask`, `GET /healthz`, `GET /schema`)
+- UI: https://recipe-qa-production.up.railway.app/
+- API: https://recipe-qa-production.up.railway.app (`POST /ask`,
+  `GET /healthz`, `GET /schema`)
+
+```bash
+curl -s https://recipe-qa-production.up.railway.app/ask \
+  -H 'Content-Type: application/json' \
+  -d '{"question": "How do I make spaghetti alla carbonara?"}'
+```
 - Container-level access for reviewers: Railway project **Viewer**
   invitation (read-only deployments, logs, container status). _TBD: invite
   sent on receipt of the reviewers' e-mail address._
@@ -24,15 +31,21 @@ stage lands; nothing here claims to be done before it is.
 
 ```bash
 # with Docker (preferred)
-docker build -t recipe-qa .
+docker build --build-arg GIT_SHA=$(git rev-parse HEAD) -t recipe-qa .
 docker run --rm -p 8000:8000 -e ANTHROPIC_API_KEY=... recipe-qa
 # open http://localhost:8000
 
 # without Docker
 uv sync
-uv run uvicorn recipe_qa.api:app --reload
-(cd web && npm ci && npm run build)
+(cd web && npm ci && npm run build)          # UI served from web/dist
+uv run uvicorn recipe_qa.api:app --reload    # needs ANTHROPIC_API_KEY
 ```
+
+No key? `RECIPE_QA_PROVIDER=fake` runs the whole pipeline with a
+deterministic stand-in model (`recipe_qa/providers/fake.py`): retrieval,
+gates, citations and the contract are real, the answer text is not.
+`(cd web && npm run dev)` serves the UI with hot reload and proxies the API
+to `localhost:8000`.
 
 ## Corpus
 
@@ -68,14 +81,48 @@ a runtime behavior (SPEC §9.5).
 
 ```bash
 uv run pytest                      # deterministic tests, no network, no key
-uv run python evals/run.py --base-url http://localhost:8000
+uv run python evals/run.py --base-url http://localhost:8000                  # smoke cases
+uv run python evals/run.py --base-url http://localhost:8000 --contract-only  # fake provider
 ```
+
+`evals/run.py` checks every response against the contract (schema,
+invariants I1–I5, citations resolve to the manifest, `/healthz`, `/schema`,
+UI served) and each case's expected refusal and sources; reports go to
+`evals/reports/`. Stage 3 ships three smoke cases (`evals/smoke.json`):
+a how-to answer, `out_of_domain`, and a `safety` refusal with citations.
+The 15-case golden set lands in stage 5.
 
 _TBD: last eval report summary._
 
 ## Deployment
 
-_TBD: Railway IaC file, `deploy.yml` flow, idempotency, rollback, secrets._
+One Docker image (API + built UI, non-root user) on Railway; decisions in
+[ADR 003](adr/003-deployment.md).
+
+| Piece | Where |
+|---|---|
+| Image | `Dockerfile` (multi-stage: Vite build → Python 3.12 slim, runtime deps only) |
+| Service config (IaC) | `railway.json`: Dockerfile builder, `/healthz` health check, restart policy, 1 replica |
+| CI | `.github/workflows/ci.yml`: ruff + pytest; UI type-check + build; image build, boot with the fake provider, contract smoke against the container |
+| CD | `.github/workflows/deploy.yml`: runs after CI succeeds on `main` |
+
+Deploy flow: set service variables (`ANTHROPIC_API_KEY` from GitHub
+secrets, `PORT`, `GIT_SHA`) without triggering a deploy → `railway up`
+builds the commit → wait until `/healthz` reports that exact SHA → smoke
+eval against the public URL with the live model; the report is kept as a
+workflow artifact.
+
+- **Idempotent**: every step sets fixed values for one commit; re-running
+  the workflow for the same SHA yields the same service.
+- **Rollback**: Actions → deploy → Run workflow → enter an older commit
+  SHA. The workflow checks it out and deploys it the same way; `/healthz`
+  confirms which build is live.
+- **Secrets**: `ANTHROPIC_API_KEY` and a project-scoped `RAILWAY_TOKEN`
+  live only in GitHub Actions secrets; the key is copied into Railway's
+  service variables by the workflow. Nothing secret is in the repository
+  or the image.
+- Deploys never run from a laptop; Railway's own GitHub auto-deploy is off,
+  so there is exactly one path to production.
 
 ## Cost & latency
 
@@ -85,12 +132,31 @@ next optimization._
 
 ## Finding the cause of a bad answer in production
 
-_TBD: one paragraph on request IDs, structured logs and what is recorded
-per stage._
+Every response, including errors, carries a request ID (`X-Request-ID`
+header, `meta.request_id` / `error.request_id` in the body, shown in the
+UI). Each `/ask` request writes one JSON log line (Railway → service →
+Logs, search the ID) with: the question, build SHA, model, prompt version
+(hash of `recipe_qa/prompts/`), corpus version, the extracted constraints
+and flags, eligible count, BM25 top-5 with scores, the IDs sent to the
+model, the IDs it cited, refusal reason or error, invalid-output retries,
+token usage per call and timings per stage. That is enough to tell which
+layer failed: extraction (wrong flags), retrieval (right recipe absent
+from top-k), or generation (right recipe given, wrong answer), and to
+replay the request against the same prompt and corpus versions. Questions
+are recipe questions, not personal data, and are logged in full (SPEC
+§9.7); Railway keeps logs for its plan's retention window, and we would set
+30 days in a production deployment.
 
 ## Scope cut and production gaps
 
 _TBD (filled at the end)._ Recorded so far:
+
+- Stage 3 extracts constraints but does not yet enforce them: `is_eligible`
+  over the whole corpus lands in stage 4. Until then a time/diet/ingredient
+  constraint is only as good as BM25 ranking and the model.
+- Rate limiting and the concurrency cap are in process memory, keyed on
+  Railway's `X-Real-IP`; correct for one instance only. A second replica
+  needs a shared store (Redis) or the edge's own limiter.
 
 - Ingredient alias table (`data/aliases.json`) lands with constraint
   matching in stage 4, not with ingestion.
