@@ -216,13 +216,28 @@ minutes. Try relaxing the time limit or asking about a specific dish."
 
 ```
 id, title, url, page_id, revid, fetched_at, content_hash,
-categories[], ingredients[{raw, normalized, optional}],
+categories[], ingredients[{raw, normalized, optional, group}],
 steps[], sections{}, metadata{total_minutes{value,status,evidence},
 servings{...}, difficulty{...}, diet{vegetarian{...}, vegan{...}, gluten_free{...}}}
 ```
 
 - Manifest: `corpus_version` = SHA-256 over sorted `(id, content_hash)`.
   Raw wikitext is kept in `data/raw/` for parser tests and audits.
+- Clarifications fixed during ingestion (stage 2, ADR 004):
+  - `title` is the page title without the `Cookbook:` namespace
+    ("Spaghetti alla Carbonara"); `url` is the canonical URL of the full
+    title, checked against the API at selection time.
+  - `content_hash` is SHA-256 of the record's canonical JSON (excluding
+    the hash itself), so a parser change also changes `corpus_version`.
+    The raw wikitext is pinned separately by `revid` and its own SHA-256 in
+    `data/corpus_selection.json`.
+  - `ingredients[].raw` is the line's visible text (markup removed);
+    `group` is the sub-heading it appears under, or null.
+  - Categories are read from the pinned wikitext, not the live API.
+  - Pages whose explicit diet category is contradicted by their own
+    ingredient list (≈ 6 % of the candidate pool) are excluded at
+    selection, so the "explicit category passes" rule in §4 never trusts a
+    contradicted category in this snapshot.
 
 ## 7. Acceptance criteria and evaluation
 
