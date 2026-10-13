@@ -1,6 +1,6 @@
 # ADR 003 — Deployment: one container on Railway, deployed from GitHub Actions
 
-Status: Proposed (2026-10-13).
+Status: Proposed (2026-10-13). Implemented in stage 3; Accepted with measurements in stage 6.
 
 ## Context
 
@@ -14,11 +14,18 @@ criterion; practices are.
 - **One Docker image** serves the API and the static UI (FastAPI +
   built Vite assets). No separate frontend service, no database.
 - **Railway** hosts it: one project, one service, one environment.
-  Railway's IaC file in the repository defines the service; the GitHub
-  Actions `deploy.yml` workflow runs the Railway CLI with a project-scoped
-  `RAILWAY_TOKEN` on every push to `main`, then waits for `/healthz` to
-  report the pushed commit SHA and runs the smoke + eval harness against
-  the public URL.
+  `railway.json` in the repository defines the build (Dockerfile) and the
+  deploy policy (`/healthz` health check, restart on failure, 1 replica).
+  The GitHub Actions `deploy.yml` workflow runs after `ci` succeeds on
+  `main` (`workflow_run`), uses the Railway CLI with a project-scoped
+  `RAILWAY_TOKEN`, then waits for `/healthz` to report the deployed commit
+  SHA and runs the smoke eval against the public URL.
+- **Service variables are set by the pipeline**, not by hand:
+  `ANTHROPIC_API_KEY` (copied from GitHub secrets), `PORT=8000` (the port
+  the generated domain targets) and `GIT_SHA` (a Docker build arg that
+  `/healthz` reports), all with `--skip-deploys` so only `railway up`
+  creates a deployment. The service has no GitHub source attached, so
+  Railway never deploys on its own.
 - **Secrets** (`ANTHROPIC_API_KEY`, `RAILWAY_TOKEN`) live only in GitHub
   Actions secrets and Railway variables.
 - **Reviewer access**: Viewer role on the Railway project (read-only

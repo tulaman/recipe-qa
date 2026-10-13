@@ -1,8 +1,11 @@
 # Recipe Q&A Service — Behavior Specification
 
-Status: v0.2. v0.1 was written before any application code; v0.2 (2026-10-13)
+Status: v0.3. v0.1 was written before any application code; v0.2 (2026-10-13)
 revises the §4 diet rule after ingestion showed contradicted categories
-(see commit history and ADR 004).
+(see commit history and ADR 004); v0.3 (2026-10-13) makes two §3 steps
+explicit while building `/ask`: which recipes a `safety` refusal cites, and
+that a question sharing no term with any recipe is `out_of_corpus` without
+a generation call.
 Owner: Ilya Lityuga. Date: 2026-10-13.
 
 This document is the contract the service is built and evaluated against.
@@ -118,10 +121,12 @@ POST /ask
        also yields: in_domain (bool), safety_question (bool)
   4. deterministic policy gates:
        not in_domain            → refuse out_of_domain
-       safety_question          → refuse safety (citations may include matched recipes, §5)
+       safety_question          → refuse safety (citations may include matched recipes, §5:
+                                  BM25 top-3 over the whole corpus scoring ≥ 50 % of the best)
   5. eligible = [r for r in corpus if is_eligible(r, constraints)]   [pure code]
        eligible == []           → refuse out_of_corpus
   6. ranked = retrieve(question, eligible, k=5)          [BM25 over recipe fields]
+       ranked == []             → refuse out_of_corpus (no recipe shares a term with the question)
   7. generate(question, constraints, ranked[:3]) → {answerable, answer, source_ids}
                                                          [LLM, structured output]
        answerable == false      → refuse out_of_corpus

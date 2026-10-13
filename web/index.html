@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Q&amp;A</title>
+    <meta name="description" content="Ask questions about a fixed collection of Wikibooks Cookbook recipes." />
+  </head>
+  <body>
+    <main class="page">
+      <header class="masthead">
+        <h1>Recipe Q&amp;A</h1>
+        <p class="lede">
+          Answers come only from a fixed collection of
+          <a href="https://en.wikibooks.org/wiki/Cookbook:Table_of_Contents" target="_blank" rel="noopener">Wikibooks Cookbook</a>
+          recipes, with links to the pages they are based on.
+        </p>
+      </header>
+
+      <form id="ask-form" class="ask" novalidate>
+        <label for="question" class="visually-hidden">Your question</label>
+        <textarea
+          id="question"
+          name="question"
+          rows="2"
+          placeholder="e.g. How do I make spaghetti carbonara?"
+          required
+        ></textarea>
+        <div class="ask-row">
+          <span id="counter" class="counter" aria-live="polite">0 / 1000</span>
+          <button id="submit" type="submit" disabled>Ask</button>
+        </div>
+      </form>
+
+      <div class="examples" aria-label="Example questions">
+        <button type="button" class="chip">What do I need for guacamole?</button>
+        <button type="button" class="chip">Does the baklava contain nuts?</button>
+        <button type="button" class="chip">How do I make kheer?</button>
+        <button type="button" class="chip">Is the baklava nut-free?</button>
+      </div>
+
+      <section id="result" class="result" aria-live="polite" hidden></section>
+
+      <footer class="footer">
+        Recipe text: Wikibooks contributors, CC BY-SA 4.0. Ingredient lists may be incomplete;
+        this service never guarantees that a dish is free of an allergen.
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

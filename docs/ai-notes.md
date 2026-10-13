@@ -51,3 +51,26 @@ live in `recipe_qa/prompts/`.
   SPEC change first, then failing tests, then the implementation.
 - Rewrote: the first selection run used quotas only and produced 34 pages
   (pages count toward several groups); added a round-robin top-up to 50.
+
+### 2026-10-13 — stage 3: vertical slice of POST /ask and first deploy
+
+- Tests first for the HTTP contract, the response invariants and BM25
+  (one failing-test commit), then schema, retrieval, providers, pipeline.
+- Accepted: the agent's two-call pipeline exactly as SPEC §3 describes,
+  although the plan for this stage said "one generation call": the
+  out_of_domain checkpoint needs the extraction call anyway, and building
+  it now avoids rewriting the pipeline in stage 4. Constraint fields are
+  extracted but not yet enforced.
+- Found while building: two SPEC §3 steps were implicit (which recipes a
+  safety refusal cites; what happens when BM25 matches nothing). Clarified
+  in SPEC v0.3 before the implementation commit.
+- Rewrote: the first schema draft had developer notes in the pydantic
+  docstrings; the SDK sends those to the model as schema descriptions, so
+  they became comments.
+- Rewrote: nutrition sections were first left to the prompt ("never
+  answer nutrition"); moved to code — they are never rendered to the
+  model.
+- Model settings come from the bundled Claude API reference, not memory:
+  `claude-haiku-5-5`, structured outputs via `messages.parse`, effort
+  `low`, no sampling parameters (Haiku 5.5 rejects non-default ones).
+
