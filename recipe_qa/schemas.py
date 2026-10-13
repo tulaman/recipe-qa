@@ -95,15 +95,18 @@ class ErrorResponse(StrictModel):
     error: ErrorDetail
 
 
-# --- model outputs ---------------------------------------------------------
+# --- model outputs (SPEC §3 steps 3 and 7) ----------------------------------
+
+
+# Docstrings and field descriptions below are sent to the model as part of
+# the JSON schema, so they are written for it.
 
 
 class Extraction(StrictModel):
-    """What the extraction call reads out of the question (SPEC §3 step 3, §4).
+    """What the question asks for. Never an answer to it."""
 
-    Stage 3 acts on in_domain and safety_question only; the constraint
-    fields are extracted now and enforced by is_eligible in stage 4.
-    """
+    # Stage 3 acts on in_domain and safety_question only; the constraint
+    # fields are extracted now and enforced by is_eligible in stage 4.
 
     in_domain: bool = Field(description="True if the question is about food, cooking or recipes.")
     safety_question: bool = Field(
@@ -131,7 +134,7 @@ class Extraction(StrictModel):
 
 
 class Generation(StrictModel):
-    """Output of the answer call (SPEC §3 step 7)."""
+    """An answer grounded in the given recipes, or a statement that they cannot answer."""
 
     answerable: bool = Field(
         description="False if the given recipes do not contain what the question asks."
