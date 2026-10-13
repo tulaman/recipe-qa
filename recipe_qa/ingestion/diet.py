@@ -16,9 +16,11 @@ gluten_free: explicit category "Gluten-free recipes" only, else unknown.
 
 Matching runs on raw + normalized text, lower-cased, on word boundaries,
 so "1 cup stock (chicken or beef)" is caught even though `normalized` is
-"stock". A match preceded by a plant qualifier ("coconut milk", "vegan
-sausage") or followed by a known non-animal noun ("butter beans",
-"oyster mushrooms", "cream of tartar") is ignored.
+"stock". A stock/broth counts as qualified only when the qualifier modifies
+it directly ("vegetable stock", "stock (vegetable)"). A match preceded by
+a plant qualifier ("coconut milk", "vegan sausage") or followed by a known
+non-animal noun ("butter beans", "oyster mushrooms", "cream of tartar") is
+ignored.
 """
 
 import re
@@ -62,6 +64,9 @@ def _terms(words: tuple[str, ...]) -> re.Pattern[str]:
     return re.compile(rf"\b({alternatives})(?:s|es)?\b")
 
 
+_QUALIFIERS = "|".join(STOCK_QUALIFIERS)
+_QUALIFIER_BEFORE = re.compile(rf"\b({_QUALIFIERS})[\s-]+$")
+_QUALIFIER_AFTER = re.compile(rf"^\s*\(\s*({_QUALIFIERS})\b")
 _MEAT = _terms(MEAT_AND_FISH)
 _ANIMAL = _terms(ANIMAL_PRODUCTS)
 _STOCK = _terms(AMBIGUOUS_STOCK)
@@ -83,10 +88,21 @@ def _first_match(pattern: re.Pattern[str], ingredients: list[Ingredient]) -> str
     return None
 
 
+def _stock_is_qualified(text: str, match: re.Match[str]) -> bool:
+    """The qualifier must modify this stock: "vegetable stock", "stock (vegetable)".
+
+    A qualifier elsewhere in the line ("vegetable oil and stock") does not count.
+    """
+    return bool(
+        _QUALIFIER_BEFORE.search(text[: match.start()])
+        or _QUALIFIER_AFTER.match(text[match.end() :])
+    )
+
+
 def _ambiguous_stock(ingredients: list[Ingredient]) -> str | None:
     for ingredient in ingredients:
         text = _text(ingredient)
-        if _STOCK.search(text) and not any(q in text for q in STOCK_QUALIFIERS):
+        if any(not _stock_is_qualified(text, m) for m in _STOCK.finditer(text)):
             return f"ingredient '{ingredient.raw}' is stock/broth of unstated origin"
     return None
 
