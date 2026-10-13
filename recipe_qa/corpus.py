@@ -17,11 +17,11 @@ from pydantic import BaseModel, ConfigDict, model_validator
 Status = Literal["explicit", "derived", "unknown"]
 
 
-class _Frozen(BaseModel):
+class FrozenModel(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
 
-class Fact[T](_Frozen):
+class Fact[T](FrozenModel):
     """A metadata value together with where it came from.
 
     explicit: stated on the page; derived: computed by a documented rule,
@@ -43,7 +43,7 @@ class Fact[T](_Frozen):
         return cls(value=None, status="unknown", evidence=evidence)
 
 
-class Ingredient(_Frozen):
+class Ingredient(FrozenModel):
     raw: str
     """Display text of the ingredient line, wiki markup removed."""
     normalized: str
@@ -53,20 +53,20 @@ class Ingredient(_Frozen):
     """Sub-heading the line appears under ("Syrup", "Filling"), if any."""
 
 
-class Diet(_Frozen):
+class Diet(FrozenModel):
     vegetarian: Fact[bool]
     vegan: Fact[bool]
     gluten_free: Fact[bool]
 
 
-class Metadata(_Frozen):
+class Metadata(FrozenModel):
     total_minutes: Fact[int]
     servings: Fact[str]
     difficulty: Fact[int]
     diet: Diet
 
 
-class Recipe(_Frozen):
+class Recipe(FrozenModel):
     id: str
     title: str
     url: str
@@ -81,7 +81,7 @@ class Recipe(_Frozen):
     metadata: Metadata
 
 
-class ManifestEntry(_Frozen):
+class ManifestEntry(FrozenModel):
     id: str
     title: str
     url: str
@@ -89,7 +89,7 @@ class ManifestEntry(_Frozen):
     content_hash: str
 
 
-class Manifest(_Frozen):
+class Manifest(FrozenModel):
     corpus_version: str
     source: str
     recipe_count: int
