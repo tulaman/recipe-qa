@@ -153,3 +153,34 @@ def test_vegan_category_with_honey_is_reported() -> None:
 def test_consistent_categories_report_nothing() -> None:
     assert category_conflicts(["Vegan recipes"], ing("rice", "coconut milk")) == []
     assert category_conflicts([], ing("bacon")) == []
+
+
+# SPEC §4 v0.2: the ingredient check always runs; a category only vouches
+# for what the check cannot decide.
+
+
+def test_contradicted_vegetarian_category_does_not_pass() -> None:
+    diet = derive_diet(["Vegetarian recipes"], ing("bread", "bacon"))
+    assert (diet.vegetarian.value, diet.vegetarian.status) == (False, "derived")
+    evidence = diet.vegetarian.evidence or ""
+    assert "bacon" in evidence
+    assert "Category:Vegetarian recipes" in evidence
+    assert diet.vegan.value is False
+
+
+def test_contradicted_vegan_category_does_not_pass() -> None:
+    diet = derive_diet(["Vegan recipes"], ing("oats", "honey"))
+    assert (diet.vegetarian.value, diet.vegetarian.status) == (True, "explicit")
+    assert (diet.vegan.value, diet.vegan.status) == (False, "derived")
+    assert "Category:Vegan recipes" in (diet.vegan.evidence or "")
+
+
+def test_category_vouches_for_what_the_check_cannot_decide() -> None:
+    diet = derive_diet(["Vegetarian recipes"], ing("onion", "stock"))
+    assert (diet.vegetarian.value, diet.vegetarian.status) == (True, "explicit")
+    assert diet.vegan.status == "derived"
+
+
+def test_category_vouches_when_no_ingredients_were_parsed() -> None:
+    diet = derive_diet(["Vegan recipes"], [])
+    assert (diet.vegan.value, diet.vegan.status) == (True, "explicit")
