@@ -1,0 +1,82 @@
+name: deploy
+
+# Production deploys happen only here (ADR 003): after CI passes on main, or
+# by hand with a commit SHA to roll back. Running it twice for the same SHA
+# converges to the same state: variables are set to fixed values and the
+# deployed image is built from that commit.
+
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit SHA to deploy (default - latest main). Use an older SHA to roll back.
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  PUBLIC_URL: https://recipe-qa-production.up.railway.app
+  RAILWAY_SERVICE: recipe-qa
+  RAILWAY_CLI_VERSION: 4.47.0
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      SHA: ${{ inputs.sha || github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SHA }}
+      - name: Resolve full commit SHA
+        run: echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@${RAILWAY_CLI_VERSION}
+
+      - name: Set service variables (no redeploy)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          printf '%s' "$ANTHROPIC_API_KEY" \
+            | railway variable set ANTHROPIC_API_KEY --stdin --service "$RAILWAY_SERVICE" --skip-deploys
+          # PORT matches the port the public domain targets; GIT_SHA is a build arg.
+          railway variable set PORT=8000 "GIT_SHA=$SHA" --service "$RAILWAY_SERVICE" --skip-deploys
+
+      - name: Build and deploy
+        run: railway up --service "$RAILWAY_SERVICE" --ci -m "deploy ${SHA::12} (${{ github.event_name }})"
+
+      - name: Wait until the new build is live
+        run: |
+          for i in $(seq 1 60); do
+            version=$(curl -fsS "$PUBLIC_URL/healthz" | jq -r .version || true)
+            if [ "$version" = "$SHA" ]; then echo "live: $version"; exit 0; fi
+            echo "waiting: live=$version want=$SHA"
+            sleep 5
+          done
+          exit 1
+
+      - name: Smoke eval against the public URL (live model)
+        run: uv run python evals/run.py --base-url "$PUBLIC_URL"
+
+      - name: Keep the eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report-${{ env.SHA }}
+          path: evals/reports/
+          if-no-files-found: ignore
