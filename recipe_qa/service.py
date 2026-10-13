@@ -130,11 +130,12 @@ class AskService:
         allowed = {r.id for r in context}
 
         # 7-8. generation, validated against the candidate set
-        async def generate() -> Completion[Generation]:
-            completion = await self.provider.generate(question, extraction, context)
-            return Completion(_validated(completion.value, allowed), completion.usage)
-
-        generation = await self._call_once_retry("generate", generate, trace)
+        generation = await self._call_once_retry(
+            "generate",
+            lambda: self.provider.generate(question, extraction, context),
+            trace,
+            validate=lambda g: _validated(g, allowed),
+        )
         if not generation.answerable:
             return Outcome(None, [], "out_of_corpus")
         answer = (generation.answer or "").strip()
@@ -145,24 +146,29 @@ class AskService:
         stage: str,
         call: Callable[[], Awaitable[Completion[T]]],
         trace: dict[str, Any],
+        validate: Callable[[T], T] | None = None,
     ) -> T:
-        """Run a model call; retry once on unusable output (SPEC §2.3)."""
+        """Run a model call; retry once on unusable output (SPEC §2.3).
+
+        Usage is recorded for every completion the provider returned, before
+        our own validation, because a rejected answer was still billed.
+        """
         started = time.perf_counter()
         try:
             for attempt in (1, 2):
                 try:
                     completion = await call()
+                    trace["usage"].append(
+                        {
+                            "stage": stage,
+                            "attempt": attempt,
+                            "input_tokens": completion.usage.input_tokens,
+                            "output_tokens": completion.usage.output_tokens,
+                        }
+                    )
+                    return validate(completion.value) if validate else completion.value
                 except ProviderInvalidOutput as exc:
                     trace.setdefault("invalid_output", []).append(f"{stage}#{attempt}: {exc}")
-                    continue
-                trace["usage"].append(
-                    {
-                        "stage": stage,
-                        "input_tokens": completion.usage.input_tokens,
-                        "output_tokens": completion.usage.output_tokens,
-                    }
-                )
-                return completion.value
             raise UpstreamInvalid(f"{stage}: invalid output twice")
         except ProviderUnavailable as exc:
             raise UpstreamUnavailable(f"{stage}: {exc}") from exc
