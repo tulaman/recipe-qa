@@ -1,6 +1,8 @@
 # Recipe Q&A Service — Behavior Specification
 
-Status: v0.1, written before any application code (see commit history).
+Status: v0.2. v0.1 was written before any application code; v0.2 (2026-10-13)
+revises the §4 diet rule after ingestion showed contradicted categories
+(see commit history and ADR 004).
 Owner: Ilya Lityuga. Date: 2026-10-13.
 
 This document is the contract the service is built and evaluated against.
@@ -154,8 +156,8 @@ with unit tests:
 | Constraint | Rule |
 |---|---|
 | `max_total_minutes = N` | Recipe passes iff `total_minutes` is known and `total_minutes < N` ("under"). "At most N" / "within N" / "N minutes or less" → `≤ N`. A range ("15–20 minutes") uses its upper bound. Unknown time ⇒ not eligible — we never assume a recipe is fast. |
-| `diet = vegetarian` | Passes iff the page is in an explicit vegetarian/vegan category, **or** the derived check finds no ingredient in the documented meat/poultry/fish/seafood/gelatin list. Unknown or compound ingredients (e.g. "stock", "broth" without qualifier) ⇒ not eligible under the derived check. |
-| `diet = vegan` | Passes iff explicit vegan category, **or** derived: vegetarian check passes and no dairy/egg/honey ingredient. |
+| `diet = vegetarian` | Passes iff the derived check finds no ingredient in the documented meat/poultry/fish/seafood/gelatin list, **and** either the page is in an explicit vegetarian/vegan category or the derived check is conclusive. Unknown or compound ingredients (e.g. "stock", "broth" without qualifier) ⇒ not eligible unless an explicit category vouches for them. A category contradicted by the page's own ingredient list never passes: the value becomes `false` (`derived`, evidence names the ingredient and the overridden category). |
+| `diet = vegan` | Passes iff the vegetarian rule passes and no dairy/egg/honey ingredient is found, **and** either the page is in an explicit vegan category or the derived check is conclusive. A contradicted vegan category never passes, as above. |
 | `diet = gluten_free` | Passes iff explicit gluten-free category only. No derivation — flour aliases are too error-prone to guarantee. |
 | `must_include = [x]` | Passes iff some normalized ingredient matches `x` or one of its documented aliases (`data/aliases.json`). |
 | `must_exclude = [x]` | Passes iff no ingredient, including those marked optional, matches `x` or its aliases. Optional ingredients count as present (conservative). |
@@ -234,10 +236,10 @@ servings{...}, difficulty{...}, diet{vegetarian{...}, vegan{...}, gluten_free{..
   - `ingredients[].raw` is the line's visible text (markup removed);
     `group` is the sub-heading it appears under, or null.
   - Categories are read from the pinned wikitext, not the live API.
-  - Pages whose explicit diet category is contradicted by their own
-    ingredient list (≈ 6 % of the candidate pool) are excluded at
-    selection, so the "explicit category passes" rule in §4 never trusts a
-    contradicted category in this snapshot.
+  - About 6 % of candidate pages carry a vegetarian/vegan category that
+    their own ingredient list contradicts. §4 (revised 2026-10-13) never
+    lets such a category pass; selection additionally excludes these pages
+    as low-quality data.
 
 ## 7. Acceptance criteria and evaluation
 
