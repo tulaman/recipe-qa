@@ -56,7 +56,7 @@ Mexican, vegetarian, vegan, gluten-free) found:
 | Fetch on every build, no raw cache | Builds need network, can silently pick up edits, and parser tests cannot run on the real pages. |
 | Hand-curated title list only | Not reproducible as a rule and invites cherry-picking; anchors are hand-picked only where a golden case needs a specific page, and each has a recorded reason. |
 | LLM extraction of ingredients/time at ingestion | Non-deterministic, costs a key in CI, and the result could not be unit-tested; the parser is a few hundred lines with ~150 unit tests. |
-| Trust diet categories as-is | ~6 % are contradicted by the page's own ingredients; SPEC §4 trusts explicit categories, so those pages are excluded from the corpus instead (see Consequences). |
+| Trust diet categories as-is | ~6 % are contradicted by the page's own ingredients. SPEC §4 was revised (v0.2): the ingredient check always runs and overrides a contradicted category; selection also excludes such pages as low-quality data. |
 
 ## Measurements (snapshot `ea3bcd59…`)
 
@@ -78,10 +78,10 @@ Mexican, vegetarian, vegan, gluten-free) found:
   committed files, with no network and no key.
 - `corpus_version` hashes the parsed records, so a parser change that
   alters what the service sees changes the version even if no page changed.
-- Excluding contradicted pages keeps SPEC §4's "explicit category passes"
-  rule safe for this snapshot only. A future refresh relies on the filter
-  staying in place; whether the rule itself should become "explicit
-  category and no contradicting ingredient" is an open question for SPEC.
+- A contradicted diet category cannot make a recipe eligible (SPEC §4
+  v0.2), independently of the selection filter, so a future refresh stays
+  safe even if the filter is relaxed. A category still decides what the
+  ingredient check cannot (unqualified stock, no parsed ingredient list).
 - `normalized` ingredient names are heuristics. Inclusion matching uses
   them with aliases; exclusion must also look at `raw` (stage 4).
 

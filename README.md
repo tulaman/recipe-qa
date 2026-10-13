@@ -97,4 +97,5 @@ _TBD (filled at the end)._ Recorded so far:
 - Ingredient `normalized` names are heuristic; exclusion matching must also
   read `raw` (ADR 004).
 - Pages whose diet category contradicts their ingredients are excluded,
-  not repaired.
+  not repaired; the eligibility rule also ignores such a category
+  (SPEC §4 v0.2).

@@ -46,5 +46,8 @@ live in `recipe_qa/prompts/`.
   of vegetarian/vegan pages contradict their ingredients. Did not change
   the SPEC §4 rule silently; excluded those pages at selection, added a
   corpus test, and left the rule change as an open question.
+- Decision (mine, after review): revise SPEC §4 to v0.2 — the ingredient
+  check always runs and overrides a contradicted category. Committed as a
+  SPEC change first, then failing tests, then the implementation.
 - Rewrote: the first selection run used quotas only and produced 34 pages
   (pages count toward several groups); added a round-robin top-up to 50.
