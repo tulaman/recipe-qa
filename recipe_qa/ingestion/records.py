@@ -1,11 +1,21 @@
 """Selection entry + pinned wikitext → Recipe record; records → Manifest."""
 
 import hashlib
+import json
 import re
 import unicodedata
+from pathlib import Path
 from urllib.parse import quote
 
-from recipe_qa.corpus import Fact, FrozenModel, Manifest, ManifestEntry, Recipe, corpus_version
+from recipe_qa.corpus import (
+    Fact,
+    FrozenModel,
+    Ingredient,
+    Manifest,
+    ManifestEntry,
+    Recipe,
+    corpus_version,
+)
 from recipe_qa.corpus import record_hash as compute_record_hash
 from recipe_qa.ingestion.diet import derive_diet
 from recipe_qa.ingestion.page import parse_page
@@ -16,6 +26,9 @@ SOURCE = "English Wikibooks Cookbook (https://en.wikibooks.org), CC BY-SA 4.0"
 NAMESPACE = "Cookbook:"
 # Characters MediaWiki leaves unescaped in canonical URLs (wfUrlencode).
 _URL_SAFE = ";@$!*(),/~:"
+# ≈ 2k tokens of recipe text; above this, whole-recipe retrieval stops
+# fitting the top-3 context budget (ADR 001 invalidation condition).
+MAX_RECIPE_CHARS = 8000
 
 
 class SelectionEntry(FrozenModel):
@@ -27,6 +40,17 @@ class SelectionEntry(FrozenModel):
     reasons: list[str]
 
 
+class Selection(FrozenModel):
+    """data/corpus_selection.json: what to ingest, pinned to revisions."""
+
+    generated_at: str
+    source: str
+    rules: list[str]
+    overlap_groups: dict[str, list[str]]
+    """Dish → recipe IDs that describe the same dish (golden cases 4 and 5)."""
+    recipes: list[SelectionEntry]
+
+
 def recipe_id(title: str) -> str:
     name = title.removeprefix(NAMESPACE)
     ascii_name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
@@ -35,6 +59,14 @@ def recipe_id(title: str) -> str:
 
 def wiki_url(title: str) -> str:
     return WIKI_BASE + quote(title.replace(" ", "_"), safe=_URL_SAFE)
+
+
+def context_chars(
+    title: str, ingredients: list[Ingredient], steps: list[str], sections: dict[str, str]
+) -> int:
+    """Characters of recipe text a generation prompt would carry."""
+    parts = [title, *(i.raw for i in ingredients), *steps, *sections.values()]
+    return sum(len(p) for p in parts)
 
 
 def _servings(raw: str | None) -> Fact[str]:
@@ -101,3 +133,29 @@ def build_manifest(recipes: list[Recipe]) -> Manifest:
             for r in ordered
         ],
     )
+
+
+def load_selection(path: Path) -> Selection:
+    return Selection.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def raw_path(raw_dir: Path, title: str) -> Path:
+    return raw_dir / f"{recipe_id(title)}.wiki"
+
+
+def build_corpus(selection: Selection, raw_dir: Path) -> tuple[list[Recipe], Manifest]:
+    """Offline rebuild from pinned raw wikitext. Raises if a raw page is missing."""
+    recipes = [
+        build_record(entry, raw_path(raw_dir, entry.title).read_text(encoding="utf-8"))
+        for entry in selection.recipes
+    ]
+    recipes.sort(key=lambda r: r.id)
+    return recipes, build_manifest(recipes)
+
+
+def dump_recipes(recipes: list[Recipe]) -> str:
+    return "".join(r.model_dump_json() + "\n" for r in recipes)
+
+
+def dump_manifest(manifest: Manifest) -> str:
+    return json.dumps(manifest.model_dump(mode="json"), ensure_ascii=False, indent=2) + "\n"
