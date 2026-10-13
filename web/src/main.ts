@@ -102,24 +102,36 @@ function renderLoading(): void {
   show(card);
 }
 
-function syncControls(busy = false): void {
+const chips = [...document.querySelectorAll<HTMLButtonElement>(".chip")];
+
+// One request at a time: every control reads this flag, so no handler can
+// re-enable the form while a request is in flight.
+let busy = false;
+
+function syncControls(): void {
   const length = [...input.value.trim()].length;
   counter.textContent = `${[...input.value].length} / ${MAX_LENGTH}`;
   submit.disabled = busy || length === 0 || length > MAX_LENGTH;
   submit.textContent = busy ? "Asking…" : "Ask";
   input.readOnly = busy;
+  for (const chip of chips) chip.disabled = busy;
 }
 
 async function submitQuestion(): Promise<void> {
   const question = input.value.trim();
-  if (!question) return;
-  syncControls(true);
+  if (busy || !question) return;
+  busy = true;
+  syncControls();
   renderLoading();
-  const res = await ask(question);
-  if (res.kind === "error") renderError(res);
-  else if (res.body.refused) renderRefusal(res.body);
-  else renderAnswer(res.body);
-  syncControls(false);
+  try {
+    const res = await ask(question);
+    if (res.kind === "error") renderError(res);
+    else if (res.body.refused) renderRefusal(res.body);
+    else renderAnswer(res.body);
+  } finally {
+    busy = false;
+    syncControls();
+  }
 }
 
 form.addEventListener("submit", (event) => {
@@ -135,8 +147,9 @@ input.addEventListener("keydown", (event) => {
   }
 });
 
-for (const chip of document.querySelectorAll<HTMLButtonElement>(".chip")) {
+for (const chip of chips) {
   chip.addEventListener("click", () => {
+    if (busy) return;
     input.value = chip.textContent ?? "";
     syncControls();
     form.requestSubmit();

@@ -137,8 +137,13 @@ button[type="submit"]:disabled {
   cursor: pointer;
 }
 
-.chip:hover {
+.chip:hover:not(:disabled) {
   border-color: var(--accent);
+}
+
+.chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .card {
