@@ -35,6 +35,7 @@ from recipe_qa.schemas import AskResponse  # noqa: E402
 
 MANIFEST = load_manifest(ROOT / "data" / "manifest.json")
 ID_BY_URL = {r.url: r.id for r in MANIFEST.recipes}
+TITLE_BY_URL = {r.url: r.title for r in MANIFEST.recipes}
 
 
 def recorded_body(response: httpx.Response | None) -> object:
@@ -83,6 +84,8 @@ def check_contract(response: httpx.Response) -> tuple[AskResponse | None, list[s
     for citation in body.citations:  # I3
         if citation.url not in ID_BY_URL:
             failures.append(f"citation outside the corpus: {citation.url}")
+        elif citation.title != TITLE_BY_URL[citation.url]:
+            failures.append(f"citation title {citation.title!r} is not the manifest's for that URL")
     if body.meta.corpus_version != MANIFEST.corpus_version:
         failures.append("meta.corpus_version differs from the local manifest")
     return body, failures
