@@ -22,13 +22,23 @@ PROMPT_VERSION = hashlib.sha256((EXTRACT_SYSTEM + GENERATE_SYSTEM).encode()).hex
 HIDDEN_SECTIONS = frozenset({"nutrition"})
 
 
+def _data(text: str) -> str:
+    """Neutralize angle brackets so data can never open or close a prompt tag.
+
+    Only < and > are replaced: escaping & as well would leak "&amp;" into
+    answers about "salt & pepper" and adds nothing, since no tag can be
+    formed without brackets.
+    """
+    return text.replace("<", "&lt;").replace(">", "&gt;")
+
+
 def _fact(fact: Fact[object], unit: str = "") -> str:
     if fact.status == "unknown":
         return "unknown"
     value = {True: "yes", False: "no"}.get(fact.value, fact.value)  # type: ignore[arg-type]
-    text = f"{value}{unit} ({fact.status}"
+    text = f"{_data(str(value))}{unit} ({fact.status}"
     if fact.status == "derived" and fact.evidence:
-        text += f": {fact.evidence}"
+        text += f": {_data(fact.evidence)}"
     return text + ")"
 
 
@@ -36,7 +46,7 @@ def render_recipe(recipe: Recipe) -> str:
     meta = recipe.metadata
     lines = [
         f'<recipe id="{recipe.id}">',
-        f"Title: {recipe.title}",
+        f"Title: {_data(recipe.title)}",
         f"Total time: {_fact(meta.total_minutes, ' minutes')}",
         f"Servings: {_fact(meta.servings)}",
         f"Vegetarian: {_fact(meta.diet.vegetarian)}",
@@ -48,22 +58,22 @@ def render_recipe(recipe: Recipe) -> str:
     for ingredient in recipe.ingredients:
         if ingredient.group != group:
             group = ingredient.group
-            lines.append(f"  {group}:" if group else "  (main):")
+            lines.append(f"  {_data(group)}:" if group else "  (main):")
         optional = " (optional)" if ingredient.optional else ""
-        lines.append(f"  - {ingredient.raw}{optional}")
+        lines.append(f"  - {_data(ingredient.raw)}{optional}")
     lines.append("Steps:")
-    lines.extend(f"  {n}. {step}" for n, step in enumerate(recipe.steps, start=1))
+    lines.extend(f"  {n}. {_data(step)}" for n, step in enumerate(recipe.steps, start=1))
     for name, text in recipe.sections.items():
         if name not in HIDDEN_SECTIONS:
-            lines.append(f"{name.capitalize()}: {text}")
+            lines.append(f"{_data(name.capitalize())}: {_data(text)}")
     lines.append("</recipe>")
     return "\n".join(lines)
 
 
 def extract_message(question: str) -> str:
-    return f"<question>{question}</question>"
+    return f"<question>{_data(question)}</question>"
 
 
 def generate_message(question: str, recipes: Sequence[Recipe]) -> str:
     blocks = "\n\n".join(render_recipe(r) for r in recipes)
-    return f"{blocks}\n\n<question>{question}</question>"
+    return f"{blocks}\n\n<question>{_data(question)}</question>"
