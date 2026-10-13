@@ -4,7 +4,8 @@ Structure rules (derived from scanning ~970 candidate pages):
 
 - Summary fields come from {{Recipe summary}} / {{recipesummary}}; parameter
   names are case-insensitive. `time` keeps its wikitext (line breaks
-  separate stages, see timeparse); other fields are plain text.
+  separate stages, see timeparse); other fields are plain text. `yield`
+  is kept so servings can fall back to it when `servings` is blank.
 - Categories are the [[Category:...]] links of the pinned revision, so they
   are reproducible offline (the live API reports current categories).
 - Level-2 headings split the page. The ingredients section is "Ingredients".
@@ -55,6 +56,7 @@ _MAGIC_WORD = re.compile(r"__[A-Z]+__")
 class ParsedPage:
     summary_time: str | None
     summary_servings: str | None
+    summary_yield: str | None
     summary_difficulty: str | None
     categories: list[str]
     ingredients: list[Ingredient]
@@ -203,6 +205,7 @@ def parse_page(wikitext: str) -> ParsedPage:
     return ParsedPage(
         summary_time=summary.get("time") or None,
         summary_servings=plain_field("servings"),
+        summary_yield=plain_field("yield"),
         summary_difficulty=plain_field("difficulty"),
         categories=_categories(wikitext),
         ingredients=_ingredients(ingredients_section.lines) if ingredients_section else [],

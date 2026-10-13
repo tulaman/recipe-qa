@@ -1,5 +1,5 @@
 {
-  "corpus_version": "ea3bcd59ee810461e40230c5edef75915b8b2b36314131b38b7af974cdbaf878",
+  "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
   "source": "English Wikibooks Cookbook (https://en.wikibooks.org), CC BY-SA 4.0",
   "recipe_count": 50,
   "recipes": [
@@ -36,7 +36,7 @@
       "title": "Balsamic Glaze",
       "url": "https://en.wikibooks.org/wiki/Cookbook:Balsamic_Glaze",
       "revid": 4518849,
-      "content_hash": "7e6455d3c515785c3dbdc5bdf33ded1041b12eb1abe2d90b08eef932e4cac0b8"
+      "content_hash": "fef8b4f0e19e6638626805b8e058987549848c7ab138f1c2114eae129484568c"
     },
     {
       "id": "brazilian-black-bean-soup",
@@ -120,7 +120,7 @@
       "title": "Henry Thiele's Pancake",
       "url": "https://en.wikibooks.org/wiki/Cookbook:Henry_Thiele%27s_Pancake",
       "revid": 4522818,
-      "content_hash": "0798670e6344e263a4d4285e37e1113cb2bb754118af22be9e6b3397afc9c00c"
+      "content_hash": "d721a8e4be75baa63e293bc35e8d6e5c9236e09388e9e045452ada32b9874234"
     },
     {
       "id": "homemade-tempeh",
@@ -232,7 +232,7 @@
       "title": "Mango Chutney (Chunky)",
       "url": "https://en.wikibooks.org/wiki/Cookbook:Mango_Chutney_(Chunky)",
       "revid": 4519081,
-      "content_hash": "70b31e527fc08fd527bd8927f13c8a3ee2c93b125bc4a3b73588d788c9888906"
+      "content_hash": "26907c5466953d7b295eacffe9b61a8574189424bdbeb438498e9c22ccfda2c4"
     },
     {
       "id": "mexican-chocolate-cake-with-mocha-buttercream",

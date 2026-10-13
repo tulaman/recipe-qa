@@ -69,10 +69,13 @@ def context_chars(
     return sum(len(p) for p in parts)
 
 
-def _servings(raw: str | None) -> Fact[str]:
-    if raw is None:
-        return Fact.unknown()
-    return Fact(value=raw, status="explicit", evidence=raw)
+def _servings(servings: str | None, yield_: str | None) -> Fact[str]:
+    """Servings as stated; a page that states only `Yield` ("4 pancakes") uses that."""
+    if servings is not None:
+        return Fact(value=servings, status="explicit", evidence=servings)
+    if yield_ is not None:
+        return Fact(value=yield_, status="explicit", evidence=f"yield: {yield_}")
+    return Fact.unknown()
 
 
 def _difficulty(raw: str | None) -> Fact[int]:
@@ -105,7 +108,9 @@ def build_record(entry: SelectionEntry, wikitext: str) -> Recipe:
         "sections": page.sections,
         "metadata": {
             "total_minutes": parse_total_minutes(page.summary_time).model_dump(mode="json"),
-            "servings": _servings(page.summary_servings).model_dump(mode="json"),
+            "servings": _servings(page.summary_servings, page.summary_yield).model_dump(
+                mode="json"
+            ),
             "difficulty": _difficulty(page.summary_difficulty).model_dump(mode="json"),
             "diet": derive_diet(page.categories, page.ingredients).model_dump(mode="json"),
         },

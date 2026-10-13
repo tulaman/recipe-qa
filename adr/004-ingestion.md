@@ -58,7 +58,7 @@ Mexican, vegetarian, vegan, gluten-free) found:
 | LLM extraction of ingredients/time at ingestion | Non-deterministic, costs a key in CI, and the result could not be unit-tested; the parser is a few hundred lines with ~150 unit tests. |
 | Trust diet categories as-is | ~6 % are contradicted by the page's own ingredients. SPEC §4 was revised (v0.2): the ingredient check always runs and overrides a contradicted category; selection also excludes such pages as low-quality data. |
 
-## Measurements (snapshot `ea3bcd59…`)
+## Measurements (snapshot `976abf38…`)
 
 - Candidate pool 1478 pages; 183 rejected by the quality filter; 50 selected.
 - Time over the 484 timed pages of the first probe: 394 explicit, 37
