@@ -37,3 +37,5 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# Wikibooks text uses en dashes and vulgar fractions; tests quote it verbatim.
+ignore = ["RUF001", "RUF002", "RUF003"]
