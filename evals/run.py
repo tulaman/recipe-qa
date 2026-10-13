@@ -51,7 +51,9 @@ def recorded_body(response: httpx.Response | None) -> object:
 def check_endpoints(client: httpx.Client) -> list[str]:
     try:
         return _check_endpoints(client)
-    except (httpx.HTTPError, ValueError) as exc:
+    except (httpx.HTTPError, ValueError, AttributeError, TypeError) as exc:
+        # Non-JSON bodies (ValueError) and JSON of the wrong shape, e.g. a
+        # proxy answering [] (AttributeError/TypeError), are failures too.
         return [f"endpoints: {type(exc).__name__}: {exc}"]
 
 
