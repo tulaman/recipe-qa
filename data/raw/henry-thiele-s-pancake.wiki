@@ -1,0 +1,37 @@
+{{Recipe summary
+| Category = Pancake recipes
+| Yield = 4 pancakes
+| Difficulty = 2
+| Image = [[File:Henry Thiele's Pancake.jpg|300px]]
+}}
+
+{{recipe|Henry Thiele's Pancake}}
+
+'''Henry Thiele's Pancake''' is a [[cookbook:Kaiserschmarrn|German pancake]] recipe developed in the 1930s at Henry Thiele's Restaurant in Portland, Oregon. The restaurant was demolished in the 1990s, now the location of Thiele Square. The original recipe contributors developed this version years ago to enjoy on New Year's Day.
+== Ingredients ==
+* 2 [[Cookbook:Cup|cups]] whole [[Cookbook:Milk|milk]]
+* ¼ [[Cookbook:Teaspoon|tsp]] [[Cookbook:Salt|salt]]
+* 1 tsp [[Cookbook:Sugar|sugar]]
+* 2 cups [[Cookbook:Flour|flour]]
+* 4 standard [[Cookbook:Egg|eggs]]
+* 8 [[Cookbook:Tablespoon|Tbsp]] [[Cookbook:Butter|butter]]
+
+== Procedure ==
+
+# Preheat [[Cookbook:Oven|oven]] to 500°F.
+# Combine milk, salt, and sugar. Mix in flour gradually. Mix in eggs.
+# For each pancake, melt 2 Tbsp butter in a pan. Pour about 1¼ cups batter into melted butter. While batter is frying gather up the batter in some places to make ridges.
+# When batter is consistency of medium scrambled eggs, put into oven for 5 minutes.
+# Remove from oven; flip pancake in pan; replace into oven for another 2.5 minutes.
+# Remove from oven; add generous amount of lemon juice and small amount maple syrup. Roll pancake into a cigar shape. Add lemon juice, maple syrup, and powdered sugar in that order. Eat.
+
+
+
+[[Category:German recipes]]
+[[Category:Recipes for pancakes]]
+[[Category:Vegetarian recipes]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using sugar]]
+[[Category:Recipes using egg]]
+[[Category:Recipes using wheat flour]]
+[[Category:Recipes using whole milk]]

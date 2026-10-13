@@ -1,0 +1,36 @@
+{{Recipe summary
+| Category = Pasta recipes
+| Difficulty = 3
+}}
+
+{{recipe}}
+
+== Ingredients ==
+*1 ½ [[Cookbook:Cup|cups]] shredded cooked [[Cookbook:Chicken|chicken]], reheated
+*2 cups uncooked farfalle [[Cookbook:Pasta|pasta]]
+
+*1 ½ [[Cookbook:Ounce|oz]] fresh shredded [[Cookbook:Parmesan Cheese|Parmiggiano-Reggiano cheese]]
+*¼ cup unsalted [[Cookbook:Butter|butter]], divided
+*¼ cup [[Cookbook:Heavy Cream|heavy cream]]
+*4 oz (115 [[Cookbook:Gram|g]]) grated [[Cookbook:Mozzarella Cheese|mozzarella cheese]]
+*½ [[Cookbook:Teaspoon|tsp]] [[Cookbook:Mince|minced]] [[Cookbook:Garlic|garlic]]
+*1 ½ [[Cookbook:Tablespoon|tbsp]] [[Cookbook:All-purpose flour|all-purpose flour]]
+
+== Procedure ==
+#In a gallon (4 liters) of boiling salted water, cook pasta to [[Cookbook:Al Dente|al dente]].
+#Drain pasta and rinse with cold water. Toss with chicken and set aside.
+#Melt 2 tbsp butter in a medium [[Cookbook:Saucepan|saucepan]] over medium high heat. Once bubbling ceases, add flour and cook, [[Cookbook:Whisk|whisking]] continuously until mixture turns light blonde in color.
+#Add remaining sauce ingredients. Bring to a [[Cookbook:Simmering|simmer]] and reduce heat to low. Drizzle over pasta mixture and serve warm.
+
+[[Category:Recipes using chicken]]
+[[Category:Recipes using parmesan]]
+[[Category:Recipes for pasta sauce]]
+[[Category:Recipes using pasta and noodles]]
+[[Category:Boiled recipes]]
+[[Category:Italian recipes]]
+[[Category:Main course recipes]]
+[[Category:Recipes with metric units]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using low-moisture mozzarella]]
+[[Category:Recipes using heavy cream]]
+[[Category:Recipes using all-purpose flour]]

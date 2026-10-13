@@ -1,0 +1,59 @@
+__notoc__
+{{Recipe}}
+
+{{recipesummary
+| Category = Dessert recipes
+| Servings = 8
+| Time = 90 minutes (40 minutes active kitchen time, 50 minutes cooking time)
+| Difficulty = 3
+| Energy = 
+| Rating = 
+}}'''Baklava''' is a Mediterranean dessert consisting of layers of phyllo dough interspersed with crushed nuts and soaked in sweet syrup. 
+
+This recipe is modified from one at Allrecipes.<ref>{{Cite web |title=Baklava |url=https://www.allrecipes.com/recipe/9454/greek-baklava/ |access-date=2025-11-17 |website=Allrecipes |language=en}}</ref> 
+
+== Ingredients ==
+
+* 1 lb (450 g) [[Cookbook:Nuts and Seeds|nuts]] (any type, but preferrably [[Cookbook:Pistachio|pistachios]] or [[Cookbook:Walnut|walnuts]])
+* 1 [[Cookbook:Teaspoon|tsp]] (5 ml) ground [[Cookbook:Cinnamon|cinnamon]]
+* 1 [[Cookbook:Pound|lb]] (450 [[Cookbook:Gram|g]]) [[Cookbook:Phyllo Dough|phyllo dough]]
+* ½ [[Cookbook:Cup|cup]] (120 [[Cookbook:Liter|ml]]) [[Cookbook:Butter|butter]]
+* 1 tsp (5 ml) [[Cookbook:Vanilla|vanilla extract]]
+* ⅓ cup (80 ml) [[Cookbook:Honey|honey]]
+* ⅔ cup (160 ml) [[Cookbook:Sugar|white sugar]]
+* ¾ cup (180 ml) water
+
+== Procedure ==
+
+# Combine the nuts and cinnamon in a [[Cookbook:Blender|blender]]. Blend the nuts into a fine powder, being careful not to form a paste. 
+# Melt the butter in a [[Cookbook:Saucepan|saucepan]] over medium heat, then set aside.
+# Line a [[Cookbook:Baking Pan|baking pan]] with [[Cookbook:Parchment Paper|parchment paper]].
+# Count the number of sheets of phyllo dough and divide it by eight. Arrange one-eighth of the sheets in the bottom of the pan, on the parchment paper.
+# Divide the chopped nuts into seven equally sized portions.
+# Brush the phyllo dough with melted butter, and evenly distribute one portion of chopped nuts over the dough.
+# Arrange another eighth of the phyllo sheets on top of the nut layer.
+# Repeat the buttering and layering of nuts and phyllo until you have used up all the phyllo sheets and chopped nuts.
+# Using a sharp knife, radially cut the baklava into eight equally sized portions shaped like the British flag.
+# [[Cookbook:Baking|Bake]] the baklava for 25 minutes at 350°F (180°C). Remove from the oven, and let cool slightly.
+# Mix the vanilla extract, honey, sugar, and water in a clean saucepan. [[Cookbook:Boiling|Boil]] over medium heat until it becomes a very thick and viscous syrup of slightly over 1 cup (240 ml). Remove from the heat, and let cool slightly. 
+# Pour the syrup on top of the baked baklava, coating each portion of the baklava evenly with syrup.
+# Let everything cool fully before serving.
+
+== Notes, tips, and variations ==
+
+* Do not pour the syrup until both the baklava and the syrup are cool to avoid burns.
+
+[[Category:Baking recipes]]
+[[Category:Greek recipes|Baklava]]
+[[Category:Halal recipes|Baklava]]
+[[Category:Recipes for dessert|Baklava]]
+[[Category:Recipes for pastries|Baklava]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using cinnamon]]
+[[Category:Recipes using honey]]
+[[Category:Recipes using phyllo dough]]
+[[Category:Recipes using pistachio]]
+[[Category:Recipes using sugar]]
+[[Category:Recipes using vanilla]]
+[[Category:Recipes using walnut]]
+[[Category:Turkish recipes]]

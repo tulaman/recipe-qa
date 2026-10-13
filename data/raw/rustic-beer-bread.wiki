@@ -1,0 +1,45 @@
+{{Recipe summary
+| Category = Bread recipes
+| Difficulty = 2
+}}
+
+{{recipe}} | [[Cookbook:Bread|Bread]]
+
+This recipe makes dough for a 1.5 kg loaf of bread. It is intended for a bread machine but can also be made by hand.
+
+== Ingredients ==
+__NOTOC__
+* 250 [[Cookbook:Milliliter|ml]] real [[Cookbook:Beer#Ale|ale]] (not lager), at room temperature (approx 21[[Cookbook:C|°C]]) 
+* 3 [[Cookbook:Tablespoon|tbsp]] (45 ml) [[Cookbook:Sunflower Oil|sunflower oil]]
+* 2 tbsp (30 ml) [[Cookbook:Malt|malt]] extract
+* 1 [[Cookbook:Teaspoon|tsp]] (5 ml) table [[Cookbook:Salt|salt]]
+* 150 [[Cookbook:Gram|g]] very strong (high-protein) white [[Cookbook:Flour|flour]]
+* 150 g country grain [[Cookbook:Whole Wheat Flour|wholemeal]] flour
+* 70 g soft grain white flour
+* 70 g strong wholemeal flour
+* 2 tsp (5 ml) easy bake [[Cookbook:Yeast|yeast]]
+
+== Procedure ==
+
+=== Bread Machine ===
+# Add ingredients to a [[Cookbook:Bread Machine|bread machine]] in the order listed, select appropriate white loaf setting (according to manufacturers instructions), and press start. 
+# Remove when cycle is complete. Cool and enjoy.
+
+=== Hand Baking ===
+# Mix the ingredients above into a [[Cookbook:Dough|dough]], and knead on an unfloured surface until an smooth elastic dough is formed.
+# Put into a greased [[Cookbook:Baking Pan|baking tin]] or on a greased baking tray, cover with a dry towel and rest for approximately 1 hour.
+# Place into a preheated [[Cookbook:Oven|oven]] at 180[[Cookbook:C|°C]] and [[Cookbook:Baking|bake]] for 20–40 minutes (baking times will change depending on altitude).
+
+[[Category:Vegan recipes|{{PAGENAME}}]]
+
+== Notes, tips, and variations ==
+# Use 1.5 tbsp (22.5 ml) demerara sugar instead of malt extract if you can't get hold of any.
+# Reduce each flour measurement by 10 g and add 40 g loose [[Cookbook:Cornmeal|polenta]] to add a different texture to the bread.
+# Substitute bread flour for hard flour and/or pastry flour for soft flour.
+
+[[Category:Recipes using beer]]
+[[Category:Recipes for bread]]
+[[Category:Baking recipes]]
+[[Category:Recipes using wheat flour]]
+[[Category:Recipes using sunflower oil]]
+[[Category:Recipes using malt]]

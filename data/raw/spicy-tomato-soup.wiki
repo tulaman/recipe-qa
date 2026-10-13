@@ -1,0 +1,32 @@
+{{recipesummary|category=Soup recipes|servings=4|time=1 hour|difficulty=2}}
+{{recipe}} | [[Cookbook:Cuisine of the United States|American cuisine]] | [[Cookbook:Vegetarian cuisine|Vegetarian Cuisine]] | [[Cookbook:Soups|Soups]]
+
+==Ingredients==
+
+* 4 [[Cookbook:Cup|cups]] [[Cookbook:Dice|diced]] [[Cookbook:Tomato|tomatoes]] (canned is fine)
+* 4 cups [[cookbook:Cream|heavy cream]]
+* 1 [[Cookbook:Teaspoon|tsp]] [[Cookbook:Sugar|sugar]]
+* ½ tsp [[Cookbook:Pepper|ground white pepper]]
+* ¼ tsp [[Cookbook:Salt|salt]]
+* ¼ tsp [[Cookbook:Garlic Powder|granulated garlic]]
+* ⅛ tsp [[Cookbook:Cayenne Pepper|cayenne]]
+
+==Procedure==
+
+# In a [[Cookbook:Blender|blender]] or [[Cookbook:Food Processor|food processor]], working in batches if necessary, [[Cookbook:Puree|puree]] tomatoes, cream, sugar, pepper, salt, garlic and cayenne.
+# Transfer soup to a [[Cookbook:saucepan|saucepan]] and bring to a [[Cookbook:Boil|boil]] over high heat.
+# Reduce heat and [[Cookbook:simmer|simmer]], stirring occasionally, until soup thickens, 20–30 minutes.
+# Serve hot.
+
+== Notes, tips, and variations ==
+
+* Try [[Cookbook:Garnish|garnishing]] soup with cooked [[Cookbook:shrimp|shrimp]] or slices of [[Cookbook:sausage|andouille sausage]].
+
+[[Category:Vegetarian recipes]]
+[[Category:Recipes using tomato]]
+[[Category:Recipes for soup]]
+[[Category:Boiled recipes]]
+[[Category:Recipes using heavy cream]]
+[[Category:Recipes using cayenne]]
+[[Category:Recipes using sugar]]
+[[Category:Recipes using garlic powder]]

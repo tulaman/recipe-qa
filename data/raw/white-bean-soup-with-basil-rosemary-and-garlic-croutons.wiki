@@ -1,0 +1,32 @@
+{{recipesummary|category=Soup recipes|servings=4|time=30 minutes|difficulty=2}}
+{{recipe}} | [[Cookbook:Cuisine of the United States|American cuisine]] | [[Cookbook:Cuisine of Italy|Italian cuisine]] | [[Cookbook:beans|Beans]] | [[Cookbook:Soups|Soups]]
+__NOTOC__
+==Ingredients==
+* 2 cans (2 [[Cookbook:Pound|lbs]]) [[Cookbook:Beans|white beans]], such as cannellini, drained
+* 2 [[Cookbook:Cup|cups]] [[Cookbook:Low-sodium Cooking|low-sodium]] [[Cookbook:Chicken|chicken]] [[Cookbook:Broth|broth]]
+* 1 cup of your favorite [[Cookbook:Marinara Sauce|marinara pasta sauce]]
+* 2 large [[Cookbook:Garlic|garlic cloves]], [[Cookbook:Mince|minced]]
+* ¼ cup packed fresh [[Cookbook:Basil|basil]] leaves, or 1 teaspoon dried basil leaves
+* 1 [[Cookbook:Teaspoon|teaspoon]] minced fresh [[Cookbook:Rosemary|rosemary]]
+* ¼ teaspoon [[Cookbook:Chile Flakes|red pepper flakes]]
+
+==Procedure==
+# [[Cookbook:Purée|Purée]] ingredients in a [[Cookbook:Blender|blender]] until smooth. 
+# Pour into a large [[Cookbook:Saucepan|saucepan]] or [[Cookbook:Dutch Oven|Dutch Oven]], and bring to a [[Cookbook:Simmer|simmer]]. 
+# Simmer, partially covered and stirring frequently, to blend flavors, 4–5 minutes.
+# Serve, garnished with croutons.
+
+==Notes, tips, and variations==
+
+* Garnish with [[Cookbook:Quick garlic croutons|Quick Garlic Croutons]]
+
+[[Category:Soup recipes]]
+[[Category:Recipes using white bean]]
+[[Category:Recipes using basil]]
+[[Category:Recipes using garlic]]
+[[Category:Recipes using rosemary]]
+[[Category:Boiled recipes]]
+[[Category:Recipes using chile flake]]
+[[Category:Recipes using croutons]]
+[[Category:Recipes using chicken broth and stock]]
+[[Category:Recipes using cannellini bean]]

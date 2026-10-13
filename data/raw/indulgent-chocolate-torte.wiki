@@ -1,0 +1,92 @@
+__NOTOC__
+{{recipesummary
+| category = Recipes for dessert
+| time = Prep: 30 minutes<br>Baking: 35-40 minutes<br>Final prep: 1 hour
+| difficulty = 4
+}}
+{{recipe}} | [[Cookbook:Cuisine of the United States|American cuisine]] | [[Cookbook:Vegetarian cuisine|Vegetarian Cuisine]] | [[Cookbook:Dessert|Dessert]]
+==Ingredients==
+
+=== Torte ===
+* 1 [[Cookbook:Cup|cup]] semi-sweet [[Cookbook:Chocolate Chips|chocolate chips]]
+* ½ cup [[Cookbook:Margarine|margarine]] or [[Cookbook:Butter|butter]]
+* ½ cup all-purpose [[Cookbook:Flour|flour]]
+* 4 [[Cookbook:Egg|eggs]], separated
+* ½ cup white granulated [[Cookbook:Sugar|sugar]]
+
+=== Chocolate glaze ===
+For ~½ cup:
+
+* 1 [[Cookbook:Ounce|ounce]] unsweetened [[Cookbook:Chocolate|chocolate]]
+* 1 [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Margarine|margarine]] or [[Cookbook:Butter|butter]]
+* 1 [[Cookbook:Cup|cup]] [[Cookbook:Powdered Sugar|powdered sugar]]
+* 5 teaspoons [[Cookbook:Boiling|boiling]] [[Cookbook:Water|water]] [[Cookbook:Boil|boil]]
+
+=== Caramel sauce ===
+For ~1¾ cup:
+
+* 1 [[Cookbook:Cup|cup]] packed [[Cookbook:Brown Sugar|brown sugar]]
+* ½ cup [[Cookbook:Cream|heavy whipping cream]]
+* ¼ cup [[Cookbook:Corn Syrup|corn syrup]]
+* 1 [[Cookbook:Tablespoon|tablespoon]] [[Cookbook:Margarine|margarine]] or [[Cookbook:Butter|butter]]
+* 2 [[Cookbook:Teaspoon|teaspoon]] ground [[Cookbook:Cinnamon|cinnamon]]
+
+=== Chocolate curls ===
+* 1 bar [[Cookbook:Chocolate|chocolate]]
+
+=== Topping ===
+* Chocolate glaze
+* Caramel sauce
+* Chocolate curls, if desired
+* ½ cup [[Cookbook:Chop|chopped]] [[Cookbook:Pecan|pecans]]
+==Procedure==
+
+=== Torte ===
+# Preheat [[Cookbook:Oven|oven]] to [[Cookbook:Oven_temperatures|325°F]].
+# Grease a 9x3-[[Cookbook:Inch|inch]] [[Cookbook:Springform Pan|springform pan]].
+# Heat chocolate chips and margarine in a two-quart [[Cookbook:Saucepan|saucepan]] over medium heat until chocolate chips are melted; cool 5 minutes.
+# Stir in flour until smooth.
+# Stir in egg yolks until well blended.
+# [[Cookbook:Whipping|Whip]] [[Cookbook:Egg White|egg whites]] in large bowl on high speed until foamy.
+# Beat in sugar, 1 [[Cookbook:Tablespoon|tablespoon]] at a time until soft peaks form.
+# [[Cookbook:Folding|Fold]] chocolate mixture into egg whites.
+# Spread in greased a 9x3-inch springform pan.
+# [[Cookbook:Bake|Bake]] for 35–40 minutes or until top of cake appears dry and cracked; cool 10 minutes.
+
+=== Chocolate glaze ===
+# Heat chocolate and margarine over low heat until melted.
+# Blend in powdered sugar and water until smooth.
+# Stir in additional boiling water, ½ teaspoon at a time, until of drizzling consistency.
+
+=== Caramel sauce ===
+# Heat all ingredients to [[Cookbook:Boil|boiling]] over medium heat, stirring constantly, reduce heat to low.
+# [[Cookbook:Simmer|Simmer]] uncovered for 5 minutes.
+
+=== Chocolate curls ===
+# Let the chocolate stand in a warm place for about 15 minutes before making curls. The thicker the bar of chocolate, the larger your curls will be.
+# Place the chocolate on waxed paper. Make chocolate curls by pulling a [[Cookbook:Vegetable Peeler|vegetable peeler]] toward you across the flattest side of the chocolate, pressing firmly in long, thin strokes. Small curls can be made by using the side of the chocolate bar.
+#Transfer each curl carefully with a [[Cookbook:Skewer|toothpick]] to wax-lined [[Cookbook:Cookie Sheet|cookie sheet]].
+
+=== Assembly ===
+# Run knife alongside of cake to loosen, remove side of pan. Cook cake completely.
+# Place on serving plate.
+# Spread top of cake with chocolate glaze; drizzle with caramel sauce.
+# [[Cookbook:Garnish|Garnish]] with chocolate curls and pecans.
+
+[[Category:Recipes using dark chocolate]]
+[[Category:Baking recipes]]
+[[Category:Recipes for sauces and condiments]]
+[[Category:Recipes for dessert]]
+[[Category:Vegetarian recipes]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using egg]]
+[[Category:Recipes for caramel]]
+[[Category:Recipes using brown sugar]]
+[[Category:Recipes using granulated sugar]]
+[[Category:Recipes using powdered sugar]]
+[[Category:Recipes using unsweetened chocolate]]
+[[Category:Recipes using ground cinnamon]]
+[[Category:Recipes using corn syrup]]
+[[Category:Recipes using heavy cream]]
+[[Category:Recipes using all-purpose flour]]
+[[Category:Recipes using margarine]]

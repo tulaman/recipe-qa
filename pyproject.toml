@@ -1,0 +1,45 @@
+[project]
+name = "recipe-qa"
+version = "0.1.0"
+description = "Question answering over a fixed corpus of Wikibooks Cookbook recipes"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pydantic>=2.11,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4",
+    "ruff>=0.15",
+]
+ingest = [
+    "mwparserfromhell>=0.7,<0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["recipe_qa"]
+
+[tool.uv]
+default-groups = ["dev", "ingest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# Wikibooks text uses en dashes and vulgar fractions; tests quote it verbatim.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# Test inputs are real wikitext lines quoted verbatim.
+"tests/**" = ["E501"]

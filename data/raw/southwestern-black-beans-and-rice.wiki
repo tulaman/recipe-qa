@@ -1,0 +1,28 @@
+{{recipesummary|category=Bean recipes|servings=4|time=20 minutes|difficulty=1}}
+{{recipe}} | [[Cookbook:North American cuisines|North America]] | [[Cookbook:Southwestern cuisine|Southwestern cuisine]] | [[Cookbook:Vegetarian cuisine|Vegetarian cuisine]] | [[Cookbook:Beans|Beans]] | [[Cookbook:Rice|Rice]]
+==Ingredients==
+
+* 2 [[Cookbook:Cup|cups]] cooked [[Cookbook:Rice|rice]]
+* 15 [[Cookbook:Ounce|ounce]] can [[Cookbook:Black Beans|black beans]], drained
+* 10 ounce can [[Cookbook:Tomato|tomatoes]] and [[Cookbook:Jalapeño|green chiles]]
+* ½ [[Cookbook:Teaspoon|tsp]] [[Cookbook:Cumin|cumin]]
+
+==Procedure==
+
+# In [[Cookbook:Pots and Pans|medium saucepan]], combine beans, tomatoes and green chiles mix, and cumin.
+# Heat through.
+# Serve over hot rice.
+
+== Notes, tips, and variations ==
+
+* Ro-Tel makes canned tomatoes and green chiles.
+
+[[Category:Inexpensive recipes|{{PAGENAME}}]]
+[[Category:United States recipes]]
+[[Category:Recipes using black bean|{{PAGENAME}}]]
+[[Category:Recipes using cumin|{{PAGENAME}}]]
+[[Category:Recipes using rice|{{PAGENAME}}]]
+[[Category:Recipes using tomato|{{PAGENAME}}]]
+[[Category:Vegan recipes|{{PAGENAME}}]]
+[[Category:Naturally gluten-free recipes|{{PAGENAME}}]]
+[[Category:Recipes using chile]]

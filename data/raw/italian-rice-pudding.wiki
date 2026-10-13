@@ -1,0 +1,41 @@
+{{recipesummary|category=Rice recipes|servings=8|time=1½ hours|difficulty=3
+}}{{recipe}} | [[Cookbook:Cuisine of Italy|Italian cuisine]] | [[Cookbook:Vegetarian cuisine|Vegetarian Cuisine]] | [[Cookbook:Rice|Rice]] | [[Cookbook:Dessert|Dessert]]
+==Ingredients==
+
+* 2 [[Cookbook:Cup|cups]] (500 [[Cookbook:Milliliter|ml]]/1.1 [[Cookbook:Pint|pint]]) [[Cookbook:Water|water]]
+* 1 cup (110 g/3.9 [[Cookbook:Ounce|oz]]) risotto [[Cookbook:Rice|rice]]
+* ¼ [[Cookbook:Teaspoon|teaspoon]] [[Cookbook:Salt|salt]]
+* 1 [[Cookbook:Tablespoon|tablespoon]] [[Cookbook:Butter|butter]]
+* 3 cups ({{convert|750|ml|USpt|abbr=on|disp=s}}) [[Cookbook:Half and Half|half and half]]
+* 1 cup ({{convert|225|g|oz|abbr=on|disp=s}}) granulated [[Cookbook:Sugar|sugar]]
+* 1 [[Cookbook:Cinnamon|cinnamon stick]]
+* 1 piece of [[Cookbook:Lemon rind|lemon peel]]
+* [[Cookbook:Cinnamon|Ground cinnamon]] to [[Cookbook:Garnish|garnish]]
+
+==Procedure==
+
+# Bring water to a [[Cookbook:Boiling|boil]], then add rice, salt, and butter.
+# Cover, lower heat to [[Cookbook:simmer|simmer]], and cook for 20 minutes.
+# Place rice in upper part of [[Cookbook:Double Boiler|double boiler]] with half and half, sugar, cinnamon stick, and lemon peel.
+# Bring to boil over direct heat.
+# Place over simmering water in double boiler and cook for 45 minutes.
+# Remove cinnamon stick and lemon peel.
+# Pour rice mixture into a 2-[[Cookbook:Quart|quart]] (1.9 [[Cookbook:Liter|L]]) casserole and allow to cool.
+# Sprinkle with cinnamon powder.
+
+== Notes, tips, and variations ==
+
+* The rice should be plump, medium grain rice that contains a lot of starch, like Arborio or Carnaroli. Other rices that work well are Roma, Nano, Maratelli, and Vialone.
+* Mixture will thicken as it cools.
+* Best at room temperature or slightly warm.
+
+[[Category:Recipes using rice]]
+[[Category:Recipes for dessert]]
+[[Category:Recipes for rice pudding]]
+[[Category:Vegetarian recipes]]
+[[Category:Inexpensive recipes]]
+[[Category:Italian recipes]]
+[[Category:Recipes using butter]]
+[[Category:Recipes using granulated sugar]]
+[[Category:Recipes using cinnamon]]
+[[Category:Recipes using lemon zest]]

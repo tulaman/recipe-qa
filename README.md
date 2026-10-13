@@ -36,11 +36,33 @@ uv run uvicorn recipe_qa.api:app --reload
 
 ## Corpus
 
+50 English Wikibooks Cookbook recipes (CC BY-SA 4.0), committed under
+`data/`. Decisions and measurements: [ADR 004](adr/004-ingestion.md).
+
+| File | What |
+|---|---|
+| `data/corpus_selection.json` | Which pages, why (anchor / group quota), pinned `revid` and SHA-256 of the wikitext, overlap groups |
+| `data/raw/<id>.wiki` | Pinned raw wikitext, for audits and the offline rebuild test |
+| `data/recipes.jsonl` | Parsed records: ingredients, steps, sections, metadata with provenance (`explicit` / `derived` / `unknown` + evidence) |
+| `data/manifest.json` | IDs, titles, canonical URLs, per-record hashes, `corpus_version` |
+
+Coverage: soup 9, dessert 10, Italian 8, Indian 8, Mexican 8, vegetarian 13,
+vegan 13, gluten-free 7 (pages count in every group they belong to).
+Overlapping dishes: carbonara ×2, rice pudding ×3, tomato soup ×2,
+baklava ×2, guacamole ×2. Time: 27 explicit, 3 derived (summed stages),
+20 unknown.
+
 ```bash
-make corpus          # scripts/select_corpus.py → scripts/ingest.py → data/
+make corpus          # rebuild recipes.jsonl + manifest.json from the pinned selection (offline)
+uv run python scripts/ingest.py --check   # exit 1 if committed data drifted from the parser
+make select-corpus   # deliberate refresh from live Wikibooks: new revids, new corpus_version
 ```
 
-_TBD: category list, counts, how pinned revisions work, how to refresh._
+`make corpus` is reproducible: a missing raw page is fetched by its pinned
+`revid` and rejected unless its hash matches. `tests/test_corpus.py` fails
+if the committed files differ from a rebuild, so a parser change cannot
+ship without regenerating the data. A refresh is a reviewed commit, never
+a runtime behavior (SPEC §9.5).
 
 ## Tests and evals
 
@@ -68,4 +90,12 @@ per stage._
 
 ## Scope cut and production gaps
 
-_TBD._
+_TBD (filled at the end)._ Recorded so far:
+
+- Ingredient alias table (`data/aliases.json`) lands with constraint
+  matching in stage 4, not with ingestion.
+- Ingredient `normalized` names are heuristic; exclusion matching must also
+  read `raw` (ADR 004).
+- Pages whose diet category contradicts their ingredients are excluded,
+  not repaired; the eligibility rule also ignores such a category
+  (SPEC §4 v0.2).
