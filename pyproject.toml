@@ -5,11 +5,15 @@ description = "Question answering over a fixed corpus of Wikibooks Cookbook reci
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "anthropic>=0.70",
+    "fastapi>=0.120",
     "pydantic>=2.11,<3",
+    "uvicorn>=0.38",
 ]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28",
     "pytest>=8.4",
     "ruff>=0.15",
 ]
@@ -39,6 +43,10 @@ target-version = "py312"
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 # Wikibooks text uses en dashes and vulgar fractions; tests quote it verbatim.
 ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.isort]
+# Explicit, so import order does not depend on which modules exist yet.
+known-first-party = ["recipe_qa"]
 
 [tool.ruff.lint.per-file-ignores]
 # Test inputs are real wikitext lines quoted verbatim.
