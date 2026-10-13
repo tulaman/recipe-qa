@@ -156,3 +156,9 @@ def test_page_without_recipe_sections_parses_to_empty(text: str) -> None:
     page = parse_page(text)
     assert page.ingredients == []
     assert page.steps == []
+
+
+def test_summary_yield_is_read() -> None:
+    page = parse_page("{{Recipe summary\n| Servings = \n| Yield = 4 pancakes\n}}\n")
+    assert page.summary_servings is None
+    assert page.summary_yield == "4 pancakes"

@@ -118,3 +118,20 @@ def test_manifest_rejects_duplicate_ids() -> None:
     carbonara = build_record(entry_for(CARBONARA), CARBONARA)
     with pytest.raises(ValueError, match="duplicate"):
         build_manifest([carbonara, carbonara])
+
+
+@pytest.mark.parametrize(
+    "replacement",
+    ["yield=about 12 oz", "servings=|yield=about 12 oz", "servings= |yield=about 12 oz"],
+)
+def test_yield_fills_servings_when_servings_is_absent(replacement: str) -> None:
+    text = CARBONARA.replace("servings=6", replacement)
+    servings = build_record(entry_for(text), text).metadata.servings
+    assert (servings.value, servings.status) == ("about 12 oz", "explicit")
+    assert servings.evidence == "yield: about 12 oz"
+
+
+def test_servings_wins_over_yield() -> None:
+    text = CARBONARA.replace("servings=6", "servings=6|yield=1 pot")
+    servings = build_record(entry_for(text), text).metadata.servings
+    assert (servings.value, servings.evidence) == ("6", "6")
