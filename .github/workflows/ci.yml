@@ -30,3 +30,48 @@ jobs:
       - name: Test
         # No provider key and no network: tests run on committed fixtures and data/.
         run: uv run pytest
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Type-check and build
+        run: npm run build
+
+  container:
+    # The image that will be deployed, started with the fake provider:
+    # proves it builds, boots without a key, serves the UI and honours the
+    # /ask contract. Live-model checks run after deploy (deploy.yml).
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Build image
+        run: docker build --build-arg GIT_SHA=${{ github.sha }} -t recipe-qa:ci .
+      - name: Start container
+        run: |
+          docker run -d --name app -p 8000:8000 -e RECIPE_QA_PROVIDER=fake recipe-qa:ci
+          for i in $(seq 1 30); do
+            if curl -fsS localhost:8000/healthz | grep -q '"${{ github.sha }}"'; then exit 0; fi
+            sleep 1
+          done
+          docker logs app
+          exit 1
+      - name: Contract smoke against the container
+        run: uv run python evals/run.py --base-url http://localhost:8000 --contract-only
+      - name: Container logs
+        if: always()
+        run: docker logs app
