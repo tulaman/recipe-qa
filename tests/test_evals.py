@@ -426,7 +426,9 @@ def test_rescoring_a_recorded_report_counts_each_category_against_the_current_se
 ) -> None:
     recorded = content_run(tmp_path, ANSWERED, [CARBONARA, refusal("out_of_corpus")])
     stricter = {**ANSWERED, "expected_facts": ["garlic"]}
-    write_set(tmp_path, "content", [{"id": "c", "question": CARBONARA_QUESTION, "expect": stricter}])
+    write_set(
+        tmp_path, "content", [{"id": "c", "question": CARBONARA_QUESTION, "expect": stricter}]
+    )
 
     table = rescore(recorded, load_e2e_set("content", tmp_path))
 
