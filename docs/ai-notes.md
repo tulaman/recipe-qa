@@ -122,3 +122,58 @@ live in `recipe_qa/prompts/`.
 - Found while designing: three repeats of a 15-case set exceed the
   service's own 30 requests/minute limit, so the runner waits out a 429
   instead of recording it as a failure.
+
+### 2026-10-14 — stage 4b: golden, held-out and extraction sets; baseline
+
+- Sets first, fitted to the corpus rather than to the model: every
+  recipe ID, competitor and expected fact comes from `data/`, and
+  `tests/test_golden_sets.py` checks each scenario claim (a competitor at
+  exactly 20 minutes, raisins only optional in a competitor, one recipe
+  for the compound case, none for the unsatisfiable one). Expected facts
+  are matched against the ingested visible text; the raw wikitext splits
+  phrases with links ("risotto [[Cookbook:Rice|rice]]").
+- Changed from the task, by the user's decision: the task asked for the
+  hold-out questions in the extraction set. SPEC §7.3 and `check_disjoint`
+  forbid a held-out question in any other set, and running extraction on
+  it would be running the hold-out. The extraction set is the 15 golden
+  questions plus 17 extra phrasings; the hold-out (5 cases) was not run.
+- Labelling conventions written down in `evals/README.md` before the
+  run (dish words are not `must_include`; ingredients in the user's words;
+  no invented time for "quick"; guarantee questions carry no constraints).
+- Baseline, nothing fixed. Build `2096155` (prompts `c9e30cb2fb92`,
+  `claude-haiku-5-5`, corpus `976abf38…`), local, served from a clean
+  export of the commit so every provenance entry is confirmed. Reports:
+  `evals/reports/milestones/stage-4b-{golden,extraction}-baseline.json`.
+- Golden, 3 runs: 13/15 pass, 1 fail, 1 unstable. Over 45 runs: false
+  answers 0, false refusals 3, wrong reason 0, technical errors 1. Content
+  checks are recorded in the cases but not measured yet.
+  - g08 (garbanzo beans) fails 3/3 as a false refusal. Extraction is
+    right (`garbanzo bean`), but no page says "garbanzo": BM25's top five
+    are other recipes (Indian Beans first), neither chickpea recipe
+    reaches the model, and it correctly finds nothing to answer from.
+    Needs the alias table (SPEC §4).
+  - g09 (rice pudding without raisins) is unstable: two runs cite Rice
+    Pudding, whose raisins are optional ("leave them out"), which SPEC §4
+    counts as present; one run was a 503 when generation hit the 12 s
+    deadline. The extraction run was calling the same API key at the time,
+    which may have slowed the provider; the error is recorded as measured.
+  - The other constraint cases (6, 7, 10, 11) pass without `is_eligible`:
+    retrieval and the model happened to pick eligible recipes. A pass
+    there is not yet a guarantee.
+  - Latency (client side, 29 answered runs): p50 3.1 s, p95 4.6 s, max
+    4.9 s; gate refusals max 1.3 s. No 429 waits: sequential requests at
+    ~3 s each stay under 30 per minute, unlike the stage 4a estimate.
+- Extraction, 3 runs: 23/32 pass, 8 fail, 1 unstable. `in_domain`,
+  `diet`, `max_total_minutes` and `time_limit_inclusive`: no errors over
+  96 runs. `must_include` spurious 29, `must_exclude` spurious 3,
+  `safety_question` false positive 6.
+  - Spurious includes are dish words ("garlic" for the garlic soup,
+    "pasta" for carbonara, "pancake", "salsa"). Harmless where the dish
+    contains the word, but "pancake" or "salsa" as a required ingredient
+    would filter out the dish once `is_eligible` exists: a future false
+    refusal.
+  - `safety_question` false positives are "an egg-free pancake recipe"
+    and "I can't have onions": requests for recipes read as guarantee
+    questions. Both would be false refusals end to end.
+  - "Is Henry Thiele's pancake egg-free?" also gets `must_exclude: egg`,
+    against the convention; harmless, since the safety gate runs first.

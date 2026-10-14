@@ -55,6 +55,15 @@ An end-to-end set is one JSON object:
 | `refusal_reason` | `refusal_reason` equals it |
 | `sources_any` | at least one cited recipe ID is in the list |
 | `constraints` | every cited recipe satisfies the predicate (below) |
+| `expected_facts` | recorded, not yet checked: case-insensitive regexes the answer must match; each matches text on a page in `sources_any` |
+| `forbidden_claims` | recorded, not yet checked: case-insensitive regexes the answer must not match |
+
+The two content keys are checked from stage 5 on (SPEC §7.2). A case may
+also carry `scenario` (its row in the table below), `competitors`
+(recipes the question naturally pulls in that fail its constraints),
+`paraphrases` (a held-out case's golden intent) and a free-text `note`;
+the runner ignores them and `tests/test_golden_sets.py` uses them to check
+that each scenario really fits the corpus.
 
 An extraction set has one labelled question per line; `expect` is a
 complete `Extraction` (`recipe_qa/schemas.py`), so omitted fields mean
@@ -64,8 +73,33 @@ their defaults (no time limit, no diet, no ingredients):
 {"id": "vegan-no-nuts", "question": "Vegan desserts without nuts?", "expect": {"in_domain": true, "safety_question": false, "diet": "vegan", "must_exclude": ["nut"]}}
 ```
 
-Committed sets: `smoke` (both kinds, three questions). The golden set
-lands in stage 5.
+Committed sets:
+
+| Set | Kind | Cases |
+|---|---|---|
+| `smoke` | both | 3 questions, run after every deploy |
+| `golden` | end to end | 15, one per scenario below |
+| `holdout` | end to end, held out | 5 paraphrases of golden intents |
+| `golden` | extraction | the 15 golden questions + 17 extra phrasings |
+
+The extraction set holds no held-out question: the held-out set shares no
+question with any other set, extraction labels included.
+
+Extraction labelling conventions (the labels are a choice; these keep it
+consistent):
+
+- An ingredient is `must_include` only when it is asked for ("with
+  garbanzo beans", "using rice"). Words that name or describe the dish
+  ("garlic soup", "a mango yogurt drink") are left to retrieval.
+- Ingredients are labelled in the user's words, singular: "garbanzo bean",
+  not "chickpea". Aliases are resolved by `is_eligible` (SPEC §4), so an
+  extractor that maps to the alias is reported as missed + spurious.
+- A vague speed ("something quick") is no time limit; the extractor must
+  not invent a number.
+- A guarantee question ("Is X egg-free?", "Can my celiac friend eat X?")
+  is `safety_question` with no constraints, as in `smoke`; a request for
+  recipes ("an egg-free pancake recipe", "gluten-free bread") is a filter,
+  not a safety question.
 
 ### Held-out set
 
@@ -172,7 +206,8 @@ rate-limit waits, outcome, failures and the response body.
 
 ## Golden set structure
 
-Concrete recipe IDs and expected facts are assigned in stage 5. The 15
+`evals/cases/golden.json` assigns one case to each row, with recipe IDs
+from the committed corpus and a `note` on why the scenario fits it. The 15
 cases cover:
 
 | # | Scenario | Checks |
@@ -193,8 +228,11 @@ cases cover:
 | 14 | Allergen safety guarantee ("Is X nut-free?") | `safety`, citation to X |
 | 15 | Factual allergen presence ("Does X contain nuts?") | answered from ingredients, no safety claim |
 
-Content checks (`expected_facts`, `forbidden_claims`) and retrieval
-recall@5 arrive with the golden set in stage 5.
+Content checks (`expected_facts`, `forbidden_claims`) are recorded in the
+golden and held-out cases now and checked from stage 5, together with
+retrieval recall@5. A merge of two disagreeing recipes (row 5) is left to
+the manual factuality review: a regex cannot tell a merged procedure from
+an allowed mention of the other variant.
 
 Input validation, prompt injection, provider errors and invalid source IDs
 are covered by `tests/`, not by the golden set, because they do not need a
