@@ -40,9 +40,22 @@ testability without a provider key.
 
 ## Measurements
 
-_To be filled from `evals/run.py` output: recall@5 on golden set (lexical,
-and hybrid if tried); retrieval stage latency; token count of top-3
-context._
+Measured 2026-10-14 on corpus `976abf38…` (50 recipes). Status stays
+Proposed: the held-out set has not been run.
+
+| Measure | Value | Source |
+|---|---|---|
+| Recall@5, golden answerable cases (lexical, eligibility first) | **11/11 = 100 %** | `uv run pytest tests/test_retrieval_recall.py -s`, at commit `4b4be2c` and in CI |
+| Recall@5 without the eligibility filter | 10/11: g08 ("garbanzo beans") misses, no page says "garbanzo" | stage 5a run of the same test, `docs/ai-notes.md` |
+| Retrieve stage, answered questions (filter + BM25, 33 requests) | median 0.4 ms, p95 14.8 ms | `evals/reports/milestones/stage-5b-stages.json` |
+| Retrieve stage, refusals (12 requests) | median 0.5 ms, p95 6.3 ms | same |
+| Generate input tokens (3 recipes + constraints + prompt), answers | median 3,554, p95 4,543 | same |
+
+Hybrid retrieval was not tried: the trigger above (recall@5 on paraphrase
+cases < 100 %) did not fire. The one recall miss so far was fixed by the
+alias table, not by embeddings. Recall uses the labelled constraints, so
+it isolates retrieval; an extraction error that adds a spurious include
+still loses a recipe end to end (g05 in stage 5a, fixed in extraction).
 
 ## Consequences
 

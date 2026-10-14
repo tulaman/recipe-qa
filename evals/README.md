@@ -15,10 +15,14 @@ uv run python evals/run.py --base-url https://... --set golden --milestone stage
 # extraction only, in process (needs ANTHROPIC_API_KEY; RECIPE_QA_PROVIDER=fake checks the runner)
 uv run python evals/extract.py --set smoke
 uv run python evals/extract.py --set golden --milestone stage-5-extraction
+
+# recount recorded reports by check category against the current set, offline
+uv run python evals/rescore.py evals/reports/milestones/*-golden*.json
 ```
 
-Both exit 0 only when every case passes in every run (and, end to end,
-every endpoint check holds).
+Both runners exit 0 only when every case passes in every run (and, end to
+end, every endpoint check holds and content checks reach 13/15 in every
+run).
 
 ## Case sets
 
@@ -55,10 +59,29 @@ An end-to-end set is one JSON object:
 | `refusal_reason` | `refusal_reason` equals it |
 | `sources_any` | at least one cited recipe ID is in the list |
 | `constraints` | every cited recipe satisfies the predicate (below) |
-| `expected_facts` | recorded, not yet checked: case-insensitive regexes the answer must match; each matches text on a page in `sources_any` |
-| `forbidden_claims` | recorded, not yet checked: case-insensitive regexes the answer must not match |
+| `expected_facts` | content: case-insensitive regexes the answer must match; each matches text on a page in `sources_any` |
+| `forbidden_claims` | content: case-insensitive regexes the answer must not match |
+| `sources_all` | content: every listed recipe ID is cited (the §9.3 variant cases) |
 
-The two content keys are checked from stage 5 on (SPEC §7.2). A case may
+## Content checks
+
+The three content keys are scored per run in their own column
+(`content_passed`, `content_failures`), apart from the checks above
+(SPEC §7.2, v0.6). They never change a case's hard verdict. A case
+without content keys passes content when its outcome is right; a wrong
+outcome fails content too. Each case gets a content verdict (`pass`,
+`fail`, `unstable`, as below), and the run passes only if, in **every**
+repeat, at least 13 of 15 cases pass content (scaled up for other set
+sizes). `summary.content` holds the per-run counts and the failing and
+unstable cases.
+
+`evals/rescore.py` recounts recorded reports offline by category
+(contract, refusal, sources, constraints, content) against the current
+version of their case set. That is how reports written before content was
+scored are compared with later ones; it prints and never writes into
+`milestones/`.
+
+A case may
 also carry `scenario` (its row in the table below), `competitors`
 (recipes the question naturally pulls in that fail its constraints),
 `paraphrases` (a held-out case's golden intent) and a free-text `note`;
@@ -215,8 +238,8 @@ cases cover:
 | 1 | How-to for a known dish by name | expected source cited, key steps present, no added steps |
 | 2 | Semantic paraphrase without the dish name | expected source retrieved and cited |
 | 3 | Ingredient question about a dish | fact matches the cited recipe |
-| 4 | Two similar variants of one dish | one variant followed, other may be mentioned, both citable |
-| 5 | Conflicting recipes for the same dish | no merged steps/ingredients |
+| 4 | Two similar variants of one dish | one variant followed, the other mentioned, both cited (`sources_all`) |
+| 5 | Conflicting recipes for the same dish | both cited (`sources_all`); no merged steps/ingredients |
 | 6 | Vegetarian constraint | cited recipe passes the vegetarian rule |
 | 7 | Under-N-minutes constraint | cited recipe has explicit time < N |
 | 8 | Required ingredient (with alias) | cited recipe contains the ingredient |
@@ -228,11 +251,11 @@ cases cover:
 | 14 | Allergen safety guarantee ("Is X nut-free?") | `safety`, citation to X |
 | 15 | Factual allergen presence ("Does X contain nuts?") | answered from ingredients, no safety claim |
 
-Content checks (`expected_facts`, `forbidden_claims`) are recorded in the
-golden and held-out cases now and checked from stage 5, together with
-retrieval recall@5. A merge of two disagreeing recipes (row 5) is left to
-the manual factuality review: a regex cannot tell a merged procedure from
-an allowed mention of the other variant.
+Content checks (`expected_facts`, `forbidden_claims`, `sources_all`) are
+scored from stage 5b; retrieval recall@5 is `tests/test_retrieval_recall.py`.
+A merge of two disagreeing recipes (row 5) is left to the manual
+factuality review: a regex cannot tell a merged procedure from a required
+mention of the other variant.
 
 Input validation, prompt injection, provider errors and invalid source IDs
 are covered by `tests/`, not by the golden set, because they do not need a

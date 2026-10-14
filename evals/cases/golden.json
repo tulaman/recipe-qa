@@ -44,6 +44,7 @@
       "expect": {
         "refused": false,
         "sources_any": ["chunky-guacamole", "guacamole-i"],
+        "sources_all": ["chunky-guacamole", "guacamole-i"],
         "expected_facts": ["avocado", "lime"],
         "forbidden_claims": ["cumin", "sour cream"]
       },
@@ -56,6 +57,7 @@
       "expect": {
         "refused": false,
         "sources_any": ["spaghetti-alla-carbonara", "carbonara-pasta"],
+        "sources_all": ["spaghetti-alla-carbonara", "carbonara-pasta"],
         "expected_facts": ["pancetta", "yolk"],
         "forbidden_claims": ["\\b(heavy|double|single|whipping) cream\\b", "garlic"]
       },

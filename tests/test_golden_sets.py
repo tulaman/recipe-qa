@@ -16,6 +16,8 @@ import pytest
 from evals.checks import constraint_failures
 from evals.sets import load_e2e_set, load_extraction_set
 from recipe_qa.corpus import load_recipes
+from recipe_qa.retrieval import BM25Index
+from recipe_qa.service import CONTEXT_K, retrieve
 
 ROOT = Path(__file__).resolve().parent.parent
 RECIPES = {r.id: r for r in load_recipes(ROOT / "data" / "recipes.jsonl")}
@@ -135,3 +137,16 @@ def test_compound_case_is_satisfied_by_exactly_one_recipe() -> None:
 
 def test_unsatisfiable_case_has_no_recipe_in_the_corpus() -> None:
     assert satisfying(CASES["g11-unsatisfiable"]["expect"]["constraints"]) == []
+
+
+@pytest.mark.parametrize("case_id", ["g04-variant-pair", "g05-disagreeing-pair"])
+def test_variant_cases_require_both_variants_and_both_reach_the_model(case_id: str) -> None:
+    """SPEC §9.3 (v0.6): the other variant is mentioned and cited, so both
+    must be among the recipes generation sees when extraction is right."""
+    case = CASES[case_id]
+    both = case["expect"]["sources_all"]
+    assert sorted(both) == sorted(case["expect"]["sources_any"])
+    recipes = list(RECIPES.values())
+    label = next(c for c in load_extraction_set("golden").cases if c["id"] == case_id)["expect"]
+    hits = retrieve(BM25Index(recipes), recipes, case["question"], label).hits[:CONTEXT_K]
+    assert set(both) <= {h.recipe.id for h in hits}

@@ -20,6 +20,7 @@ import pytest
 from evals import provenance, report
 from evals.checks import constraint_failures
 from evals.extract import compare, run_extraction
+from evals.rescore import rescore
 from evals.run import RATE_LIMIT_WAIT_S, run_set
 from evals.sets import SetError, check_disjoint, load_e2e_set, load_extraction_set
 from recipe_qa.corpus import load_manifest, load_recipes
@@ -200,6 +201,7 @@ def test_recorded_smoke_responses_pass_every_run() -> None:
         "pass": 3,
         "fail": 0,
         "unstable": 0,
+        "content": {"per_run": [3, 3], "required": 3, "fail": [], "unstable": []},
         "verdict": "pass",
     }
     assert result["repeat"] == 2
@@ -314,6 +316,7 @@ def test_contract_only_skips_expectations_and_the_refusal_matrix() -> None:
     answers[RECORDED["capital_out_of_domain"]["question"]] = [(200, CARBONARA)]
     result = smoke_run(answers, repeat=1, contract_only=True)
     assert result["summary"]["verdict"] == "pass"
+    assert result["summary"]["content"] is None
     assert result["refusal_matrix"] is None
 
 
@@ -339,6 +342,106 @@ def test_a_cited_recipe_must_satisfy_the_case_constraints(tmp_path: Path) -> Non
     assert len(failures) == 1
     assert "spaghetti-alla-carbonara" in failures[0]
     assert "vegetarian" in failures[0]
+
+
+# --- content checks (SPEC §7.2, v0.6) -------------------------------------------
+
+CARBONARA_QUESTION = RECORDED["carbonara_answer"]["question"]
+ANSWERED = {"refused": False, "sources_any": ["spaghetti-alla-carbonara"]}
+
+
+def content_run(tmp_path: Path, expect: dict, bodies: list[dict]) -> dict:
+    """One case answered by each body in turn, one run per body."""
+    write_set(tmp_path, "content", [{"id": "c", "question": CARBONARA_QUESTION, "expect": expect}])
+    with server({CARBONARA_QUESTION: [(200, b) for b in bodies]}) as client:
+        return run_set(
+            client,
+            load_e2e_set("content", tmp_path),
+            repeat=len(bodies),
+            contract_only=False,
+            sleep=no_sleep(),
+        )
+
+
+def without(word: str) -> dict:
+    body = copy.deepcopy(CARBONARA)
+    body["answer"] = body["answer"].replace(word, "pork")
+    return body
+
+
+@pytest.mark.parametrize(
+    ("content", "failure"),
+    [
+        ({"expected_facts": ["guanciale", "pecorino romano", "60 minutes|an hour"]}, None),
+        ({"expected_facts": ["garlic"]}, "expected fact 'garlic' not in answer"),
+        ({"forbidden_claims": [r"\bheavy cream\b"]}, None),
+        # A mention of the other variant is still a mention.
+        ({"forbidden_claims": ["lemon zest"]}, "forbidden claim 'lemon zest' in answer"),
+        ({"sources_all": ["spaghetti-alla-carbonara", "carbonara-pasta"]}, None),
+        ({"sources_all": ["spaghetti-alla-carbonara", "baklava-i"]}, "baklava-i not cited"),
+    ],
+)
+def test_content_checks_read_the_answer_and_the_citations(
+    tmp_path: Path, content: dict, failure: str | None
+) -> None:
+    run = content_run(tmp_path, {**ANSWERED, **content}, [CARBONARA])["cases"][0]["runs"][0]
+    assert run["passed"] is True  # content never decides the hard checks
+    assert run["content_passed"] is (failure is None)
+    assert run["content_failures"] == ([] if failure is None else [failure])
+
+
+def test_a_case_without_content_expectations_passes_content_only_with_the_right_outcome(
+    tmp_path: Path,
+) -> None:
+    expect = {"refused": True, "refusal_reason": "out_of_domain"}
+    runs = content_run(tmp_path, expect, [OUT_OF_DOMAIN, CARBONARA])["cases"][0]["runs"]
+    assert [r["content_passed"] for r in runs] == [True, False]
+    assert runs[1]["content_failures"] == ["outcome answer, expected out_of_domain"]
+
+
+def test_content_is_counted_per_run_and_fails_a_run_whose_hard_checks_pass(
+    tmp_path: Path,
+) -> None:
+    expect = {**ANSWERED, "expected_facts": ["guanciale"]}
+    result = content_run(tmp_path, expect, [CARBONARA, without("guanciale")])
+    case = result["cases"][0]
+    assert case["verdict"] == "pass"
+    assert case["content"] == {"verdict": "unstable", "passes": "1/2"}
+    assert result["summary"]["content"] == {
+        "per_run": [1, 0],
+        "required": 1,
+        "fail": [],
+        "unstable": ["c"],
+    }
+    assert result["summary"]["verdict"] == "fail"
+
+
+@pytest.mark.parametrize(("cases", "required"), [(15, 13), (3, 3), (1, 1), (30, 26)])
+def test_content_needs_13_of_15_scaled_to_the_set(cases: int, required: int) -> None:
+    assert report.content_required(cases) == required
+
+
+def test_rescoring_a_recorded_report_counts_each_category_against_the_current_set(
+    tmp_path: Path,
+) -> None:
+    recorded = content_run(tmp_path, ANSWERED, [CARBONARA, refusal("out_of_corpus")])
+    stricter = {**ANSWERED, "expected_facts": ["garlic"]}
+    write_set(
+        tmp_path, "content", [{"id": "c", "question": CARBONARA_QUESTION, "expect": stricter}]
+    )
+
+    table = rescore(recorded, load_e2e_set("content", tmp_path))
+
+    assert table["categories"] == {
+        "contract": {"passed": 2, "runs": 2},
+        "refusal": {"passed": 1, "runs": 2},
+        "sources": {"passed": 1, "runs": 2},
+        "constraints": {"passed": 2, "runs": 2},
+        "content": {"passed": 0, "runs": 2},
+    }
+    assert table["content"]["per_run"] == [0, 0]
+    assert table["set_changed"] is True
+    assert table["missing_cases"] == []
 
 
 # --- constraint predicates (SPEC §4, checked against corpus metadata) ---------

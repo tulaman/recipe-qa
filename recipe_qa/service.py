@@ -9,6 +9,7 @@ only extracts and phrases.
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
@@ -37,6 +38,13 @@ CONTEXT_K = 3
 # A safety refusal cites recipes scoring at least this share of the best
 # match, so "Is the baklava nut-free?" links both baklavas and nothing else.
 SAFETY_MATCH_RATIO = 0.5
+# A must_exclude answer is a filter result, never a guarantee (SPEC §5): any
+# form of "safe", and "free" used as an allergen claim ("nut-free", "nut
+# free", "free of"), makes it invalid. "free-range eggs" (in the corpus) and
+# "feel free to" are not claims.
+GUARANTEE_WORDING = re.compile(
+    r"safe|\w[-\s]+free\b(?![-\s]+range\b|\s+to\b)|\bfree\s+(?:of|from)\b", re.IGNORECASE
+)
 
 REFUSAL_MESSAGES: dict[RefusalReason, str] = {
     "out_of_domain": (
@@ -164,7 +172,9 @@ class AskService:
         if not extraction.in_domain:
             return Outcome(None, [], "out_of_domain")
         if extraction.safety_question:
+            started = time.perf_counter()
             hits = self._index.search(question, k=CONTEXT_K)
+            trace["stages_ms"]["retrieve"] = round((time.perf_counter() - started) * 1000, 1)
             best = hits[0].score if hits else 0.0
             matched = [h.recipe.id for h in hits if h.score >= SAFETY_MATCH_RATIO * best]
             return Outcome(None, matched, "safety")
@@ -191,7 +201,7 @@ class AskService:
             "generate",
             lambda: self.provider.generate(question, extraction, context),
             trace,
-            validate=lambda g: _validated(g, allowed),
+            validate=lambda g: _validated(g, allowed, extraction),
         )
         if not generation.answerable:
             return Outcome(None, [], "out_of_corpus")
@@ -233,12 +243,16 @@ class AskService:
             trace["stages_ms"][stage] = round((time.perf_counter() - started) * 1000, 1)
 
 
-def _validated(generation: Generation, allowed: set[str]) -> Generation:
-    """SPEC §3 step 8: an answer is non-empty and cites 1-3 given recipes."""
+def _validated(generation: Generation, allowed: set[str], extraction: Extraction) -> Generation:
+    """SPEC §3 step 8: an answer is non-empty, cites 1-3 given recipes and,
+    when the question excludes an ingredient, guarantees nothing."""
     if not generation.answerable:
         return generation
-    if not (generation.answer or "").strip():
+    answer = (generation.answer or "").strip()
+    if not answer:
         raise ProviderInvalidOutput("answerable but empty answer")
+    if extraction.must_exclude and (match := GUARANTEE_WORDING.search(answer)):
+        raise ProviderInvalidOutput(f"guarantee wording in a must_exclude answer: {match[0]!r}")
     cited = set(generation.source_ids)
     if not 1 <= len(cited) <= CONTEXT_K:
         raise ProviderInvalidOutput(f"{len(cited)} distinct source_ids")

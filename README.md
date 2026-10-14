@@ -83,11 +83,18 @@ a runtime behavior (SPEC §9.5).
 ## Tests and evals
 
 ```bash
-uv run pytest                      # deterministic tests, no network, no key
+uv run pytest                                            # deterministic tests, no network, no key
+uv run pytest tests/test_retrieval_recall.py -s          # retrieval recall@5 on the golden set
 uv run python evals/run.py --base-url http://localhost:8000                  # smoke set, 3 runs per case
+uv run python evals/run.py --base-url http://localhost:8000 --set golden     # golden set, 3 runs per case
 uv run python evals/run.py --base-url http://localhost:8000 --contract-only  # fake provider
-uv run python evals/extract.py --set smoke                                   # extraction only, needs a key
+uv run python evals/extract.py --set golden                                  # extraction only, needs a key
+uv run python evals/rescore.py evals/reports/milestones/*-golden*.json       # recount old reports, offline
+uv run python evals/stages.py --report REPORT.json --log server.log          # latency/tokens per stage
 ```
+
+`stages.py` joins a run's report with the server's trace log (start the
+server with its output tee'd to `evals/reports/server.log`).
 
 Evaluation is layered (SPEC §7, details in [evals/README.md](evals/README.md)):
 `evals/extract.py` measures constraint extraction on its own labelled set,
@@ -105,10 +112,25 @@ under `evals/reports/milestones/`. A held-out paraphrase set, kept apart
 from every other set, runs once, as a milestone.
 
 Sets: `smoke` (three questions: a how-to answer, `out_of_domain`, and a
-`safety` refusal with citations). The 15-case golden set and the held-out
-paraphrases land in stage 5.
+`safety` refusal with citations), `golden` (15 cases, one per scenario in
+SPEC §7.2), the extraction set (32 labelled questions) and `holdout` (5
+paraphrases, not run yet).
 
-_TBD: last eval report summary._
+Latest results (stage 5b, build `ad4a74a`, `claude-haiku-5-5`, 3 runs per
+case; reports in [`evals/reports/milestones/`](evals/reports/milestones/)):
+
+| Measure | Result | Report |
+|---|---|---|
+| Golden, hard checks | 15/15 cases in every run | [`stage-5b-golden.json`](evals/reports/milestones/stage-5b-golden.json) |
+| Golden, content checks | 15/15, 15/15, 15/15 (need ≥ 13 per run); no unstable case | same |
+| Refusals over 45 runs | false answers 0, false refusals 0, wrong reason 0, errors 0 | same |
+| Extraction | 30/32 cases every run; unstable: g02, x17 (spurious `must_include`) | [`stage-5b-extraction.json`](evals/reports/milestones/stage-5b-extraction.json) |
+| Retrieval recall@5 | 11/11 answerable golden cases | `tests/test_retrieval_recall.py` |
+| Latency, client side | answers p50 3.3 s / p95 4.7 s; refusals p50 1.1 s / p95 2.5 s | `stage-5b-golden.json`; per stage in [`stage-5b-stages.json`](evals/reports/milestones/stage-5b-stages.json) |
+| Held-out set | not run | — |
+
+How these moved from the stage 4b baseline, and why, is in
+[docs/ai-notes.md](docs/ai-notes.md) (stage 5b) and in ADR 001 / 002.
 
 ## Deployment
 

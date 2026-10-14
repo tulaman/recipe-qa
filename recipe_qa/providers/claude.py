@@ -80,5 +80,8 @@ class ClaudeProvider:
         self, question: str, extraction: Extraction, recipes: Sequence[Recipe]
     ) -> Completion[Generation]:
         return await self._parse(
-            GENERATE_SYSTEM, generate_message(question, recipes), Generation, GENERATE_MAX_TOKENS
+            GENERATE_SYSTEM,
+            generate_message(question, extraction, recipes),
+            Generation,
+            GENERATE_MAX_TOKENS,
         )
