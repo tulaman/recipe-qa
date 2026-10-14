@@ -35,9 +35,9 @@ export default defineRailway(() => {
     },
   });
 
+  // The CLI manages variables by default: one not declared above is removed
+  // on apply ("variables: managed (default)" in the plan header).
   return project("recipe-qa", {
-    // Variables not declared above are removed on apply.
-    variables: { managed: true },
     resources: [app],
   });
 });

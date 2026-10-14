@@ -2,8 +2,8 @@ name: deploy
 
 # Production deploys happen only here (ADR 003): after CI passes on main, or
 # by hand with a commit SHA to roll back. Running it twice for the same SHA
-# converges to the same state: variables are set to fixed values and the
-# deployed image is built from that commit.
+# converges to the same state: .railway/railway.ts is applied and checked to
+# have no pending changes, and the deployed image is built from that commit.
 
 on:
   workflow_run:
@@ -13,8 +13,12 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: Commit SHA to deploy (default - latest main). Use an older SHA to roll back.
+        description: Commit SHA to deploy (default - latest main). Use an older SHA to roll back; it must contain .railway/railway.ts.
         required: false
+      allow_destructive:
+        description: Apply changes that delete Railway resources or variables (review the CI plan first).
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -26,7 +30,7 @@ concurrency:
 env:
   PUBLIC_URL: https://recipe-qa-production.up.railway.app
   RAILWAY_SERVICE: recipe-qa
-  RAILWAY_CLI_VERSION: 4.47.0
+  RAILWAY_CLI_VERSION: 5.68.0
 
 jobs:
   deploy:
@@ -50,20 +54,40 @@ jobs:
           ref: ${{ env.SHA }}
       - name: Resolve full commit SHA
         run: echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Require the IaC file
+        # Commits before the IaC migration cannot be deployed by this
+        # workflow: they set neither the infrastructure nor BUILD_SHA.
+        run: test -f .railway/railway.ts || { echo "::error::$SHA has no .railway/railway.ts"; exit 1; }
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli@${RAILWAY_CLI_VERSION}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .railway/package-lock.json
+      - name: Install Railway CLI and IaC SDK
+        run: |
+          npm install -g @railway/cli@${RAILWAY_CLI_VERSION}
+          npm ci --prefix .railway --no-audit --no-fund
 
-      - name: Set service variables (no redeploy)
+      - name: Apply infrastructure (.railway/railway.ts)
+        # Destructive changes (deleting a resource or variable) need an
+        # explicit workflow_dispatch with allow_destructive; a merge alone
+        # never deletes anything.
+        env:
+          ALLOW_DESTRUCTIVE: ${{ inputs.allow_destructive && '--confirm-destructive' || '' }}
+        run: railway config apply --yes $ALLOW_DESTRUCTIVE
+      - name: Check the environment matches the file
+        run: railway config plan --detailed-exit-code
+
+      - name: Set the provider key (no redeploy)
+        # The value lives in GitHub secrets; railway.ts declares it preserve().
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           printf '%s' "$ANTHROPIC_API_KEY" \
             | railway variable set ANTHROPIC_API_KEY --stdin --service "$RAILWAY_SERVICE" --skip-deploys
-          # PORT matches the port the public domain targets.
-          railway variable set PORT=8000 --service "$RAILWAY_SERVICE" --skip-deploys
 
       - name: Build and deploy
         # BUILD_SHA is untracked but not git-ignored, so `railway up` uploads
