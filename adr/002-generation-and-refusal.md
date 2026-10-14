@@ -52,9 +52,66 @@ provider.
 
 ## Measurements
 
-_To be filled: golden-set pass rates per category; extraction accuracy on
-the 15 questions plus a small paraphrase set; token usage and cost per
-answered / refused question; latency per stage._
+Measured 2026-10-14, `claude-haiku-5-5`, corpus `976abf38…`, build
+`ad4a74a` (prompts confirmed by the harness), 3 runs per case, served
+from a clean export of the commit. Status stays Proposed: the held-out
+set has not been run.
+
+**Extraction**, 32 labelled questions × 3 runs = 96 runs per field. Runs
+with the field right, stage 4b baseline → stage 5b
+(`evals/reports/milestones/stage-4b-extraction-baseline.json` →
+`stage-5b-extraction.json`):
+
+| Field | 4b | 5b | 5b errors |
+|---|---|---|---|
+| `in_domain` | 96/96 | 96/96 | — |
+| `safety_question` | 90/96 | 96/96 | — (4b: 6 false positives) |
+| `max_total_minutes` | 96/96 | 96/96 | — |
+| `time_limit_inclusive` | 96/96 | 96/96 | — |
+| `diet` | 96/96 | 96/96 | — |
+| `must_include` | 73/96 | 93/96 | 5 spurious items in 3 runs (g02 mango, yogurt ×2; x17 salsa ×1) |
+| `must_exclude` | 93/96 | 96/96 | — |
+| Cases passing every run | 23/32 | 30/32 | g02, x17 unstable |
+
+One golden question is mis-parsed in some runs (g02), which is at, not
+past, the invalidation limit below.
+
+**Refusal matrix**, golden, 45 runs (`stage-5b-golden.json`):
+
+| Expected \ Got | answer | out_of_corpus | out_of_domain | safety | error |
+|---|---|---|---|---|---|
+| answer | 33 | 0 | 0 | 0 | 0 |
+| out_of_corpus | 0 | 6 | 0 | 0 | 0 |
+| out_of_domain | 0 | 0 | 3 | 0 | 0 |
+| safety | 0 | 0 | 0 | 3 | 0 |
+
+False answers 0, false refusals 0, wrong reason 0, technical errors 0.
+Hard checks 15/15 in every run; content checks 15/15 in each of the three
+runs. The guarantee-wording guard (SPEC §5) fired 0 times.
+
+**Latency and tokens per stage**, server trace of the same 45 runs, all
+matched by request ID (`stage-5b-stages.json`); median / p95:
+
+| Stage | Answers (33) | Refusals (12) |
+|---|---|---|
+| extract, ms | 1,193 / 1,953 | 1,080 / 1,488 |
+| retrieve, ms | 0.4 / 14.8 | 0.5 / 6.3 |
+| generate, ms | 1,996 / 3,105 | 970 / 1,081 (only g12, refused by the model) |
+| total (server), ms | 3,282 / 4,695 | 1,124 / 2,459 |
+| extract tokens in / out | 1,641 / 65 (p95 1,650 / 74) | 1,641 / 19 (p95 1,653 / 73) |
+| generate tokens in / out | 3,554 / 252 (p95 4,543 / 550) | 3,602 / 25 |
+
+At the list prices above, the median answered question is about
+5,200 input and 320 output tokens, ≈ $0.00068, so ≈ $0.68 per 1,000
+answered questions. That is under the $1.00 target but above the $0.55
+SPEC §8 projection: extraction input (1.6k tokens, mostly the output
+schema) is three times the ~400 estimated. Gate refusals (out_of_domain,
+safety) skip generation. Over the same runs, client-side p95 for answers
+is 4.7 s (target 5 s).
+
+Golden by category across stages, rescored offline against the current
+set (`uv run python evals/rescore.py evals/reports/milestones/*-golden*.json`):
+see `docs/ai-notes.md`, stage 5b.
 
 ## Consequences
 
