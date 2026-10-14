@@ -78,7 +78,7 @@ Measured 2026-10-13/14 on the production project and GitHub Actions
 
 | Metric | Value | Source |
 |---|---|---|
-| Push to healthy, automatic path (IaC pipeline) | **1 min 41 s**: CI 38 s, 2 s to start `deploy`, apply 2 s + plan check 1 s (no changes), `railway up` 38 s, `/healthz` reported the SHA 1 s later | merge `9eb2ef3`: push 10:10:45Z, live 10:12:26Z; CI run 38547740143, `deploy` run 38547818354 |
+| Push to healthy, automatic path (IaC pipeline) | **1 min 41 s** = 3 s until CI starts + CI 38 s + 2 s until `deploy` is triggered + 15 s runner start and setup (checkout, uv, Node, CLI and SDK install) + apply 2 s + plan check 1 s (no changes) + provider key 1 s + `railway up` 38 s + 1 s until `/healthz` reports the SHA | merge `9eb2ef3`: push 10:10:45Z, live 10:12:26Z; CI run 38547740143, `deploy` run 38547818354 |
 | Push to healthy, before IaC | 3 min 17 s (CI 58 s, `railway up` 112 s, first build without layer cache) | stage 3 merge `f6984bf`: push 20:27:18Z, `/healthz` reported the SHA 20:30:35Z |
 | Deploy run, trigger to healthy (IaC pipeline) | 72 s with infrastructure changes (`railway up` 49 s); 42 s with none (`railway up` 24 s) | `deploy` runs 38544143582, 38544420572 for `a0fb06b` |
 | CI on `main` | 32–38 s | runs 38543936686 (`a0fb06b`), 38547740143 (`9eb2ef3`) |
@@ -88,7 +88,8 @@ Measured 2026-10-13/14 on the production project and GitHub Actions
 | Image size | 231 MB uncompressed, 74 MB gzipped (`docker save`) | built from `a0fb06b` |
 
 The cold start is well inside the SPEC §8 budget (≤ 10 s). The IaC steps
-add about 3 s to a deploy with no infrastructure changes. The gain over
+add about 3 s to a deploy with no infrastructure changes (apply and plan
+check), plus their share of the 15 s setup (Node and SDK install). The gain over
 stage 3 is mostly the build (`railway up` 38 s vs 112 s on the first,
 uncached build), not the pipeline. The first automatic deploy after the amendment stopped at apply
 by design (it would have deleted `GIT_SHA`); the IaC figure is from the
