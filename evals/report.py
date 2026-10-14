@@ -25,7 +25,10 @@ PASS, FAIL, UNSTABLE = "pass", "fail", "unstable"
 
 
 def case_verdict(passed: list[bool], outcomes: list[str]) -> str:
-    if all(passed) and len(set(outcomes)) == 1:
+    # A changing outcome is instability even when every run failed (SPEC §7.3).
+    if len(set(outcomes)) > 1:
+        return UNSTABLE
+    if all(passed):
         return PASS
     if not any(passed):
         return FAIL

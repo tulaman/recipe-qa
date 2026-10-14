@@ -33,6 +33,7 @@ sys.path.insert(0, str(ROOT))
 
 from evals import report  # noqa: E402
 from evals.checks import (  # noqa: E402
+    ERROR,
     check_contract,
     check_endpoints,
     check_expectations,
@@ -77,17 +78,20 @@ def run_once(
     except httpx.HTTPError as exc:
         # One unreachable case must not cost the report for the others.
         failures = [f"request failed: {type(exc).__name__}: {exc}"]
-        body = None
+        body, broken = None, True
     elapsed_ms = round((time.perf_counter() - started) * 1000)
     if response is not None:
         body, failures = check_contract(response)
+        # A response that breaks the contract is a technical error, even when
+        # it parses: it must not count as an answer or a refusal.
+        broken = bool(failures)
         if body is not None and not contract_only:
             failures += check_expectations(body, case.get("expect", {}))
     return {
         "status": response.status_code if response is not None else None,
         "client_latency_ms": elapsed_ms,
         "rate_limit_waits": waits,
-        "outcome": outcome(body),
+        "outcome": ERROR if broken else outcome(body),
         "model": body.meta.model if body is not None else None,
         "passed": not failures,
         "failures": failures,

@@ -107,8 +107,8 @@ Every case runs `--repeat` times (default 3). Per case:
 | Verdict | When |
 |---|---|
 | `pass` | every run passed and every run had the same outcome |
-| `fail` | no run passed |
-| `unstable` | anything else: some runs failed, or all passed but the outcome changed |
+| `fail` | no run passed and every run had the same outcome |
+| `unstable` | anything else: the outcome changed between runs (whether the runs passed or failed), or some runs passed and others failed |
 
 The outcome of an end-to-end run is `answer`, the refusal reason, or
 `error` (non-200 or broken contract). Which recipes an answer cites may
