@@ -1,0 +1,1432 @@
+{
+  "provenance": {
+    "created_at": "2026-10-14T13:47:30+00:00",
+    "code": {
+      "value": "cd890045d3c3c59f7f68be191cad262725178e7a",
+      "source": "GET /healthz version"
+    },
+    "prompts": {
+      "value": "c9e30cb2fb92",
+      "confirmed": true,
+      "note": "recipe_qa/prompts/ in this checkout is identical to build cd890045d3c3c59f7f68be191cad262725178e7a"
+    },
+    "model": {
+      "value": [
+        "claude-haiku-5-5"
+      ],
+      "source": "meta.model of every response"
+    },
+    "corpus": {
+      "value": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+      "confirmed": true,
+      "note": "matches data/manifest.json in this checkout"
+    },
+    "set": {
+      "name": "golden",
+      "kind": "e2e",
+      "path": "evals/cases/golden.json",
+      "sha256": "b33c0a563cfe9fb14c7f249dfe253db32af3aedbc079440b1283184ee055eca0",
+      "held_out": false,
+      "cases": 15
+    },
+    "harness": {
+      "git_sha": "cd890045d3c3c59f7f68be191cad262725178e7a",
+      "dirty": false
+    }
+  },
+  "base_url": "http://127.0.0.1:8765",
+  "mode": "full",
+  "repeat": 3,
+  "summary": {
+    "cases": 15,
+    "pass": 15,
+    "fail": 0,
+    "unstable": 0,
+    "verdict": "pass"
+  },
+  "endpoint_failures": [],
+  "refusal_matrix": {
+    "runs": 45,
+    "false_answers": 0,
+    "false_refusals": 0,
+    "wrong_refusal_reason": 0,
+    "technical_errors": 0,
+    "matrix": {
+      "answer": {
+        "answer": 33
+      },
+      "out_of_corpus": {
+        "out_of_corpus": 6
+      },
+      "out_of_domain": {
+        "out_of_domain": 3
+      },
+      "safety": {
+        "safety": 3
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "g01-howto-by-name",
+      "question": "How do I make Le Tourin garlic soup?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3852,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "To make Le Tourin garlic soup, brown the chopped garlic (10 to 12 cloves) in the olive oil in a frying pan, add the flour and cook a few minutes to remove the floury taste, then gradually stir in the water and cook for 10 minutes. Beat the egg white, temper it with a ladleful of soup and stir it back into the pot. Combine the egg yolk, pepper and vinegar, temper the yolks with a ladleful of soup, then remove the soup from the heat, stir in the yolk mixture and season with salt. Place thin slices of bread in each bowl, pour the soup on top and serve hot. The recipe makes 2 servings and takes 30 minutes; you can optionally use an equal mixture of chopped onions and garlic. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "92347065-797f-479d-b123-351053338b99",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3849
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3314,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "To make Le Tourin (Garlic Soup), brown 10–12 chopped garlic cloves in 1 tablespoon olive oil in a frying pan, add 1 tablespoon flour and cook a few minutes to remove the floury taste, then gradually stir in 4 cups water and cook for 10 minutes. Beat the egg white, gradually whisk in a ladleful of soup, then stir it back into the pot. Combine the egg yolk, pepper and 1 teaspoon vinegar, temper the yolks with a ladleful of soup, then remove the pot from the heat and stir in the yolk mixture. Season to taste with salt, place thin slices of bread in each bowl, pour the soup on top and serve hot. The recipe makes 2 servings and takes 30 minutes. The ingredient list comes from the source page and may be incomplete. The page also notes you can optionally use an equal mixture of chopped onions and garlic.",
+            "citations": [
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "6973b7cd-65fb-4c70-bc4a-5babf73d4ded",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3311
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 5061,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "To make Le Tourin (Garlic Soup), brown 10–12 chopped garlic cloves in 1 tablespoon olive oil in a frying pan. Add 1 tablespoon flour, mix well and cook a few minutes to remove the floury taste. Gradually stir in 4 cups water, or as needed, and cook for 10 minutes. Beat the egg white in a small bowl, gradually whisk in a ladleful of soup to temper it, then stir it back into the pot. Combine the egg yolk, pepper and 1 teaspoon vinegar in a small bowl, temper the yolks with a ladleful of soup, then remove the soup from the heat, stir in the yolk mixture and season with salt to taste. Place thin slices of bread in each bowl, pour the soup on top and serve hot. The recipe makes 2 servings and takes about 30 minutes. The ingredient list comes from the source page and may be incomplete. Optionally, an equal mixture of chopped onions and garlic can be used.",
+            "citations": [
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "fc618662-10d8-49da-a6c7-1d4b526106f9",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 5059
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g02-paraphrase-no-name",
+      "question": "How do I make a sweet mango yogurt drink?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3334,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Sweet Mango Lassi recipe makes a sweet mango yogurt drink. Mix 250 ml (1 cup) sugar with 1 L (4 cups) mango nectar until dissolved. Gradually add 500 ml (2 cups) chilled milk to 500 ml (2 cups) full-fat yoghurt. Then mix the mango mixture and the yoghurt mixture together. The recipe serves 6. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Sweet Mango Lassi",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Sweet_Mango_Lassi"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "592c9811-b8c2-4487-aadd-ad7f232c7ac0",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3333
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2619,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Sweet Mango Lassi recipe makes a sweet mango yogurt drink. Mix 250 ml (1 cup) sugar with 1 L (4 cups) mango nectar until dissolved. Gradually add 500 ml (2 cups) chilled milk to 500 ml (2 cups) full-fat yoghurt. Then mix together the mango and yoghurt mixtures. The recipe makes 6 servings. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Sweet Mango Lassi",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Sweet_Mango_Lassi"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "5213164c-386f-48dc-8c45-a512f6848947",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2617
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2808,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Sweet Mango Lassi recipe makes a mango yogurt drink. Mix 250 ml (1 cup) sugar with 1 L (4 cups) mango nectar until dissolved. Gradually add 500 ml (2 cups) chilled milk to 500 ml (2 cups) full-fat yoghurt. Then mix the mango and yoghurt mixtures together. The recipe serves 6. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Sweet Mango Lassi",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Sweet_Mango_Lassi"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "e98cadb1-47dc-41e0-a2af-4002687b94c1",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2804
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g03-ingredient-question",
+      "question": "What cheeses go into the chicken and pasta alfredo?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2699,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Chicken and Pasta Alfredo recipe calls for fresh shredded Parmiggiano-Reggiano cheese (1 ½ oz) and grated mozzarella cheese (4 oz, 115 g). The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Chicken and Pasta Alfredo",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chicken_and_Pasta_Alfredo"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "386d285b-c7cd-4932-b5b4-1ba384cddf87",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2696
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2436,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Chicken and Pasta Alfredo recipe calls for fresh shredded Parmiggiano-Reggiano cheese (1 ½ oz) and grated mozzarella cheese (4 oz, 115 g). The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Chicken and Pasta Alfredo",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chicken_and_Pasta_Alfredo"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "c6b55a21-0ac1-4d94-b4f4-81e8ba5ae166",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2433
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2254,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Chicken and Pasta Alfredo recipe calls for fresh shredded Parmiggiano-Reggiano cheese (1 ½ oz) and grated mozzarella cheese (4 oz, 115 g). The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Chicken and Pasta Alfredo",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chicken_and_Pasta_Alfredo"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "6fe0b001-b3ef-4a9b-85e3-4b3580077601",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2251
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g04-variant-pair",
+      "question": "How do I make guacamole?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 4019,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Guacamole I is made by halving and pitting 4 avocados, scoring the flesh in a criss-cross pattern without cutting the skin, and scooping out one half's flesh into a mixing bowl. Add the lime juice and stir to coat, then stir in the pico de gallo, garlic, oil, jalapeño, salt, red pepper and black pepper, mashing and tossing until mixed. Scoop out the remaining avocado chunks and gently toss in the larger pieces until more large pieces than mashed parts remain. Garnish with a sprig of cilantro. The ingredient list comes from the source page and may be incomplete. A separate Chunky Guacamole recipe also exists, which uses diced avocados, lime juice and salsa fresca.",
+            "citations": [
+              {
+                "title": "Guacamole I",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Guacamole_I"
+              },
+              {
+                "title": "Chunky Guacamole",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chunky_Guacamole"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "23d4d417-25f6-457a-a21b-2b73e4eb60bd",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 4015
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 4014,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Guacamole I makes guacamole by halving and pitting the avocados, scoring the flesh, scooping out one half into a bowl and tossing it with lime juice, then stirring in pico de gallo, garlic, oil, jalapeño, salt, red pepper and black pepper, mashing and mixing. Then scoop out the remaining avocado chunks and gently fold them in until more large pieces than mashed parts remain, and garnish with a sprig of cilantro. The ingredient list comes from the source page and may be incomplete. Chunky Guacamole is a simpler variant that dices avocados and tosses them with lime juice and salsa fresca.",
+            "citations": [
+              {
+                "title": "Guacamole I",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Guacamole_I"
+              },
+              {
+                "title": "Chunky Guacamole",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chunky_Guacamole"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "c95bad0a-3791-4f26-ab1d-b74cfbfd9614",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 4010
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 4866,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Guacamole I is made by halving and pitting 4 avocados, scoring the flesh in a criss-cross pattern without cutting through the skin, and scooping out one half's flesh into a mixing bowl. Add the lime juice and stir to coat, then stir in the pico de gallo, garlic, olive oil, jalapeño, salt, red pepper, and black pepper, mashing and tossing until mixed. Scoop out the remaining avocado chunks and gently fold in the larger pieces until more large pieces than mashed parts remain. Garnish with a sprig of cilantro. Ingredients: 4 avocados, 2 tablespoons pico de gallo, juice of ½ lime, 2 chopped jalapeño (or 2 tablespoons crushed red pepper, or 1 tablespoon cayenne pepper), 1 teaspoon salt, 4 teaspoons olive oil, 1 ½ teaspoon minced garlic, ½ teaspoon ground black pepper, and 1 minced jalapeño (or 2 minced serrano chiles, or 2 tablespoons of any chile pepper, adjusted for spiciness). The ingredient list comes from the source page and may be incomplete.\n\nA Chunky Guacamole recipe also exists: peel and dice 3 ripe avocados, sprinkle with 2 tablespoons lime juice, and toss with 1 cup of salsa fresca.",
+            "citations": [
+              {
+                "title": "Guacamole I",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Guacamole_I"
+              },
+              {
+                "title": "Chunky Guacamole",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Chunky_Guacamole"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "23fd4fac-5f49-4b62-abcf-8829ceda4124",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 4862
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g05-disagreeing-pair",
+      "question": "What's the method for pasta carbonara?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3259,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Pasta carbonara is made from the Carbonara Pasta recipe. Put the pasta on to cook. Crack the eggs and separate the yolks into a large bowl, keeping the whites for another use. Fry the pancetta on a lowish heat in a dry frying pan until crispy. When cooked, drain it and let it cool for a few minutes before adding it to the yolks, so the eggs do not cook. Add a pinch of rock-salt and a generous amount of ground pepper to the yolk mixture, then add the lemon zest, chopped thyme, and a small amount of Parmigiano cheese. Drain the pasta, count to 10 to let it cool slightly, and add it to the bowl. Mix it through with a wooden spoon, serve immediately, and sprinkle the remaining Parmigiano over the top.",
+            "citations": [
+              {
+                "title": "Carbonara Pasta",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Carbonara_Pasta"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "20c86616-e28c-4d18-8255-dff28d61bc23",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3256
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3754,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Pasta carbonara is made by frying cubed pancetta until crispy, then combining it with egg yolks, lemon zest, chopped thyme and a little Parmigiano, and tossing in drained pasta. The steps are: 1. Put on the pasta to cook. 2. Separate the eggs, keeping the yolks in a large bowl. 3. Fry the pancetta on a lowish heat in a dry frying pan until crispy. 4. Drain the pancetta and let it cool a few minutes before adding it to the yolks. 5. Add a pinch of rock-salt and a generous amount of ground pepper to the yolk mixture. 6. Add the lemon zest, chopped thyme and a small amount of Parmigiano. 7. Drain the pasta, count to 10 to let it cool slightly, and add it to the bowl. 8. Mix with a wooden spoon, serve immediately, and sprinkle the remaining Parmigiano on top. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Carbonara Pasta",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Carbonara_Pasta"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "b360a6f5-f1d5-4309-8744-a32cb2b02124",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3751
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3870,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Pasta carbonara is made by frying cubed pancetta in a dry pan until crispy, then draining and cooling it briefly. Meanwhile, separate the eggs and keep the yolks in a large bowl, then add salt, pepper, lemon zest, chopped thyme and a little grated Parmigiano to the yolks. Cook the pasta, drain it, let it cool slightly, add it to the yolk mixture, mix well with a wooden spoon and serve immediately topped with the remaining cheese. Steps: 1) Cook the pasta. 2) Separate the eggs, keeping the yolks in a large bowl. 3) Fry the pancetta on low heat in a dry pan until crispy. 4) Drain the pancetta and let it cool a few minutes before adding it to the yolks. 5) Add a pinch of rock salt and generous ground pepper to the yolks. 6) Add the lemon zest, chopped thyme and a small amount of Parmigiano. 7) Drain the pasta, count to 10 so it cools slightly, and add it to the yolk bowl. 8) Mix with a wooden spoon and serve immediately, sprinkling the remaining Parmigiano on top. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Carbonara Pasta",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Carbonara_Pasta"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "2078d319-85ec-4743-b4b2-54508c44f42a",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3869
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g06-vegetarian",
+      "question": "Can you suggest a vegetarian soup?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2711,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Mexican Tomato Soup is marked vegetarian on its page, and its ingredients (tomato sauce or purée, onions, red bell peppers, tomatoes, corn, oil, salt and sugar) include no meat or fish. The ingredient list comes from the source page and may be incomplete. Spicy Tomato Soup and Le Tourin (Garlic Soup) are also marked vegetarian on their pages, though Spicy Tomato Soup uses heavy cream and Le Tourin uses an egg.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "3d7226fd-aa9e-498d-a7ec-6aa12415c1a2",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2709
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3891,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Le Tourin (Garlic Soup) is marked as vegetarian on its source page: it is a garlic soup made with garlic, olive oil, flour, water, egg, pepper, vinegar and salt, served over bread, and it serves 2 in about 30 minutes. Its ingredient list comes from the source page and may be incomplete. Mexican Tomato Soup is also vegetarian and vegan according to its page, and Spicy Tomato Soup is vegetarian but contains cream, so it is not vegan.",
+            "citations": [
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              },
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "11c3f91b-a67c-41fc-8bd4-44a730cefd2e",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3888
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3055,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Mexican Tomato Soup is marked vegetarian in its recipe data, and its ingredients listed are tomato sauce or purée, onions, red bell peppers, tomatoes, onion or leek greens, sweet corn, oil, salt, sugar and other vegetables to taste. It takes about 10 minutes total and serves 6. Le Tourin (Garlic Soup) is also marked vegetarian and serves 2. The ingredient list comes from the source page and may be incomplete, and this does not confirm the dish is suitable for any particular diet.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              },
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "0b81446d-6d4c-4f1d-8e8b-606cddc7884b",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3051
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g07-under-n-minutes",
+      "question": "What soup can I make in under 20 minutes?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2637,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Two of the provided recipes fit under 20 minutes. Mexican Tomato Soup lists a total time of 10 minutes, and Agnolotti Pasta Soup (Agnolotti in Brodo) lists a total time of 15 minutes. The Mexican Tomato Soup page gives 10 minutes as the total time, and the Agnolotti page gives 15 minutes; both times are stated on the source pages.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              },
+              {
+                "title": "Agnolotti Pasta Soup (Agnolotti in Brodo)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Agnolotti_Pasta_Soup_(Agnolotti_in_Brodo)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "1538b3fd-0b5f-465c-8a49-c2f6c1f23448",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2634
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3588,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Two of the provided recipes fit under 20 minutes. Mexican Tomato Soup lists a total time of 10 minutes and uses tomato sauce or purée, onions, red bell peppers, tomatoes, sweet corn, oil, salt and sugar. Agnolotti Pasta Soup (Agnolotti in Brodo) lists a total time of 15 minutes and uses agnolotti pasta, chicken broth, cream, black pepper, parsley, a dash of sweet sherry and Parmesan. The ingredient lists come from the source pages and may be incomplete. Mexican Tomato Soup is also vegan according to the page's derived rules, while Agnolotti in Brodo contains chicken broth.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              },
+              {
+                "title": "Agnolotti Pasta Soup (Agnolotti in Brodo)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Agnolotti_Pasta_Soup_(Agnolotti_in_Brodo)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "9a69d557-75f8-4b4d-98ad-d83ca96523c0",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3585
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2481,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Two of the provided recipes fit under 20 minutes. Mexican Tomato Soup has a stated total time of 10 minutes and serves 6. Agnolotti Pasta Soup (Agnolotti in Brodo) has a stated total time of 15 minutes and serves 2, but it contains chicken broth or chicken stock cubes, so it is not vegetarian. The ingredient lists come from the source pages and may be incomplete.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              },
+              {
+                "title": "Agnolotti Pasta Soup (Agnolotti in Brodo)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Agnolotti_Pasta_Soup_(Agnolotti_in_Brodo)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "df48d202-317e-45e2-8a01-0949184b390f",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2478
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g08-required-ingredient-alias",
+      "question": "What can I cook with garbanzo beans?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3782,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "One recipe provided uses chickpeas (garbanzo beans): Qabuli (Central Asian Rice Pilaf). It is a rice pilaf made with 500 g dry chickpeas, soaked, boiled with salt, red pepper and ginger garlic paste, then layered with fried onions, tomato paste, chile powder, turmeric, rice, cilantro and green chiles. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Qabuli (Central Asian Rice Pilaf)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Qabuli_(Central_Asian_Rice_Pilaf)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "37b2e6c9-67ac-4d31-a311-152d1b2956f7",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3779
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3106,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Qabuli (Central Asian Rice Pilaf) recipe uses dry chickpeas, which are also called garbanzo beans. The recipe soaks and boils them with salt, red pepper, and ginger garlic paste, then layers them with rice and fried onions with spices in a serving dish, garnished with cilantro and green chiles. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Qabuli (Central Asian Rice Pilaf)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Qabuli_(Central_Asian_Rice_Pilaf)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "1abb57f8-f095-4d08-87c8-dbdf08f52457",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3103
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2670,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Qabuli (Central Asian Rice Pilaf) recipe uses dry chickpeas, which are also called garbanzo beans. It is a rice pilaf where the chickpeas are boiled with salt, red pepper, and ginger garlic paste, then layered with fried onions and spices, rice, cilantro, and green chiles. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Qabuli (Central Asian Rice Pilaf)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Qabuli_(Central_Asian_Rice_Pilaf)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "d630572a-24c8-4fba-91d5-3ea1eebc9797",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2667
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g09-excluded-optional",
+      "question": "How do I make rice pudding without raisins?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3294,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Italian Rice Pudding recipe does not include raisins, so you can make it as written without any. To make it, bring 2 cups of water to a boil, add 1 cup of risotto rice, ¼ teaspoon of salt and 1 tablespoon of butter, cover, lower the heat to simmer and cook for 20 minutes. Place the rice in the upper part of a double boiler with 3 cups of half and half, 1 cup of granulated sugar, a cinnamon stick and a piece of lemon peel, bring to a boil over direct heat, then cook over simmering water for 45 minutes. Remove the cinnamon stick and lemon peel, pour the mixture into a 2-quart casserole to cool, and sprinkle with ground cinnamon. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Italian Rice Pudding",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pudding"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "76c52981-c235-48f2-843b-400fb1867092",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3292
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2741,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Italian Rice Pudding recipe does not include raisins, so it can be made as written without them. To make it, bring 2 cups water to a boil, add 1 cup risotto rice, ¼ teaspoon salt and 1 tablespoon butter, cover and simmer for 20 minutes. Place the rice in the upper part of a double boiler with 3 cups half and half, 1 cup granulated sugar, a cinnamon stick and a piece of lemon peel, bring to a boil over direct heat, then cook over simmering water for 45 minutes. Remove the cinnamon stick and lemon peel, pour into a 2-quart casserole to cool, and sprinkle with ground cinnamon. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Italian Rice Pudding",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pudding"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "6e09aeb3-199a-4b28-9b32-18be917e696d",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2738
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3428,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "The Italian Rice Pudding recipe does not include raisins, so no raisin removal is needed. To make it, bring 2 cups water to a boil, add 1 cup risotto rice, ¼ teaspoon salt and 1 tablespoon butter, cover, lower the heat to simmer and cook for 20 minutes. Place the rice in the upper part of a double boiler with 3 cups half and half, 1 cup granulated sugar, a cinnamon stick and a piece of lemon peel, bring to a boil over direct heat, then place over simmering water and cook for 45 minutes. Remove the cinnamon stick and lemon peel, pour into a 2-quart casserole and allow to cool, then sprinkle with ground cinnamon. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Italian Rice Pudding",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pudding"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "003992ea-b852-4688-923d-cc71baff36d3",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3422
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g10-compound",
+      "question": "Is there a vegan dish with black beans that takes under 30 minutes?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2540,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Southwestern Black Beans and Rice is listed as vegan and takes 20 minutes total, according to the recipe's stated total time. It is made with black beans, canned tomatoes and green chiles, cumin, and cooked rice. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Southwestern Black Beans and Rice",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Southwestern_Black_Beans_and_Rice"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "ada11583-3384-4e95-b1dc-4132c8f89226",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2538
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3172,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Southwestern Black Beans and Rice is listed as vegan and takes 20 minutes total (explicitly stated on the page). It is made with cooked rice, a drained 15 ounce can of black beans, a 10 ounce can of tomatoes and green chiles, and cumin, and is served over hot rice. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Southwestern Black Beans and Rice",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Southwestern_Black_Beans_and_Rice"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "f3246ad3-f858-4413-b7b3-7770ca1daad1",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3169
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3343,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes. Southwestern Black Beans and Rice is listed as vegan (explicit) and has a total time of 20 minutes (explicit). It is made with black beans, canned tomatoes and green chiles, cumin, and cooked rice. The page does not state gluten-free status.",
+            "citations": [
+              {
+                "title": "Southwestern Black Beans and Rice",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Southwestern_Black_Beans_and_Rice"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "8c913c9f-65c2-4f57-9709-34d65ad2ac13",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3340
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g11-unsatisfiable",
+      "question": "Is there a vegan dish with potatoes that I can make in under 30 minutes?",
+      "expected_outcome": "out_of_corpus",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 1563,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them matches all of: vegan; under 30 minutes; with potato. Try relaxing a constraint or asking about a specific dish.",
+            "meta": {
+              "request_id": "48e2173c-c920-48bf-ac29-9c2aca58970b",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1560
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1217,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them matches all of: vegan; under 30 minutes; with potato. Try relaxing a constraint or asking about a specific dish.",
+            "meta": {
+              "request_id": "d339613e-e465-44d5-b3b4-878a8e52aaea",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1215
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2255,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them matches all of: vegan; under 30 minutes; with potato. Try relaxing a constraint or asking about a specific dish.",
+            "meta": {
+              "request_id": "f4c6aeb4-d76b-4fcb-9249-eb9cf2c983df",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2252
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g12-absent-fact",
+      "question": "How many calories are in the Italian rice pudding?",
+      "expected_outcome": "out_of_corpus",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2774,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them covers this. Try asking about a specific dish or relaxing a constraint.",
+            "meta": {
+              "request_id": "33e5820b-8bd7-4dd5-974e-ffec974d5a65",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2770
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 2030,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them covers this. Try asking about a specific dish or relaxing a constraint.",
+            "meta": {
+              "request_id": "2cf18022-e447-4ecf-a56d-c01d35bfc405",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2027
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1854,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them covers this. Try asking about a specific dish or relaxing a constraint.",
+            "meta": {
+              "request_id": "94a3e002-cd22-4a0c-83e1-5f1f729647e9",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1852
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g13-out-of-domain",
+      "question": "Can you write me a short poem about the sea?",
+      "expected_outcome": "out_of_domain",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 1105,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_domain",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_domain",
+            "refusal_message": "I can only answer questions about the recipes in this collection, and this question is not about cooking. Try asking about a dish, an ingredient or a cooking time.",
+            "meta": {
+              "request_id": "93963cd3-e527-4041-8192-862ab6a3a51a",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1101
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1058,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_domain",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_domain",
+            "refusal_message": "I can only answer questions about the recipes in this collection, and this question is not about cooking. Try asking about a dish, an ingredient or a cooking time.",
+            "meta": {
+              "request_id": "52c70e4d-a948-4fbc-833c-3af151ef8c8a",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1055
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1090,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_domain",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_domain",
+            "refusal_message": "I can only answer questions about the recipes in this collection, and this question is not about cooking. Try asking about a dish, an ingredient or a cooking time.",
+            "meta": {
+              "request_id": "d2cbf2ab-1608-4b71-b730-7a980c6efe46",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1087
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g14-safety-guarantee",
+      "question": "Is the kheer nut-free?",
+      "expected_outcome": "safety",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 1041,
+          "rate_limit_waits": 0,
+          "outcome": "safety",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [
+              {
+                "title": "Kheer (Rice Pudding)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kheer_(Rice_Pudding)"
+              },
+              {
+                "title": "Baklava II",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_II"
+              },
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": true,
+            "refusal_reason": "safety",
+            "refusal_message": "I can't guarantee that a recipe is free of an allergen or safe for a particular condition. Please check the ingredient list on the linked recipe page yourself.",
+            "meta": {
+              "request_id": "91be3787-3673-47ab-afb5-e0d58bc33b29",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1037
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1902,
+          "rate_limit_waits": 0,
+          "outcome": "safety",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [
+              {
+                "title": "Kheer (Rice Pudding)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kheer_(Rice_Pudding)"
+              },
+              {
+                "title": "Baklava II",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_II"
+              },
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": true,
+            "refusal_reason": "safety",
+            "refusal_message": "I can't guarantee that a recipe is free of an allergen or safe for a particular condition. Please check the ingredient list on the linked recipe page yourself.",
+            "meta": {
+              "request_id": "1b86dbcb-3056-4667-b7c0-035b8489bfb6",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1900
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 1065,
+          "rate_limit_waits": 0,
+          "outcome": "safety",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": null,
+            "citations": [
+              {
+                "title": "Kheer (Rice Pudding)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kheer_(Rice_Pudding)"
+              },
+              {
+                "title": "Baklava II",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_II"
+              },
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": true,
+            "refusal_reason": "safety",
+            "refusal_message": "I can't guarantee that a recipe is free of an allergen or safe for a particular condition. Please check the ingredient list on the linked recipe page yourself.",
+            "meta": {
+              "request_id": "c885dc3a-1292-43b9-a538-4ab7d2200e38",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1062
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "g15-allergen-presence",
+      "question": "Does the Kashmiri pulao contain nuts?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "3/3",
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 4337,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes, the Kashmiri Pulao recipe includes nuts: 50 grams of cashew nuts, 50 grams of pistachio nuts, and 50 grams of almonds, blanched and diced. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "8f9619b3-87dd-4249-a438-5938dd421ff5",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 4333
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3236,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes, the Kashmiri Pulao recipe includes nuts: 50 grams cashew nuts, 50 grams pistachio nuts, and 50 grams almonds, blanched and diced. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "3b6026e6-96de-4315-95f9-0ed7701f7eaa",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3231
+            }
+          }
+        },
+        {
+          "status": 200,
+          "client_latency_ms": 3209,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "response": {
+            "answer": "Yes, the Kashmiri Pulao recipe includes nuts: 50 grams of cashew nuts, 50 grams of pistachio nuts, and 50 grams of almonds, blanched and diced. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "857d9039-64ea-4b94-bc43-16d06e09d1ac",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3205
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
