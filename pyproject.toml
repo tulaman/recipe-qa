@@ -33,6 +33,8 @@ default-groups = ["dev", "ingest"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# The eval harness (evals/) is not part of the package; its logic is tested too.
+pythonpath = ["."]
 addopts = "-ra --strict-markers"
 
 [tool.ruff]
@@ -46,7 +48,7 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.isort]
 # Explicit, so import order does not depend on which modules exist yet.
-known-first-party = ["recipe_qa"]
+known-first-party = ["recipe_qa", "evals"]
 
 [tool.ruff.lint.per-file-ignores]
 # Test inputs are real wikitext lines quoted verbatim.

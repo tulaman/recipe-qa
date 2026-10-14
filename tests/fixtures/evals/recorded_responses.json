@@ -1,0 +1,72 @@
+{
+  "_note": "Recorded from https://recipe-qa-production.up.railway.app (build b8d3e30, claude-haiku-5-5) on 2026-10-14 by evals/run.py; bodies verbatim.",
+  "carbonara_answer": {
+    "question": "How do I make spaghetti alla carbonara?",
+    "status": 200,
+    "body": {
+      "answer": "Spaghetti alla Carbonara is made by dicing guanciale or pancetta, cooking spaghetti until al dente, frying the pork in olive oil until it has rendered most of its fat but is still chewy, whisking about half a cup of pasta water into egg yolks with grated Pecorino Romano and Parmigiano-Reggiano, tossing the drained spaghetti with the pork, turning off the heat, then adding the egg and cheese mixture with the remaining pasta water to form an emulsion, and finally adding pepper and tossing to coat. The recipe serves 6 and lists a total time of 60 minutes. Ingredients come from the source page and may be incomplete. A separate Carbonara Pasta recipe on the list is a variant using pancetta, lemon zest and thyme.\n\nIngredients: 450 g (1 pound) spaghetti; 225–500 g (½–1 pound) guanciale or pancetta; 5 egg yolks; 178 ml (¾ cup) grated Pecorino Romano; 178 ml (¾ cup) grated Parmigiano-Reggiano; 3–4 tablespoons extra-virgin olive oil; ½ tablespoon freshly-ground pepper; salt.",
+      "citations": [
+        {
+          "title": "Spaghetti alla Carbonara",
+          "url": "https://en.wikibooks.org/wiki/Cookbook:Spaghetti_alla_Carbonara"
+        },
+        {
+          "title": "Carbonara Pasta",
+          "url": "https://en.wikibooks.org/wiki/Cookbook:Carbonara_Pasta"
+        }
+      ],
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": null,
+      "meta": {
+        "request_id": "1acc2623-b868-4d3e-bbde-32d1563d13c3",
+        "model": "claude-haiku-5-5",
+        "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+        "latency_ms": 4924
+      }
+    }
+  },
+  "capital_out_of_domain": {
+    "question": "What is the capital of France?",
+    "status": 200,
+    "body": {
+      "answer": null,
+      "citations": [],
+      "refused": true,
+      "refusal_reason": "out_of_domain",
+      "refusal_message": "I can only answer questions about the recipes in this collection, and this question is not about cooking. Try asking about a dish, an ingredient or a cooking time.",
+      "meta": {
+        "request_id": "01f2b7e9-a26d-4645-a27e-ee49b64b28b8",
+        "model": "claude-haiku-5-5",
+        "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+        "latency_ms": 1440
+      }
+    }
+  },
+  "baklava_safety": {
+    "question": "Is the baklava nut-free?",
+    "status": 200,
+    "body": {
+      "answer": null,
+      "citations": [
+        {
+          "title": "Baklava II",
+          "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_II"
+        },
+        {
+          "title": "Baklava I",
+          "url": "https://en.wikibooks.org/wiki/Cookbook:Baklava_I"
+        }
+      ],
+      "refused": true,
+      "refusal_reason": "safety",
+      "refusal_message": "I can't guarantee that a recipe is free of an allergen or safe for a particular condition. Please check the ingredient list on the linked recipe page yourself.",
+      "meta": {
+        "request_id": "b8e7bbb6-d19f-41d6-a847-fab4908ec55a",
+        "model": "claude-haiku-5-5",
+        "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+        "latency_ms": 910
+      }
+    }
+  }
+}

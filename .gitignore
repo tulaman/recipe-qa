@@ -6,7 +6,9 @@ __pycache__/
 .ruff_cache/
 node_modules/
 web/dist/
-evals/reports/
+# Exploratory eval reports stay local; milestone reports are committed (SPEC §7.3).
+evals/reports/*
+!evals/reports/milestones/
 .env
 .env.*
 *.log
