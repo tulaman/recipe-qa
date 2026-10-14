@@ -31,9 +31,7 @@ export default defineRailway(() => {
       PORT: "8000",
       // Secret: the value lives in GitHub Actions secrets and Railway only.
       ANTHROPIC_API_KEY: preserve(),
-      // Set by deploy.yml on every deploy; kept as-is here until the SHA
-      // moves into the image build.
-      GIT_SHA: preserve(),
+      // No GIT_SHA: the commit is baked into the image (recipe_qa/BUILD_SHA).
     },
   });
 

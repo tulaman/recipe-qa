@@ -9,6 +9,9 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict
 
 ROOT = Path(__file__).resolve().parent.parent
+BUILD_SHA_FILE = Path(__file__).resolve().parent / "BUILD_SHA"
+"""Written by CI into the build context and copied into the image (ADR 003).
+Not committed; a checkout without it reports version "dev"."""
 
 
 class Settings(BaseModel):
@@ -27,9 +30,9 @@ class Settings(BaseModel):
     max_body_bytes: int = 8 * 1024
 
     @classmethod
-    def from_env(cls) -> Settings:
+    def from_env(cls, build_sha_file: Path = BUILD_SHA_FILE) -> Settings:
         env = os.environ
-        values: dict[str, object] = {"version": env.get("GIT_SHA") or "dev"}
+        values: dict[str, object] = {"version": _build_sha(build_sha_file) or "dev"}
         for field, var in [
             ("provider", "RECIPE_QA_PROVIDER"),
             ("model", "RECIPE_QA_MODEL"),
@@ -39,3 +42,10 @@ class Settings(BaseModel):
             if env.get(var):
                 values[field] = env[var]
         return cls.model_validate(values)
+
+
+def _build_sha(path: Path) -> str:
+    try:
+        return path.read_text().strip()
+    except FileNotFoundError:
+        return ""

@@ -62,11 +62,15 @@ jobs:
         run: |
           printf '%s' "$ANTHROPIC_API_KEY" \
             | railway variable set ANTHROPIC_API_KEY --stdin --service "$RAILWAY_SERVICE" --skip-deploys
-          # PORT matches the port the public domain targets; GIT_SHA is a build arg.
-          railway variable set PORT=8000 "GIT_SHA=$SHA" --service "$RAILWAY_SERVICE" --skip-deploys
+          # PORT matches the port the public domain targets.
+          railway variable set PORT=8000 --service "$RAILWAY_SERVICE" --skip-deploys
 
       - name: Build and deploy
-        run: railway up --service "$RAILWAY_SERVICE" --ci -m "deploy ${SHA::12} (${{ github.event_name }})"
+        # BUILD_SHA is untracked but not git-ignored, so `railway up` uploads
+        # it and the image reports this commit on /healthz.
+        run: |
+          echo "$SHA" > recipe_qa/BUILD_SHA
+          railway up --service "$RAILWAY_SERVICE" --ci -m "deploy ${SHA::12} (${{ github.event_name }})"
 
       - name: Wait until the new build is live
         run: |

@@ -60,7 +60,9 @@ jobs:
         with:
           enable-cache: true
       - name: Build image
-        run: docker build --build-arg GIT_SHA=${{ github.sha }} -t recipe-qa:ci .
+        run: |
+          echo "${{ github.sha }}" > recipe_qa/BUILD_SHA
+          docker build -t recipe-qa:ci .
       - name: Start container
         run: |
           docker run -d --name app -p 8000:8000 -e RECIPE_QA_PROVIDER=fake recipe-qa:ci
