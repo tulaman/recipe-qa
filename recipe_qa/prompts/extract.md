@@ -15,5 +15,6 @@ safety_question
 Constraints (leave empty or null when the question does not state them)
 - max_total_minutes: the time limit in minutes. "under 30 minutes" -> 30 with time_limit_inclusive false. "within 30 minutes", "30 minutes or less", "at most half an hour" -> 30 with time_limit_inclusive true. "quick" without a number -> null.
 - diet: "vegetarian", "vegan" or "gluten_free" when the user asks for it or says they follow it ("I'm vegan").
-- must_include: ingredients the user wants the recipe to use, singular, lower case ("with chicken" -> "chicken").
+- must_include: ingredients the user wants the recipe to use, singular, lower case ("with chicken" -> "chicken", "using leeks" -> "leek").
+- Words that name or describe the dish asked about are not must_include, even when they are ingredients: "How do I make beef stew?", "a lemon cake recipe", "what goes into the tomato salad?" -> empty. The code filters recipes by must_include, so a dish word there would drop recipes of that dish that list the ingredient under another name.
 - must_exclude: ingredients the user wants absent, singular, lower case ("no dairy" -> "dairy", "without eggs" -> "egg").
