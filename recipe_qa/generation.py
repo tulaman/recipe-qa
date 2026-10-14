@@ -11,7 +11,9 @@ import hashlib
 from collections.abc import Sequence
 from pathlib import Path
 
+from recipe_qa.constraints import describe
 from recipe_qa.corpus import Fact, Recipe
+from recipe_qa.schemas import Extraction
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
 EXTRACT_SYSTEM = (PROMPTS / "extract.md").read_text(encoding="utf-8")
@@ -74,6 +76,14 @@ def extract_message(question: str) -> str:
     return f"<question>{_data(question)}</question>"
 
 
-def generate_message(question: str, recipes: Sequence[Recipe]) -> str:
+def render_constraints(constraints: Extraction) -> str:
+    """What code already applied to every recipe shown (SPEC §3 step 7)."""
+    lines = [f"- {_data(part)}" for part in describe(constraints)] or ["none"]
+    return "<constraints>\n" + "\n".join(lines) + "\n</constraints>"
+
+
+def generate_message(question: str, constraints: Extraction, recipes: Sequence[Recipe]) -> str:
     blocks = "\n\n".join(render_recipe(r) for r in recipes)
-    return f"{blocks}\n\n<question>{_data(question)}</question>"
+    return (
+        f"{render_constraints(constraints)}\n\n{blocks}\n\n<question>{_data(question)}</question>"
+    )
