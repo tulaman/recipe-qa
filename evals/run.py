@@ -34,6 +34,7 @@ sys.path.insert(0, str(ROOT))
 from evals import report  # noqa: E402
 from evals.checks import (  # noqa: E402
     ERROR,
+    check_content,
     check_contract,
     check_endpoints,
     check_expectations,
@@ -87,6 +88,12 @@ def run_once(
         broken = bool(failures)
         if body is not None and not contract_only:
             failures += check_expectations(body, case.get("expect", {}))
+    content_failures: list[str] = []
+    if not contract_only:
+        if body is None or broken:
+            content_failures = ["no valid response to check"]
+        else:
+            content_failures = check_content(body, case.get("expect", {}))
     return {
         "status": response.status_code if response is not None else None,
         "client_latency_ms": elapsed_ms,
@@ -95,6 +102,8 @@ def run_once(
         "model": body.meta.model if body is not None else None,
         "passed": not failures,
         "failures": failures,
+        "content_passed": None if contract_only else not content_failures,
+        "content_failures": content_failures,
         "response": recorded_body(response),
     }
 
@@ -112,6 +121,8 @@ def run_set(
     for case in case_set.cases:
         runs = [run_once(client, case, contract_only, sleep) for _ in range(repeat)]
         passed = [r["passed"] for r in runs]
+        outcomes = [r["outcome"] for r in runs]
+        content = [r["content_passed"] for r in runs]
         cases.append(
             {
                 "id": case["id"],
@@ -119,8 +130,14 @@ def run_set(
                 "expected_outcome": None
                 if contract_only
                 else expected_outcome(case.get("expect", {})),
-                "verdict": report.case_verdict(passed, [r["outcome"] for r in runs]),
+                "verdict": report.case_verdict(passed, outcomes),
                 "passes": f"{sum(passed)}/{len(runs)}",
+                "content": None
+                if contract_only
+                else {
+                    "verdict": report.case_verdict(content, outcomes),
+                    "passes": f"{sum(content)}/{len(runs)}",
+                },
                 "runs": runs,
             }
         )

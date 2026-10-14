@@ -2,6 +2,8 @@
 
 A case runs several times. It passes only if every run passes and every
 run has the same outcome; mixed results are "unstable", never "pass".
+Content checks get the same per-case verdict, but decide the run by count:
+in every repeat, at least 13 of 15 cases must pass them (SPEC §7.2).
 Refusal errors are kept in a matrix and three separate counts. Exploratory
 reports go to evals/reports/ (ignored by git); milestone reports go to
 evals/reports/milestones/ and are committed.
@@ -22,6 +24,13 @@ ROOT = Path(__file__).resolve().parent.parent
 REPORTS_DIR = ROOT / "evals" / "reports"
 
 PASS, FAIL, UNSTABLE = "pass", "fail", "unstable"
+CONTENT_SHARE = (13, 15)
+"""SPEC §7.2: 13 of 15 content checks, scaled up for a set of another size."""
+
+
+def content_required(cases: int) -> int:
+    passed, of = CONTENT_SHARE
+    return -(-passed * cases // of)
 
 
 def case_verdict(passed: list[bool], outcomes: list[str]) -> str:
@@ -38,12 +47,33 @@ def case_verdict(passed: list[bool], outcomes: list[str]) -> str:
 def summarize(cases: list[dict[str, Any]], endpoint_failures: list[str]) -> dict[str, Any]:
     verdicts = Counter(c["verdict"] for c in cases)
     passed = verdicts[PASS] == len(cases) and not endpoint_failures
+    content = summarize_content(cases)
+    if content is not None:
+        passed = passed and all(n >= content["required"] for n in content["per_run"])
     return {
         "cases": len(cases),
         "pass": verdicts[PASS],
         "fail": verdicts[FAIL],
         "unstable": verdicts[UNSTABLE],
+        "content": content,
         "verdict": PASS if passed else FAIL,
+    }
+
+
+def summarize_content(cases: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Content passes per repeat, and the cases that failed or wavered; None if unchecked."""
+    if not cases or any(c.get("content") is None for c in cases):
+        return None
+    repeats = max(len(c["runs"]) for c in cases)
+    per_run = [
+        sum(bool(c["runs"][i]["content_passed"]) for c in cases if i < len(c["runs"]))
+        for i in range(repeats)
+    ]
+    return {
+        "per_run": per_run,
+        "required": content_required(len(cases)),
+        "fail": [c["id"] for c in cases if c["content"]["verdict"] == FAIL],
+        "unstable": [c["id"] for c in cases if c["content"]["verdict"] == UNSTABLE],
     }
 
 
@@ -126,9 +156,16 @@ def print_cases(cases: list[dict[str, Any]]) -> None:
     for case in cases:
         latencies = [r["client_latency_ms"] for r in case["runs"]]
         timing = f"{max(latencies):>6} ms max" if latencies else ""
-        print(f"{case['verdict'].upper():<8}  {case['id']:<{width}}  {case['passes']:>5}  {timing}")
+        content = case.get("content")
+        mark = f"content {content['verdict']:<8} {content['passes']:>5}" if content else ""
+        print(
+            f"{case['verdict'].upper():<8}  {case['id']:<{width}}  {case['passes']:>5}  "
+            f"{mark}  {timing}"
+        )
         for failure in sorted({f for run in case["runs"] for f in run["failures"]}):
             print(f"          - {failure}")
+        for failure in sorted({f for run in case["runs"] for f in run.get("content_failures", [])}):
+            print(f"          - content: {failure}")
 
 
 def print_summary(summary: dict[str, Any], matrix: dict[str, Any] | None) -> None:
@@ -143,6 +180,14 @@ def print_summary(summary: dict[str, Any], matrix: dict[str, Any] | None) -> Non
         for expected, row in matrix["matrix"].items():
             cells = ", ".join(f"{actual} {n}" for actual, n in sorted(row.items()))
             print(f"  expected {expected:<14} got {cells}")
+    content = summary.get("content")
+    if content is not None:
+        runs = ", ".join(f"{n}/{summary['cases']}" for n in content["per_run"])
+        print(f"\ncontent checks per run: {runs} (need {content['required']} in every run)")
+        if content["unstable"]:
+            print(f"  unstable content: {', '.join(content['unstable'])}")
+        if content["fail"]:
+            print(f"  failing content: {', '.join(content['fail'])}")
     print(
         f"\n{summary['pass']}/{summary['cases']} cases pass; "
         f"{summary['fail']} fail, {summary['unstable']} unstable -> {summary['verdict'].upper()}"

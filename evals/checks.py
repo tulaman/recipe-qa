@@ -4,6 +4,9 @@ Contract checks hold for every response. Expectation checks compare a
 response with its case: refusal, sources, and constraint predicates. The
 predicates read corpus metadata (SPEC §4), never the answer text, and are
 written here independently of the service so they can catch its mistakes.
+Content checks read the answer text and the citations; they are kept
+apart from the others because a run passes on 13 of 15 of them, not on
+all (SPEC §7.2).
 """
 
 from __future__ import annotations
@@ -112,21 +115,65 @@ def expected_outcome(expect: dict[str, Any]) -> str | None:
 
 
 def check_expectations(body: AskResponse, expect: dict[str, Any]) -> list[str]:
+    return [
+        *check_refusal(body, expect),
+        *check_sources(body, expect),
+        *check_constraints(body, expect),
+    ]
+
+
+def check_refusal(body: AskResponse, expect: dict[str, Any]) -> list[str]:
     failures = []
     if "refused" in expect and body.refused != expect["refused"]:
         failures.append(f"refused={body.refused}, expected {expect['refused']}")
     if "refusal_reason" in expect and body.refusal_reason != expect["refusal_reason"]:
         expected = expect["refusal_reason"]
         failures.append(f"refusal_reason={body.refusal_reason}, expected {expected}")
-    cited = [ID_BY_URL[c.url] for c in body.citations if c.url in ID_BY_URL]
-    if "sources_any" in expect and not set(cited) & set(expect["sources_any"]):
-        failures.append(f"cited {sorted(cited)}, expected one of {expect['sources_any']}")
-    constraints = expect.get("constraints")
-    if constraints:
-        for recipe_id in cited:
-            for failure in constraint_failures(RECIPES[recipe_id], constraints):
-                failures.append(f"cited {recipe_id}: {failure}")
     return failures
+
+
+def check_sources(body: AskResponse, expect: dict[str, Any]) -> list[str]:
+    cited = cited_ids(body)
+    if "sources_any" in expect and not set(cited) & set(expect["sources_any"]):
+        return [f"cited {sorted(cited)}, expected one of {expect['sources_any']}"]
+    return []
+
+
+def check_constraints(body: AskResponse, expect: dict[str, Any]) -> list[str]:
+    constraints = expect.get("constraints")
+    if not constraints:
+        return []
+    return [
+        f"cited {recipe_id}: {failure}"
+        for recipe_id in cited_ids(body)
+        for failure in constraint_failures(RECIPES[recipe_id], constraints)
+    ]
+
+
+def check_content(body: AskResponse, expect: dict[str, Any]) -> list[str]:
+    """expected_facts, forbidden_claims and sources_all (SPEC §7.2).
+
+    A case without them passes on the right outcome; a wrong outcome fails
+    content too, since an unexpected refusal says nothing that was asked.
+    """
+    failures = []
+    expected, actual = expected_outcome(expect), outcome(body)
+    if expected is not None and actual != expected and not (expected == "refused" and body.refused):
+        failures.append(f"outcome {actual}, expected {expected}")
+    answer = body.answer or ""
+    for fact in expect.get("expected_facts", []):
+        if not re.search(fact, answer, re.IGNORECASE):
+            failures.append(f"expected fact {fact!r} not in answer")
+    for claim in expect.get("forbidden_claims", []):
+        if re.search(claim, answer, re.IGNORECASE):
+            failures.append(f"forbidden claim {claim!r} in answer")
+    cited = cited_ids(body)
+    failures += [f"{rid} not cited" for rid in expect.get("sources_all", []) if rid not in cited]
+    return failures
+
+
+def cited_ids(body: AskResponse) -> list[str]:
+    return [ID_BY_URL[c.url] for c in body.citations if c.url in ID_BY_URL]
 
 
 # --- constraint predicates (SPEC §4) -------------------------------------------
