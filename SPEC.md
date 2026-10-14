@@ -1,12 +1,15 @@
 # Recipe Q&A Service — Behavior Specification
 
-Status: v0.3. v0.1 was written before any application code; v0.2 (2026-10-13)
+Status: v0.4. v0.1 was written before any application code; v0.2 (2026-10-13)
 revises the §4 diet rule after ingestion showed contradicted categories
 (see commit history and ADR 004); v0.3 (2026-10-13) makes two §3 steps
 explicit while building `/ask`: which recipes a `safety` refusal cites, and
 that a question sharing no term with any recipe is `out_of_corpus` without
-a generation call.
-Owner: Ilya Lityuga. Date: 2026-10-13.
+a generation call; v0.4 (2026-10-14) states §7 as layered evaluation
+requirements: extraction measured on its own, false answers and false
+refusals kept apart, stability across repeated runs, a held-out set, and
+versioned reports.
+Owner: Ilya Lityuga. Date: 2026-10-14.
 
 This document is the contract the service is built and evaluated against.
 Anything the assignment left open is resolved in §9 (Assumptions) rather
@@ -248,6 +251,23 @@ servings{...}, difficulty{...}, diet{vegetarian{...}, vegan{...}, gluten_free{..
 
 ## 7. Acceptance criteria and evaluation
 
+Evaluation is layered (v0.4): each probabilistic step named in §3 is
+measured where it happens, so a failure points at one layer instead of at
+"the answer was wrong".
+
+### 7.1 Layers
+
+1. **Extraction** is measured on its own labelled set of questions, each
+   with its expected `Constraints`, `in_domain` and `safety_question`,
+   separately from end-to-end runs. A wrong flag or constraint is reported
+   as an extraction error, field by field, not only as a wrong final
+   answer.
+2. **Retrieval** is measured without generation (recall@5 below).
+3. **End-to-end** sends questions to a running instance over HTTP and
+   checks the response (7.2).
+
+### 7.2 End-to-end checks
+
 The eval harness (`evals/run.py`) sends every golden question to a running
 instance over HTTP and checks:
 
@@ -265,6 +285,29 @@ result is recorded in the README.
 
 Golden set structure (15 cases; concrete recipes assigned after the corpus
 snapshot is committed): see `evals/README.md`.
+
+### 7.3 How results are counted and reported
+
+- **False answers and false refusals are reported separately, never
+  summed.** A false answer (a refusal was expected, the service answered)
+  and a false refusal (an answer was expected, the service refused) have
+  different costs and different fixes; one number hiding both is not
+  reported. A refusal with the wrong reason is a third, separate count.
+- **Results must hold across repeated runs.** Every case is run more than
+  once against the same build. A case that passes in some runs and fails
+  in others, or whose outcome (answer or refusal reason) changes between
+  runs, is reported as **unstable** and does not count as passing.
+- **A held-out set is kept apart from tuning.** A set of paraphrases of
+  the golden questions is written before tuning, is never used while
+  changing prompts, retrieval or rules, shares no question with any other
+  set, and is evaluated once, before submission. Its result is recorded as
+  measured, whatever it is.
+- **Every report records the versions it was produced against**: code
+  (the build that answered), prompts, model, corpus, and the case set
+  itself. A version the harness could not confirm is marked as
+  unconfirmed, not assumed.
+- Reports that a milestone relies on (README numbers, the held-out run)
+  are committed to the repository; exploratory runs are not.
 
 ## 8. Non-functional targets
 
