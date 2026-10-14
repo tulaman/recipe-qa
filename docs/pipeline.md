@@ -27,9 +27,9 @@ flowchart TD
         VAL -->|ok| CC
     end
 
-    RL -->|exceeded| E429["429 rate_limited"]
-    VAL -->|invalid| E422["422 invalid_request"]
-    CC -->|busy| E429
+    RL -->|"exceeded: 429"| ERR
+    VAL -->|"invalid: 422"| ERR
+    CC -->|"busy: 429"| ERR
 
     CC -->|ok| EX
 
@@ -80,10 +80,8 @@ flowchart TD
     HITS -->|no| R_OOC
     ANS -->|no| R_OOC
 
-    E502["502 upstream_invalid<br/>bad output twice"]
-    E503["503 upstream_unavailable<br/>timeout, connection, 429, 5xx<br/>or 12 s deadline exceeded"]
-    SVC -.-> E502
-    SVC -.-> E503
+    ERR["<b>Error response</b> {error: code, message, request_id}<br/>422 invalid_request<br/>429 rate_limited<br/>502 upstream_invalid: bad output twice<br/>503 upstream_unavailable: timeout, connection,<br/>429, 5xx or 12 s deadline exceeded<br/>500 internal_error: unexpected exception"]
+    SVC -.->|"502 / 503 / 500"| ERR
 
     OK["200 AskResponse<br/>answer, citations 1-3,<br/>meta: request_id, model,<br/>corpus_version, latency_ms"]
     MAP --> OK
@@ -94,7 +92,8 @@ flowchart TD
 
     OK --> LOG
     RESP --> LOG
-    LOG["Emit one JSON log line<br/>extraction, top_k scores, cited_ids,<br/>token usage per stage, stage timings"]
+    ERR --> LOG
+    LOG["Emit one JSON log line for every response,<br/>errors included: status, error,<br/>extraction, top_k scores, cited_ids,<br/>token usage per stage, stage timings<br/>(whatever the request reached)"]
     LOG --> U
 
     INDEX[("In-memory BM25 index<br/>built at startup from<br/>data/recipes.jsonl")]
@@ -114,7 +113,7 @@ flowchart TD
     class RID,RL,VAL,CC,G1,G2,BM,HITS,CTX,CHK,ANS,MAP,LOG code
     class EX,GEN llm
     class EXOUT,INDEX,MANI data
-    class E429,E422,E502,E503 err
+    class ERR err
     class R_OOD,SAFE,R_SAFE,R_OOC,RESP refuse
     class OK ok
     class ELIG planned
@@ -145,7 +144,7 @@ loaded into memory at startup.
 ```mermaid
 flowchart LR
     WB[("Wikibooks Cookbook<br/>MediaWiki API")]
-    SEL["scripts/select_corpus.py<br/>pick 40-60 pages,<br/>pin revid + sha256"]
+    SEL["scripts/select_corpus.py<br/>pick 40-60 pages,<br/>pin revid + sha256,<br/>write raw wikitext"]
     CS[("data/corpus_selection.json")]
     RAW[("data/raw/<br/>pinned wikitext")]
     ING["scripts/ingest.py<br/>parse wikitext: ingredients, steps,<br/>sections, time, servings, diet<br/>each fact: explicit / derived / unknown"]
@@ -153,8 +152,10 @@ flowchart LR
     MAN[("data/manifest.json<br/>corpus_version")]
     APP["App startup<br/>BM25 index + citation map"]
 
-    WB --> SEL --> CS --> ING
-    WB -->|"fetch by pinned revid"| RAW --> ING
+    WB --> SEL
+    SEL --> CS --> ING
+    SEL --> RAW --> ING
+    WB -.->|"ingest.py fallback: fetch a missing<br/>raw file by its pinned revid"| RAW
     ING --> REC --> APP
     ING --> MAN --> APP
 
