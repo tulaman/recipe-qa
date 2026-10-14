@@ -25,7 +25,7 @@ RUN uv sync --locked --no-default-groups --no-install-project
 
 # Includes recipe_qa/BUILD_SHA when CI wrote one: the commit /healthz reports.
 COPY recipe_qa/ recipe_qa/
-COPY data/recipes.jsonl data/manifest.json data/
+COPY data/recipes.jsonl data/manifest.json data/aliases.json data/
 COPY --from=web /web/dist web/dist
 
 RUN useradd --system --uid 10001 --no-create-home app
