@@ -52,11 +52,14 @@ def _number(text: str) -> float:
     return float(text)
 
 
-def _stage_minutes(text: str) -> int | None:
+def _stage_minutes(text: str) -> tuple[int, bool] | None:
+    """Minutes in one stage, and whether a range's upper bound was taken."""
     total = 0.0
     found = False
+    ranged = False
     for match in _DURATION.finditer(text):
         found = True
+        ranged = ranged or match["high"] is not None
         amount = _number(match["high"] or match["low"])
         unit = match["unit"].lower().rstrip("s")
         total += amount * _UNIT_MINUTES[unit]
@@ -65,20 +68,15 @@ def _stage_minutes(text: str) -> int | None:
     # A number left over after removing durations has no unit we can trust.
     if re.search(r"\d", _DURATION.sub(" ", text)):
         return None
-    return round(total)
+    return round(total), ranged
 
 
-def uses_upper_bound(raw: str) -> bool:
-    """True when rule 4 took the upper end of a range stated in `raw`."""
-    text = _PARENTHETICAL.sub(" ", html.unescape(raw))
-    return any(match["high"] for match in _DURATION.finditer(text))
-
-
-def parse_total_minutes(raw: str | None) -> Fact[int]:
+def _parse(raw: str | None) -> tuple[Fact[int], bool]:
+    """The total, and whether a stage it came from used an upper bound."""
     if raw is None or not raw.strip():
-        return Fact.unknown()
+        return Fact.unknown(), False
 
-    unknown = Fact[int].unknown(evidence=raw)
+    unknown = Fact[int].unknown(evidence=raw), False
     text = html.unescape(raw).replace("\xa0", " ")
 
     for inner in _PARENTHETICAL.findall(text):
@@ -86,7 +84,7 @@ def parse_total_minutes(raw: str | None) -> Fact[int]:
             return unknown
     text = _PARENTHETICAL.sub(" ", text)
 
-    stages: list[tuple[str | None, int]] = []
+    stages: list[tuple[str | None, int, bool]] = []
     for chunk in _STAGE_SPLIT.split(text):
         if not chunk.strip():
             continue
@@ -96,19 +94,29 @@ def parse_total_minutes(raw: str | None) -> Fact[int]:
             return unknown
         label_match = _LABEL.match(chunk)
         label, body = (label_match[1].lower(), label_match[2]) if label_match else (None, chunk)
-        minutes = _stage_minutes(body)
-        if minutes is None:
+        parsed = _stage_minutes(body)
+        if parsed is None:
             return unknown
-        stages.append((label, minutes))
+        stages.append((label, *parsed))
 
     if not stages:
         return unknown
-    for label, minutes in stages:
+    for label, minutes, ranged in stages:
         if label == "total":
-            return Fact(value=minutes, status="explicit", evidence=raw)
+            return Fact(value=minutes, status="explicit", evidence=raw), ranged
     if len(stages) == 1:
-        label, minutes = stages[0]
+        label, minutes, ranged = stages[0]
         if label is not None:
             return unknown
-        return Fact(value=minutes, status="explicit", evidence=raw)
-    return Fact(value=sum(m for _, m in stages), status="derived", evidence=raw)
+        return Fact(value=minutes, status="explicit", evidence=raw), ranged
+    total = sum(minutes for _, minutes, _ in stages)
+    return Fact(value=total, status="derived", evidence=raw), any(r for *_, r in stages)
+
+
+def parse_total_minutes(raw: str | None) -> Fact[int]:
+    return _parse(raw)[0]
+
+
+def uses_upper_bound(raw: str) -> bool:
+    """True when rule 4 took the upper end of a range for the returned value."""
+    return _parse(raw)[1]
