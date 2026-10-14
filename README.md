@@ -84,16 +84,29 @@ a runtime behavior (SPEC §9.5).
 
 ```bash
 uv run pytest                      # deterministic tests, no network, no key
-uv run python evals/run.py --base-url http://localhost:8000                  # smoke cases
+uv run python evals/run.py --base-url http://localhost:8000                  # smoke set, 3 runs per case
 uv run python evals/run.py --base-url http://localhost:8000 --contract-only  # fake provider
+uv run python evals/extract.py --set smoke                                   # extraction only, needs a key
 ```
 
-`evals/run.py` checks every response against the contract (schema,
-invariants I1–I5, citations resolve to the manifest, `/healthz`, `/schema`,
-UI served) and each case's expected refusal and sources; reports go to
-`evals/reports/`. Stage 3 ships three smoke cases (`evals/smoke.json`):
-a how-to answer, `out_of_domain`, and a `safety` refusal with citations.
-The 15-case golden set lands in stage 5.
+Evaluation is layered (SPEC §7, details in [evals/README.md](evals/README.md)):
+`evals/extract.py` measures constraint extraction on its own labelled set,
+field by field; `evals/run.py` sends a case set to a running instance and
+checks every response against the contract (schema, invariants I1–I5,
+citations resolve to the manifest, `/healthz`, `/schema`, UI served) and
+each case's expected refusal, sources and constraint predicates (checked
+against corpus metadata). Each case runs three times; a case that passes
+only sometimes, or changes outcome, is reported as unstable, not as
+passing. False answers, false refusals and wrong refusal reasons are
+counted separately. Every report records the build, prompt version, model,
+corpus and case set it ran against. Exploratory reports go to
+`evals/reports/` (ignored); `--milestone NAME` writes a report to commit
+under `evals/reports/milestones/`. A held-out paraphrase set, kept apart
+from every other set, runs once, as a milestone.
+
+Sets: `smoke` (three questions: a how-to answer, `out_of_domain`, and a
+`safety` refusal with citations). The 15-case golden set and the held-out
+paraphrases land in stage 5.
 
 _TBD: last eval report summary._
 

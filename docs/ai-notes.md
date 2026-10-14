@@ -100,3 +100,25 @@ live in `recipe_qa/prompts/`.
   would have failed every deploy at the empty-plan check. Verified against
   the issue and Railway's documented defaults before changing anything;
   only the default-valued field is affected, so it is now left implicit.
+
+### 2026-10-14 — stage 4a: layered evaluation
+
+- SPEC v0.4 first (requirements only, no file names): extraction measured
+  separately, false answers and false refusals never summed, stability
+  across repeats, a held-out set run once, versioned reports. Then
+  failing harness tests, then the harness.
+- Tests replay `/ask` bodies recorded from production (the deployed smoke
+  run), not hand-written ones, so the harness is checked against what the
+  service really returns.
+- Decision: constraint predicates live in `evals/`, not in `recipe_qa`,
+  and do not use the service's alias table; a case lists its own aliases.
+  An oracle that shares the code under test cannot catch its mistakes.
+- Decision: the service does not publish its prompt version, and adding it
+  to `/healthz` would change the API contract in a task that excludes
+  pipeline changes. The harness derives it instead: if the build commit
+  `/healthz` reports exists locally and `recipe_qa/prompts/` is identical
+  there, the local `PROMPT_VERSION` is the server's; otherwise the report
+  says "unconfirmed".
+- Found while designing: three repeats of a 15-case set exceed the
+  service's own 30 requests/minute limit, so the runner waits out a 429
+  instead of recording it as a failure.
