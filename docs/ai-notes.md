@@ -268,7 +268,7 @@ live in `recipe_qa/prompts/`.
 
   | Commit | Change | Golden content per run | Extraction | Flips |
   |---|---|---|---|---|
-  | `b134d62` (pre) | harness + guard, prompts as 5a | 14, 14, 14 | 23/32 | — (exploratory) |
+  | `b134d62` (pre) | harness + guard, prompts as 5a | 14, 14, 14 | not run | — (exploratory, golden only) |
   | `a1ce046` | generate: constraints, provenance | 13, 14, 14 | 23/32 | g04 pass → unstable (one variant cited) |
   | `05f0980` | generate: always cite the other variant | 14, 14, 14 | 23/32 | g04 → pass |
   | `c6f32e3` | extract: dish words are not includes | 15, 15, 15 | 28/32 | g05 → pass; extraction g14, x05, x06 → fail/unstable |
@@ -302,7 +302,8 @@ live in `recipe_qa/prompts/`.
   Extraction prompt examples were written to avoid golden dishes, so the
   rule is not fitted to the questions it is measured on.
 - For the factuality review, not caught by any check: in the last run a
-  g06 answer called Le Tourin a "variant-free garlic soup" and said Spicy
-  Tomato Soup "is also vegetarian" (a derived value stated as a label);
-  a g07 answer called Agnolotti in Brodo "a variant" of another soup. The
-  variant rule leaks the word "variant" into answers that have none.
+  g06 answer called Le Tourin a "variant-free garlic soup", and a g07
+  answer called Agnolotti in Brodo "a variant" of another soup. The variant
+  rule leaks the word "variant" into answers that have none. (The same g06
+  answer calls Spicy Tomato Soup vegetarian; that is fine, its category is
+  explicit.)
