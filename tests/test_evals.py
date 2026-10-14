@@ -242,6 +242,17 @@ def test_a_case_failing_every_run_is_a_failure_not_unstable() -> None:
     assert result["summary"]["fail"] == 1
 
 
+def test_a_case_failing_every_run_with_changing_outcomes_is_unstable() -> None:
+    answers = recorded_smoke()
+    question = RECORDED["capital_out_of_domain"]["question"]
+    answers[question] = [(200, CARBONARA), (200, refusal("out_of_corpus"))]
+    result = smoke_run(answers)
+    case = next(c for c in result["cases"] if c["id"] == "smoke-out-of-domain")
+    assert case["passes"] == "0/2"
+    assert case["verdict"] == "unstable"
+    assert result["summary"]["unstable"] == 1
+
+
 def test_false_answers_false_refusals_and_wrong_reasons_are_counted_apart() -> None:
     answers = {
         # expected an answer, got a refusal: false refusal
@@ -270,6 +281,19 @@ def test_a_technical_error_is_its_own_column_not_a_refusal() -> None:
     assert result["refusal_matrix"]["technical_errors"] == 1
     assert result["refusal_matrix"]["matrix"]["safety"] == {"error": 1}
     assert result["refusal_matrix"]["false_answers"] == 0
+
+
+def test_a_parsed_response_that_breaks_the_contract_is_a_technical_error() -> None:
+    answers = recorded_smoke(repeat=1)
+    broken = copy.deepcopy(CARBONARA)
+    broken["citations"].append({"title": "Elsewhere", "url": "https://example.org/recipe"})
+    answers[RECORDED["carbonara_answer"]["question"]] = [(200, broken)]
+    result = smoke_run(answers, repeat=1)
+    run = next(c for c in result["cases"] if c["id"] == "smoke-howto")["runs"][0]
+    assert run["outcome"] == "error"
+    assert "citation outside the corpus: https://example.org/recipe" in run["failures"]
+    assert result["refusal_matrix"]["technical_errors"] == 1
+    assert result["refusal_matrix"]["matrix"]["answer"] == {"error": 1}
 
 
 def test_rate_limited_requests_wait_and_retry_instead_of_failing() -> None:
