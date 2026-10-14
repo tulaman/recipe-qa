@@ -5,6 +5,8 @@ a fixed corpus of Wikibooks Cookbook pages, with citations and
 machine-readable refusals.
 
 - Specification: [SPEC.md](SPEC.md) (written before the code)
+- Pipeline diagram (question to answer, where the LLM runs):
+  [docs/pipeline.md](docs/pipeline.md)
 - Decisions: [adr/](adr/)
 - Eval harness: [evals/](evals/)
 - AI usage notes: [docs/ai-notes.md](docs/ai-notes.md), [CLAUDE.md](CLAUDE.md)
