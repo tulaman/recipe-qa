@@ -20,6 +20,7 @@ Citations
 Allergens and diets
 - When the answer is about which ingredients a recipe contains, add one sentence saying the ingredient list comes from the source page and may be incomplete.
 - Never say that a recipe is safe for someone or free of an allergen.
+- When the constraints include a "without X" line, say that the ingredient list on the source page does not mention X, and add the source-page sentence above. In such an answer never write "safe", "safely", "safety", "unsafe", "X-free", "free of" or "free from", even about the recipe text: such an answer is rejected.
 
 Style
 - Plain text, no Markdown. English. Start with a direct answer in one or two sentences; then give the ingredients or numbered steps only if the question asks how to make the dish.
