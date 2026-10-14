@@ -73,8 +73,24 @@ repo; reviewer visibility; time to first public deploy (< 1 hour).
 
 ## Measurements
 
-_To be filled: deploy duration from push to healthy; cold start time;
-image size._
+Measured 2026-10-13/14 on the production project and GitHub Actions
+(`ubuntu-latest`); times from step and Railway log timestamps.
+
+| Metric | Value | Source |
+|---|---|---|
+| Push to healthy, automatic path | 3 min 17 s (CI 58 s, `railway up` 112 s, first build without layer cache) | stage 3 merge `f6984bf`: push 20:27:18Z, `/healthz` reported the SHA 20:30:35Z |
+| Deploy run, trigger to healthy (IaC pipeline) | 72 s with infrastructure changes (`railway up` 49 s); 42 s with none (`railway up` 24 s) | `deploy` runs 38544143582, 38544420572 for `a0fb06b` |
+| CI on `main` | 32 s | run 38543936686 for `a0fb06b` |
+| Apply + empty-plan check | 3 s + 1 s with changes; 1 s + 1 s without | same `deploy` runs |
+| Cold start on Railway | 2.4 s from "Starting Container" to "Healthcheck succeeded" (two deploys, 2.36 s and 2.37 s) | Railway deploy and build logs |
+| Cold start, local | 0.75–0.90 s, median 0.86 s (n = 5), `docker run` to first `200` on `/healthz` | Docker 24 on the author's laptop, fake provider |
+| Image size | 231 MB uncompressed, 74 MB gzipped (`docker save`) | built from `a0fb06b` |
+
+The cold start is well inside the SPEC §8 budget (≤ 10 s). The push-to-
+healthy figure predates the IaC pipeline: the first automatic deploy after
+the amendment stopped at apply by design (it would have deleted
+`GIT_SHA`), so its end-to-end time is the sum above (CI, then a deploy run)
+until the next ordinary merge measures it directly.
 
 ## Consequences
 
@@ -85,6 +101,18 @@ image size._
 - Railway's generated domain (`recipe-qa-production.up.railway.app`) is not
   expressible in `railway.ts`; it exists outside the file and the file does
   not delete it.
+- An apply that changes the service makes Railway redeploy the previous
+  deployment with the new settings, rebuilt from that deployment's upload.
+  Observed in the first IaC deploy: apply finished at 09:41:22Z, Railway
+  created a `redeploy` of the stage 3 upload at 09:41:22Z, `railway up`
+  created the real deployment 2 s later; both built, both containers
+  started at 09:42:08Z, and the redeploy shut down at 09:42:15Z once the
+  new one was live. An apply with no changes triggers nothing. Costs: one
+  extra build per infrastructure change, and if `railway up` then fails,
+  the old code keeps running under the new settings (for this change,
+  without `GIT_SHA`, so `/healthz` would have reported `unknown`).
+  Acceptable: the deploy fails loudly and `/healthz` shows which build is
+  live.
 - The CI plan job runs pull-request code with the production token. Only
   branches of this repository get it (people who can already change the
   workflows); forks and Dependabot get no plan.
