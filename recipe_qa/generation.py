@@ -8,11 +8,13 @@ the exact instructions that produced it.
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Sequence
 from pathlib import Path
 
 from recipe_qa.constraints import describe
 from recipe_qa.corpus import Fact, Recipe
+from recipe_qa.ingestion.timeparse import uses_upper_bound
 from recipe_qa.schemas import Extraction
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
@@ -22,6 +24,8 @@ PROMPT_VERSION = hashlib.sha256((EXTRACT_SYSTEM + GENERATE_SYSTEM).encode()).hex
 
 # Never shown to the model, so it cannot answer from them (SPEC §9.9).
 HIDDEN_SECTIONS = frozenset({"nutrition"})
+
+_BREAK = re.compile(r"\s*</?br\s*/?>\s*", re.IGNORECASE)
 
 
 def _data(text: str) -> str:
@@ -34,14 +38,42 @@ def _data(text: str) -> str:
     return text.replace("<", "&lt;").replace(">", "&gt;")
 
 
-def _fact(fact: Fact[object], unit: str = "") -> str:
+def _fact(fact: Fact[object]) -> str:
     if fact.status == "unknown":
         return "unknown"
     value = {True: "yes", False: "no"}.get(fact.value, fact.value)  # type: ignore[arg-type]
-    text = f"{_data(str(value))}{unit} ({fact.status}"
+    text = f"{_data(str(value))} ({fact.status}"
     if fact.status == "derived" and fact.evidence:
         text += f": {_data(fact.evidence)}"
     return text + ")"
+
+
+def _duration(minutes: int) -> str:
+    hours, rest = divmod(minutes, 60)
+    parts = []
+    if hours:
+        parts.append(f"{hours} hour{'s' if hours != 1 else ''}")
+    if rest or not hours:
+        parts.append(f"{rest} minute{'s' if rest != 1 else ''}")
+    return " ".join(parts)
+
+
+def _total_time(fact: Fact[int]) -> str:
+    """Readable total plus the page's own wording (SPEC §4).
+
+    A sum of 1345 minutes reads as an error, and a range kept at its upper
+    bound is not what the page says; showing both lets the model repeat
+    the page instead of the number.
+    """
+    if fact.status == "unknown" or fact.value is None:
+        return "unknown"
+    text = _duration(fact.value)
+    if fact.evidence and uses_upper_bound(fact.evidence):
+        text = f"up to {text}"
+    page = _BREAK.sub("; ", fact.evidence or "").strip()
+    if fact.status == "derived" or (page and page != _duration(fact.value)):
+        return f"{text} ({fact.status}: {_data(page)})"
+    return f"{text} ({fact.status})"
 
 
 def render_recipe(recipe: Recipe) -> str:
@@ -49,7 +81,7 @@ def render_recipe(recipe: Recipe) -> str:
     lines = [
         f'<recipe id="{recipe.id}">',
         f"Title: {_data(recipe.title)}",
-        f"Total time: {_fact(meta.total_minutes, ' minutes')}",
+        f"Total time: {_total_time(meta.total_minutes)}",
         f"Servings: {_fact(meta.servings)}",
         f"Vegetarian: {_fact(meta.diet.vegetarian)}",
         f"Vegan: {_fact(meta.diet.vegan)}",

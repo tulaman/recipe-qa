@@ -68,6 +68,12 @@ def _stage_minutes(text: str) -> int | None:
     return round(total)
 
 
+def uses_upper_bound(raw: str) -> bool:
+    """True when rule 4 took the upper end of a range stated in `raw`."""
+    text = _PARENTHETICAL.sub(" ", html.unescape(raw))
+    return any(match["high"] for match in _DURATION.finditer(text))
+
+
 def parse_total_minutes(raw: str | None) -> Fact[int]:
     if raw is None or not raw.strip():
         return Fact.unknown()
