@@ -5,8 +5,9 @@ trace shows that no constraint was dropped; `is_eligible` is its negation.
 Both read only ingested metadata (time and diet facts already carry the
 §4 rules, ranges at their upper bound) and the ingredient list.
 
-Ingredient matching is a whole-word, case-insensitive match of the term or
-one of its aliases (`data/aliases.json`), singular or plural. Inclusion
+Ingredient matching is a whole-word, case- and accent-insensitive match of
+the term or one of its aliases (`data/aliases.json`), singular or plural
+(including -y/-ies and -f/-ves). Inclusion
 looks at the normalized name (§4); exclusion also at the raw line, which
 keeps parenthetical detail ("any nuts, e.g. pistachios"), and counts
 optional ingredients. A dairy or egg word with a plant qualifier before it
@@ -23,7 +24,7 @@ from pathlib import Path
 
 from recipe_qa.corpus import Ingredient, Recipe
 from recipe_qa.ingestion.diet import ANIMAL_PRODUCTS, NOT_ANIMAL_AFTER, PLANT_BEFORE
-from recipe_qa.retrieval import tokenize
+from recipe_qa.retrieval import fold, tokenize
 from recipe_qa.schemas import Extraction
 
 ALIASES_PATH = Path(__file__).resolve().parent.parent / "data" / "aliases.json"
@@ -60,12 +61,19 @@ ALIASES = AliasTable.load()
 
 
 def _pattern(term: str) -> re.Pattern[str]:
-    """`term` as whole words, its last word singular or plural."""
-    words = term.lower().split()
+    """`term` as whole words, accent-folded, its last word singular or plural.
+
+    Group 1 is the part every form shares, so callers can look right after it.
+    """
+    words = fold(term).split()
     last = (tokenize(words[-1]) or [words[-1]])[0] if words else ""
     stem = re.escape(" ".join([*words[:-1], last]))
-    if last.endswith("y"):
-        return re.compile(rf"\b({stem[:-1]})(?:y|ies)\b")
+    if last.endswith("y"):  # berry, berries; turkey, turkeys
+        return re.compile(rf"\b({stem[:-1]})(?:y|ys|ies)\b")
+    if last.endswith("fe"):  # knife, knives
+        return re.compile(rf"\b({stem[:-2]})(?:fe|fes|ves)\b")
+    if last.endswith("f"):  # leaf, leaves; loaf, loaves
+        return re.compile(rf"\b({stem[:-1]})(?:f|fs|ves)\b")
     return re.compile(rf"\b({stem})(?:s|es)?\b")
 
 
@@ -81,11 +89,11 @@ def _matches(text: str, terms: tuple[str, ...]) -> bool:
 
 
 def _included(ingredient: Ingredient, terms: tuple[str, ...]) -> bool:
-    return _matches(ingredient.normalized.lower(), terms)
+    return _matches(fold(ingredient.normalized), terms)
 
 
 def _excluded(ingredient: Ingredient, terms: tuple[str, ...]) -> bool:
-    return _matches(f"{ingredient.raw} | {ingredient.normalized}".lower(), terms)
+    return _matches(fold(f"{ingredient.raw} | {ingredient.normalized}"), terms)
 
 
 def why_ineligible(

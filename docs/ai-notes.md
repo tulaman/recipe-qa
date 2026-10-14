@@ -228,3 +228,9 @@ live in `recipe_qa/prompts/`.
     would be false refusals end to end.
   - Latency (client side, 33 answered runs): p50 3.3 s, p95 4.3 s, max
     5.1 s. Refusals max 2.8 s.
+- Review fixes after the run (PR #9): the image now ships
+  `data/aliases.json` (the container failed to start without it), and
+  matching folds accents on both sides ("crème" matched nothing) and knows
+  -f/-ves and -y/-ys plurals ("bay leaf" missed "bay leaves"). No golden
+  constraint uses an accented or irregular term, and recall@5 is still
+  11/11, so the run on `cd89004` stands.

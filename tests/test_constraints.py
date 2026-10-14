@@ -172,6 +172,27 @@ def test_include_ignores_raw_only_text() -> None:
     assert not is_eligible(r, ask(must_include=["chicken"]))
 
 
+@pytest.mark.parametrize(
+    ("ingredient", "term"),
+    [
+        ("bay leaves", "bay leaf"),
+        ("2 loaves stale bread", "loaf"),
+        ("kitchen knives", "knife"),
+        ("smoked turkeys", "turkey"),
+        ("fresh berries", "berry"),
+    ],
+)
+def test_include_matches_irregular_plurals(ingredient: str, term: str) -> None:
+    assert is_eligible(recipe([ing(ingredient)]), ask(must_include=[term]))
+
+
+def test_bay_leaf_finds_the_recipe_that_lists_bay_leaves() -> None:
+    r = CORPUS["italian-rice-pilaf"]
+    assert any("bay leaves" in i.raw.lower() for i in r.ingredients)  # the premise
+    assert is_eligible(r, ask(must_include=["bay leaf"]))
+    assert not is_eligible(r, ask(must_exclude=["bay leaf"]))
+
+
 def test_aliases_are_directional() -> None:
     assert is_eligible(recipe([ing("almonds")]), ask(must_include=["nut"]))
     assert not is_eligible(recipe([ing("walnuts")]), ask(must_include=["almond"]))
@@ -216,6 +237,8 @@ def test_exclude_on_the_corpus_drops_the_optional_raisins() -> None:
         (ing("parmigiano-reggiano cheese"), "dairy"),
         (ing("2 egg yolks", "egg yolks"), "egg"),
         (ing("mayonnaise"), "egg"),
+        (ing("2 tbsp crème fraîche"), "dairy"),
+        (ing("Gruyère, grated"), "dairy"),
         (ing("all-purpose flour"), "gluten"),
         (ing("soy sauce"), "gluten"),
     ],
