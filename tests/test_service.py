@@ -156,6 +156,8 @@ GUARANTEES = [
     "Apple Crisp is not unsafe.",
     "For safety, choose Apple Crisp.",
     "Apple Crisp is nut-free.",
+    "Apple Crisp is nut free.",
+    "It is gluten  free too.",
     "Apple Crisp is free of nuts.",
     "Apple Crisp is free from nuts.",
 ]
@@ -184,6 +186,20 @@ def test_a_must_exclude_answer_that_keeps_guarantee_wording_is_upstream_invalid(
     service = service_extracting(generate=answering(*GUARANTEES[:2]), must_exclude=["nut"])
     with pytest.raises(UpstreamInvalid):
         asyncio.run(service.ask(DESSERTS_WITHOUT_NUTS, "rid", {}))
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "Beat 4 free-range eggs; the source page does not mention nuts.",
+        "Use free range eggs; the source page does not mention nuts.",
+        "Feel free to add cinnamon; the source page does not mention nuts.",
+    ],
+)
+def test_free_that_is_not_an_allergen_claim_passes_the_guard(answer: str) -> None:
+    service = service_extracting(generate=answering(answer), must_exclude=["nut"])
+    response = asyncio.run(service.ask(DESSERTS_WITHOUT_NUTS, "rid", {}))
+    assert response.answer == answer
 
 
 def test_recipe_wording_like_heat_safe_is_kept_when_nothing_is_excluded() -> None:
