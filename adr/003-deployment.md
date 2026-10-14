@@ -78,19 +78,23 @@ Measured 2026-10-13/14 on the production project and GitHub Actions
 
 | Metric | Value | Source |
 |---|---|---|
-| Push to healthy, automatic path | 3 min 17 s (CI 58 s, `railway up` 112 s, first build without layer cache) | stage 3 merge `f6984bf`: push 20:27:18Z, `/healthz` reported the SHA 20:30:35Z |
+| Push to healthy, automatic path (IaC pipeline) | **1 min 41 s**: CI 38 s, 2 s to start `deploy`, apply 2 s + plan check 1 s (no changes), `railway up` 38 s, `/healthz` reported the SHA 1 s later | merge `9eb2ef3`: push 10:10:45Z, live 10:12:26Z; CI run 38547740143, `deploy` run 38547818354 |
+| Push to healthy, before IaC | 3 min 17 s (CI 58 s, `railway up` 112 s, first build without layer cache) | stage 3 merge `f6984bf`: push 20:27:18Z, `/healthz` reported the SHA 20:30:35Z |
 | Deploy run, trigger to healthy (IaC pipeline) | 72 s with infrastructure changes (`railway up` 49 s); 42 s with none (`railway up` 24 s) | `deploy` runs 38544143582, 38544420572 for `a0fb06b` |
-| CI on `main` | 32 s | run 38543936686 for `a0fb06b` |
+| CI on `main` | 32–38 s | runs 38543936686 (`a0fb06b`), 38547740143 (`9eb2ef3`) |
 | Apply + empty-plan check | 3 s + 1 s with changes; 1 s + 1 s without | same `deploy` runs |
-| Cold start on Railway | 2.4 s from "Starting Container" to "Healthcheck succeeded" (two deploys, 2.36 s and 2.37 s) | Railway deploy and build logs |
+| Cold start on Railway | 2.4–3.8 s from "Starting Container" to "Healthcheck succeeded" (three deploys: 2.36 s, 2.37 s, 3.79 s) | Railway deploy and build logs |
 | Cold start, local | 0.75–0.90 s, median 0.86 s (n = 5), `docker run` to first `200` on `/healthz` | Docker 24 on the author's laptop, fake provider |
 | Image size | 231 MB uncompressed, 74 MB gzipped (`docker save`) | built from `a0fb06b` |
 
-The cold start is well inside the SPEC §8 budget (≤ 10 s). The push-to-
-healthy figure predates the IaC pipeline: the first automatic deploy after
-the amendment stopped at apply by design (it would have deleted
-`GIT_SHA`), so its end-to-end time is the sum above (CI, then a deploy run)
-until the next ordinary merge measures it directly.
+The cold start is well inside the SPEC §8 budget (≤ 10 s). The IaC steps
+add about 3 s to a deploy with no infrastructure changes. The gain over
+stage 3 is mostly the build (`railway up` 38 s vs 112 s on the first,
+uncached build), not the pipeline. The first automatic deploy after the amendment stopped at apply
+by design (it would have deleted `GIT_SHA`); the IaC figure is from the
+next ordinary merge, which needed no manual step. Its apply changed
+nothing and Railway created exactly one deployment (no apply-triggered
+redeploy, see Consequences).
 
 ## Consequences
 
