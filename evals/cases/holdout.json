@@ -10,7 +10,7 @@
         "refused": false,
         "sources_any": ["le-tourin-garlic-soup"],
         "expected_facts": ["olive oil", "flour", "egg", "vinegar"],
-        "forbidden_claims": ["duck fat", "goose fat", "\\bonions?\\b"]
+        "forbidden_claims": ["duck fat", "goose fat"]
       }
     },
     {

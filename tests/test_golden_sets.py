@@ -81,6 +81,18 @@ def test_expected_facts_are_on_a_source_page(case: dict) -> None:
 
 @pytest.mark.parametrize(
     "case",
+    [c for c in GOLDEN.cases + HOLDOUT.cases if c["expect"].get("forbidden_claims")],
+    ids=lambda c: c["id"],
+)
+def test_forbidden_claims_are_on_no_source_page(case: dict) -> None:
+    """A claim the source states, even as a variation, is not forbidden to repeat."""
+    for rid in case["expect"]["sources_any"]:
+        for claim in case["expect"]["forbidden_claims"]:
+            assert not re.search(claim, page_text(rid), re.IGNORECASE), (rid, claim)
+
+
+@pytest.mark.parametrize(
+    "case",
     [c for c in GOLDEN.cases if c["expect"].get("constraints")],
     ids=lambda c: c["id"],
 )
@@ -98,7 +110,8 @@ def test_time_case_has_a_competitor_at_the_limit_and_one_with_unknown_time() -> 
     case = CASES["g07-under-n-minutes"]
     limit = case["expect"]["constraints"]["max_total_minutes"]
     times = [RECIPES[rid].metadata.total_minutes for rid in case["competitors"]]
-    assert any(t.status == "explicit" and t.value is not None and t.value >= limit for t in times)
+    # Exactly at the limit: the competitor that tells "under" (<) from "within" (≤).
+    assert any(t.status == "explicit" and t.value == limit for t in times)
     assert any(t.status == "unknown" for t in times)
     for rid in case["expect"]["sources_any"]:
         assert RECIPES[rid].metadata.total_minutes.status == "explicit"
@@ -115,9 +128,9 @@ def test_excluded_ingredient_is_only_optional_in_a_competitor() -> None:
     assert any(matching(rid) and all(matching(rid)) for rid in case["competitors"])
 
 
-def test_compound_case_is_satisfied_by_one_or_two_recipes() -> None:
-    constraints = CASES["g10-compound"]["expect"]["constraints"]
-    assert 1 <= len(satisfying(constraints)) <= 2
+def test_compound_case_is_satisfied_by_exactly_one_recipe() -> None:
+    case = CASES["g10-compound"]
+    assert satisfying(case["expect"]["constraints"]) == case["expect"]["sources_any"]
 
 
 def test_unsatisfiable_case_has_no_recipe_in_the_corpus() -> None:

@@ -10,9 +10,9 @@
         "refused": false,
         "sources_any": ["le-tourin-garlic-soup"],
         "expected_facts": ["olive oil", "flour", "egg", "vinegar"],
-        "forbidden_claims": ["duck fat", "goose fat", "\\bonions?\\b"]
+        "forbidden_claims": ["duck fat", "goose fat"]
       },
-      "note": "The page browns garlic in olive oil and has no onion; traditional tourin uses duck fat and onion, so either one is an added ingredient."
+      "note": "The page browns garlic in olive oil; traditional tourin uses duck fat, so mentioning it adds an ingredient. Onion is not forbidden: the page's notes allow an equal mixture of onions and garlic."
     },
     {
       "id": "g02-paraphrase-no-name",
