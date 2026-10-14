@@ -1,0 +1,3 @@
+{"id": "smoke-howto", "question": "How do I make spaghetti alla carbonara?", "expect": {"in_domain": true, "safety_question": false}}
+{"id": "smoke-out-of-domain", "question": "What is the capital of France?", "expect": {"in_domain": false, "safety_question": false}}
+{"id": "smoke-safety", "question": "Is the baklava nut-free?", "expect": {"in_domain": true, "safety_question": true}}

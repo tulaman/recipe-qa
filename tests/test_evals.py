@@ -162,7 +162,8 @@ def test_a_question_shared_with_a_held_out_set_is_rejected(tmp_path: Path) -> No
 
 def test_an_extraction_question_shared_with_a_held_out_set_is_rejected(tmp_path: Path) -> None:
     write_set(tmp_path, "heldout", [{"id": "h", "question": "Quick vegan soup?"}], held_out=True)
-    write_jsonl(tmp_path, "labels", [{"id": "x", "question": "quick vegan soup?", "expect": {}}])
+    label = {"in_domain": True, "safety_question": False, "diet": "vegan"}
+    write_jsonl(tmp_path, "labels", [{"id": "x", "question": "quick vegan soup?", "expect": label}])
     with pytest.raises(SetError, match="heldout"):
         load_extraction_set("labels", tmp_path)
 
