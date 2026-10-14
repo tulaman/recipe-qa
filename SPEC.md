@@ -232,8 +232,8 @@ what "careful" means:
   told to say that the ingredient list on the source page does not mention
   the excluded ingredient. Code then rejects, as invalid output (§3 step 8),
   a `must_exclude` answer containing any form of *safe* ("safe", "safely",
-  "unsafe", "safety") or *free* used as a guarantee ("nut-free", "free of",
-  "free from"). The check applies only to `must_exclude` answers, because
+  "unsafe", "safety") or *free* used as a guarantee ("nut-free", "nut free",
+  "free of", "free from"; not "free-range" or "feel free"). The check applies only to `must_exclude` answers, because
   recipe text legitimately says "heat-safe tins" or "refrigerated safely".
 
 Refusal messages are polite, specific to the reason, and never blame the

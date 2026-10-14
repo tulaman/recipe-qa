@@ -39,8 +39,12 @@ CONTEXT_K = 3
 # match, so "Is the baklava nut-free?" links both baklavas and nothing else.
 SAFETY_MATCH_RATIO = 0.5
 # A must_exclude answer is a filter result, never a guarantee (SPEC §5): any
-# form of "safe", and "free" used as an allergen claim, makes it invalid.
-GUARANTEE_WORDING = re.compile(r"safe|\w-free\b|\bfree\s+(?:of|from)\b", re.IGNORECASE)
+# form of "safe", and "free" used as an allergen claim ("nut-free", "nut
+# free", "free of"), makes it invalid. "free-range eggs" (in the corpus) and
+# "feel free to" are not claims.
+GUARANTEE_WORDING = re.compile(
+    r"safe|\w[-\s]+free\b(?![-\s]+range\b|\s+to\b)|\bfree\s+(?:of|from)\b", re.IGNORECASE
+)
 
 REFUSAL_MESSAGES: dict[RefusalReason, str] = {
     "out_of_domain": (
