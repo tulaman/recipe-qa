@@ -238,8 +238,8 @@ cases cover:
 | 1 | How-to for a known dish by name | expected source cited, key steps present, no added steps |
 | 2 | Semantic paraphrase without the dish name | expected source retrieved and cited |
 | 3 | Ingredient question about a dish | fact matches the cited recipe |
-| 4 | Two similar variants of one dish | one variant followed, other may be mentioned, both citable |
-| 5 | Conflicting recipes for the same dish | no merged steps/ingredients |
+| 4 | Two similar variants of one dish | one variant followed, the other mentioned, both cited (`sources_all`) |
+| 5 | Conflicting recipes for the same dish | both cited (`sources_all`); no merged steps/ingredients |
 | 6 | Vegetarian constraint | cited recipe passes the vegetarian rule |
 | 7 | Under-N-minutes constraint | cited recipe has explicit time < N |
 | 8 | Required ingredient (with alias) | cited recipe contains the ingredient |
