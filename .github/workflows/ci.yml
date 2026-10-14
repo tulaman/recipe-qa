@@ -48,6 +48,42 @@ jobs:
       - name: Type-check and build
         run: npm run build
 
+  infra:
+    # .railway/railway.ts is the Railway project's desired state (ADR 003).
+    # Type-check it everywhere; on pull requests from this repository also
+    # show what deploy.yml would apply to production after merge.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: .railway
+    env:
+      RAILWAY_CLI_VERSION: 5.68.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .railway/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Type-check
+        run: npm run typecheck
+      - name: Plan against production
+        # Forks and Dependabot get no secrets: no preview, and deploy.yml
+        # still refuses destructive changes after merge.
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "no RAILWAY_TOKEN, skipping plan"; exit 0; fi
+          set -o pipefail
+          npm install -g @railway/cli@${RAILWAY_CLI_VERSION}
+          railway config plan | tee plan.txt
+          { echo '### Railway plan (production)'; echo '```'; cat plan.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
   container:
     # The image that will be deployed, started with the fake provider:
     # proves it builds, boots without a key, serves the UI and honours the
@@ -60,7 +96,9 @@ jobs:
         with:
           enable-cache: true
       - name: Build image
-        run: docker build --build-arg GIT_SHA=${{ github.sha }} -t recipe-qa:ci .
+        run: |
+          echo "${{ github.sha }}" > recipe_qa/BUILD_SHA
+          docker build -t recipe-qa:ci .
       - name: Start container
         run: |
           docker run -d --name app -p 8000:8000 -e RECIPE_QA_PROVIDER=fake recipe-qa:ci

@@ -23,16 +23,13 @@ WORKDIR /app
 COPY pyproject.toml uv.lock README.md ./
 RUN uv sync --locked --no-default-groups --no-install-project
 
+# Includes recipe_qa/BUILD_SHA when CI wrote one: the commit /healthz reports.
 COPY recipe_qa/ recipe_qa/
 COPY data/recipes.jsonl data/manifest.json data/
 COPY --from=web /web/dist web/dist
 
 RUN useradd --system --uid 10001 --no-create-home app
 USER app
-
-# Last, so a new commit does not invalidate the layers above.
-ARG GIT_SHA=unknown
-ENV GIT_SHA=${GIT_SHA}
 
 EXPOSE 8000
 CMD ["sh", "-c", "exec uvicorn recipe_qa.api:app --host 0.0.0.0 --port ${PORT:-8000} --no-access-log"]
