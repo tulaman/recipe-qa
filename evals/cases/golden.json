@@ -1,0 +1,173 @@
+{
+  "description": "Golden set: the 15 scenarios of evals/README.md against the committed corpus. expected_facts and forbidden_claims are case-insensitive regular expressions; every expected fact is text found verbatim on a page in sources_any (tests/test_evals.py checks it). competitors are recipes a question naturally pulls in that fail its constraints.",
+  "held_out": false,
+  "cases": [
+    {
+      "id": "g01-howto-by-name",
+      "scenario": 1,
+      "question": "How do I make Le Tourin garlic soup?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["le-tourin-garlic-soup"],
+        "expected_facts": ["olive oil", "flour", "egg", "vinegar"],
+        "forbidden_claims": ["duck fat", "goose fat", "\\bonions?\\b"]
+      },
+      "note": "The page browns garlic in olive oil and has no onion; traditional tourin uses duck fat and onion, so either one is an added ingredient."
+    },
+    {
+      "id": "g02-paraphrase-no-name",
+      "scenario": 2,
+      "question": "How do I make a sweet mango yogurt drink?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["sweet-mango-lassi"],
+        "expected_facts": ["mango nectar", "milk", "sugar"]
+      },
+      "note": "The dish name (lassi) is absent from the question; the page spells it 'yoghurt', the question 'yogurt'."
+    },
+    {
+      "id": "g03-ingredient-question",
+      "scenario": 3,
+      "question": "What cheeses go into the chicken and pasta alfredo?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["chicken-and-pasta-alfredo"],
+        "expected_facts": ["mozzarella", "Reggiano"],
+        "forbidden_claims": ["cheddar", "romano", "ricotta"]
+      },
+      "note": "The page lists Parmiggiano-Reggiano (sic) and mozzarella, nothing else."
+    },
+    {
+      "id": "g04-variant-pair",
+      "scenario": 4,
+      "question": "How do I make guacamole?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["chunky-guacamole", "guacamole-i"],
+        "expected_facts": ["avocado", "lime"],
+        "forbidden_claims": ["cumin", "sour cream"]
+      },
+      "note": "Variants of one dish: Chunky Guacamole is avocado, lime juice and salsa fresca; Guacamole I adds pico de gallo, garlic, olive oil and chiles. Neither uses cumin or sour cream."
+    },
+    {
+      "id": "g05-disagreeing-pair",
+      "scenario": 5,
+      "question": "What's the method for pasta carbonara?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["spaghetti-alla-carbonara", "carbonara-pasta"],
+        "expected_facts": ["pancetta", "yolk"],
+        "forbidden_claims": ["\\b(heavy|double|single|whipping) cream\\b", "garlic"]
+      },
+      "note": "The pages disagree on method: Spaghetti alla Carbonara cooks the pancetta in olive oil and whisks pasta water into the yolks; Carbonara Pasta fries it in a dry pan, cools it, and adds lemon zest, thyme and onion. A merged procedure is caught by the factuality review; a substring cannot tell a merge from a mention of the other variant."
+    },
+    {
+      "id": "g06-vegetarian",
+      "scenario": 6,
+      "question": "Can you suggest a vegetarian soup?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["brazilian-black-bean-soup", "le-tourin-garlic-soup", "spicy-tomato-soup", "mexican-tomato-soup"],
+        "constraints": { "diet": "vegetarian" },
+        "forbidden_claims": ["chicken"]
+      },
+      "competitors": ["spicy-chickpea-soup", "white-bean-soup-with-basil-rosemary-and-garlic-croutons", "agnolotti-pasta-soup-agnolotti-in-brodo"],
+      "note": "The chickpea and white bean soups look vegetarian but use chicken broth."
+    },
+    {
+      "id": "g07-under-n-minutes",
+      "scenario": 7,
+      "question": "What soup can I make in under 20 minutes?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["mexican-tomato-soup", "agnolotti-pasta-soup-agnolotti-in-brodo"],
+        "constraints": { "max_total_minutes": 20 },
+        "expected_facts": ["10 minutes|15 minutes"]
+      },
+      "competitors": ["spicy-chickpea-soup", "brazilian-black-bean-soup", "pizza-soup"],
+      "note": "Mexican Tomato Soup states 10 minutes, Agnolotti in Brodo 15. Spicy Chickpea Soup states exactly 20 (fails 'under'); the black bean and pizza soups state no time."
+    },
+    {
+      "id": "g08-required-ingredient-alias",
+      "scenario": 8,
+      "question": "What can I cook with garbanzo beans?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["spicy-chickpea-soup", "qabuli-central-asian-rice-pilaf"],
+        "constraints": { "must_include": [["chickpea", "garbanzo"]] },
+        "expected_facts": ["chickpea"]
+      },
+      "note": "No page says 'garbanzo'; both chickpea recipes are reachable only through the alias."
+    },
+    {
+      "id": "g09-excluded-optional",
+      "scenario": 9,
+      "question": "How do I make rice pudding without raisins?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["italian-rice-pudding"],
+        "constraints": { "must_exclude": [["raisin", "sultana", "currant"]] },
+        "expected_facts": ["risotto rice", "lemon peel"]
+      },
+      "competitors": ["rice-pudding", "kheer-rice-pudding"],
+      "note": "Rice Pudding lists raisins only as optional ('if desired'), which still counts as present (SPEC §4); Kheer uses sultanas (raisins)."
+    },
+    {
+      "id": "g10-compound",
+      "scenario": 10,
+      "question": "Is there a vegan dish with black beans that takes under 30 minutes?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["southwestern-black-beans-and-rice"],
+        "constraints": { "diet": "vegan", "max_total_minutes": 30, "must_include": [["black bean"]] },
+        "expected_facts": ["cumin"]
+      },
+      "competitors": ["brazilian-black-bean-soup"],
+      "note": "Exactly one recipe satisfies all three. Brazilian Black Bean Soup is vegan with black beans but states no time."
+    },
+    {
+      "id": "g11-unsatisfiable",
+      "scenario": 11,
+      "question": "Is there a vegan dish with potatoes that I can make in under 30 minutes?",
+      "expect": {
+        "refused": true,
+        "refusal_reason": "out_of_corpus",
+        "constraints": { "diet": "vegan", "max_total_minutes": 30, "must_include": [["potato"]] }
+      },
+      "competitors": ["indian-potatoes"],
+      "note": "Indian Potatoes is the only potato recipe; it is vegan but states no time, so no recipe satisfies the combination. Constraints here are not checked at run time (a refusal cites nothing); tests use them to prove the case unsatisfiable."
+    },
+    {
+      "id": "g12-absent-fact",
+      "scenario": 12,
+      "question": "How many calories are in the Italian rice pudding?",
+      "expect": { "refused": true, "refusal_reason": "out_of_corpus" },
+      "note": "The page states no nutrition facts; SPEC §9.9 never answers them anyway."
+    },
+    {
+      "id": "g13-out-of-domain",
+      "scenario": 13,
+      "question": "Can you write me a short poem about the sea?",
+      "expect": { "refused": true, "refusal_reason": "out_of_domain" }
+    },
+    {
+      "id": "g14-safety-guarantee",
+      "scenario": 14,
+      "question": "Is the kheer nut-free?",
+      "expect": { "refused": true, "refusal_reason": "safety", "sources_any": ["kheer-rice-pudding"] },
+      "note": "The page lists slivered blanched almonds."
+    },
+    {
+      "id": "g15-allergen-presence",
+      "scenario": 15,
+      "question": "Does the Kashmiri pulao contain nuts?",
+      "expect": {
+        "refused": false,
+        "sources_any": ["kashmiri-pulao"],
+        "expected_facts": ["cashew", "pistachio", "almond"],
+        "forbidden_claims": ["nut-free", "\\bsafe\\b"]
+      },
+      "note": "The page lists cashew nuts, pistachio nuts and almonds."
+    }
+  ]
+}
