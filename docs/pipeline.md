@@ -7,9 +7,7 @@ is a picture of it and of the code in `recipe_qa/api.py` and
 
 Legend: blue = deterministic code, orange = LLM call (Claude, structured
 output), grey = committed data, red = HTTP error, purple = refusal
-(HTTP 200, `refused: true`), green = answer. The dashed box is SPEC §3
-step 5 (`is_eligible`), which is not wired in yet: today every recipe is
-eligible and the extracted constraints are only logged.
+(HTTP 200, `refused: true`), green = answer.
 
 ## 1. Online: `POST /ask`
 
@@ -46,11 +44,13 @@ flowchart TD
         SAFE["<b>Safety refusal, no generation</b><br/>find recipes to cite:<br/>BM25 top-3 over whole corpus,<br/>no constraints applied,<br/>keep hits ≥ 50 % of best score"]
         G2 -->|"yes: refuse"| SAFE
 
-        ELIG["is_eligible(recipe, constraints)<br/>time, diet, include, exclude<br/>(planned, SPEC §4)"]
+        ELIG["is_eligible(recipe, constraints)<br/>over the whole corpus:<br/>time, diet, include, exclude,<br/>aliases from data/aliases.json"]
         G2 -->|no| ELIG
+        ANYELIG{"any recipe<br/>eligible?"}
+        ELIG --> ANYELIG
 
         BM["BM25 retrieve, k = 5<br/>over eligible recipes<br/>title x3, ingredients x2, rest x1"]
-        ELIG --> BM
+        ANYELIG -->|yes| BM
         HITS{"any recipe shares<br/>a term with the question?"}
         BM --> HITS
 
@@ -76,6 +76,9 @@ flowchart TD
     SAFE --> R_SAFE
     R_OOD["refused: out_of_domain<br/>no citations"]
     R_OOC["refused: out_of_corpus<br/>no citations"]
+    R_UNMET["refused: out_of_corpus<br/>message names the constraints<br/>no citations, nothing relaxed"]
+    ANYELIG -->|no| R_UNMET
+    R_UNMET --> RESP
     G1 -->|no| R_OOD
     HITS -->|no| R_OOC
     ANS -->|no| R_OOC
@@ -93,7 +96,7 @@ flowchart TD
     OK --> LOG
     RESP --> LOG
     ERR --> LOG
-    LOG["Emit one JSON log line for every response,<br/>errors included: status, error,<br/>extraction, top_k scores, cited_ids,<br/>token usage per stage, stage timings<br/>(whatever the request reached)"]
+    LOG["Emit one JSON log line for every response,<br/>errors included: status, error,<br/>extraction, eligible count, rejection<br/>reasons, top_k scores, cited_ids,<br/>token usage per stage, stage timings<br/>(whatever the request reached)"]
     LOG --> U
 
     INDEX[("In-memory BM25 index<br/>built at startup from<br/>data/recipes.jsonl")]
@@ -108,13 +111,12 @@ flowchart TD
     classDef err fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
     classDef refuse fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
     classDef ok fill:#dcfce7,stroke:#16a34a,color:#14532d
-    classDef planned fill:#f8fafc,stroke:#64748b,color:#334155,stroke-dasharray:5 5
 
-    class RID,RL,VAL,CC,G1,G2,BM,HITS,CTX,CHK,ANS,MAP,LOG code
+    class RID,RL,VAL,CC,G1,G2,ELIG,ANYELIG,BM,HITS,CTX,CHK,ANS,MAP,LOG code
     class EX,GEN llm
     class EXOUT,INDEX,MANI data
     class ERR err
-    class R_OOD,SAFE,R_SAFE,R_OOC,RESP refuse
+    class R_OOD,SAFE,R_SAFE,R_OOC,R_UNMET,RESP refuse
     class OK ok
     class ELIG planned
 ```
@@ -126,7 +128,7 @@ flowchart TD
 | Rate limit, validation, concurrency | code | whether the request is served at all |
 | Extract | LLM #1 | reads the question: is it about cooking, is it a safety question, which constraints it states. It never answers. |
 | Domain and safety gates | code | `out_of_domain` and `safety` refusals, from the extracted flags |
-| Eligibility (planned) | code | which recipes satisfy time, diet and ingredient constraints |
+| Eligibility | code | which recipes satisfy time, diet and ingredient constraints, over the whole corpus before ranking; none → `out_of_corpus` naming the constraints |
 | Retrieval | code | which 3 recipes the model may see (BM25 over whole recipes, ADR 001) |
 | Generate | LLM #2 | phrases an answer from those 3 recipes and names its sources, or says they cannot answer |
 | Citation check | code | rejects any source ID outside the given 3; retries once, then 502 |

@@ -177,3 +177,60 @@ live in `recipe_qa/prompts/`.
     questions. Both would be false refusals end to end.
   - "Is Henry Thiele's pancake egg-free?" also gets `must_exclude: egg`,
     against the convention; harmless, since the safety gate runs first.
+
+### 2026-10-14 — stage 5a: eligibility over the whole corpus
+
+- Spec first: the alias table's scope is recorded in SPEC §4 (v0.5)
+  before the table grew. It is directional ("no nuts" excludes almonds,
+  "with almonds" does not match walnuts), holds nut, dairy, egg and the
+  three spellings the golden set needs (garbanzo, yoghurt, sultana), and
+  lists gluten sources for exclusion only. They are never used for
+  `gluten_free`, which still needs an explicit category.
+- `why_ineligible` returns every failed constraint, not the first one, so
+  the trace shows that nothing was dropped. Time and diet read the facts
+  ingestion already derived (a range is stored at its upper bound), so the
+  §4 rules live in one place. "No dairy" reuses the diet check's look-alike
+  rule, so "coconut milk" and "butter beans" are not dairy in either.
+- Step 5 filters all 50 recipes before BM25. The test's premise is checked
+  on the corpus: for "What rice dish can I make in under 30 minutes?"
+  (vegan, < 30, rice) the only eligible recipe is 8th unfiltered.
+  An empty filter refuses `out_of_corpus` without a generation call, and
+  the message names the constraints.
+- Recall@5 (`tests/test_retrieval_recall.py`, labelled constraints, no
+  network): 11/11. Without the filter g08 misses, because no page says
+  "garbanzo".
+- Golden, 3 runs, build `cd89004` (prompts `c9e30cb2fb92` unchanged,
+  `claude-haiku-5-5`, corpus `976abf38…`). Served from a clean export of
+  the commit, so all provenance is confirmed. Report:
+  `evals/reports/milestones/stage-5a-golden.json`. 15/15 pass, 0 unstable.
+  Over 45 runs: false answers 0, false refusals 0, wrong reason 0,
+  technical errors 0. Constraint correctness holds in every run of
+  g06–g10.
+  - g08 flipped fail → pass: the alias makes both chickpea recipes
+    eligible. Only Qabuli is cited, though, because Spicy Chickpea Soup
+    shares no term with "What can I cook with garbanzo beans?". BM25 never
+    returns a zero-score recipe (SPEC §3 step 6). A question whose only
+    eligible recipes share no word with it would refuse `out_of_corpus`
+    even though a recipe is eligible. No golden case hits this; it is
+    recorded, not changed.
+  - g09 flipped unstable → pass: Rice Pudding (optional raisins) and Kheer
+    (sultanas) are filtered out, and Italian Rice Pudding is cited in all
+    three runs. The baseline 503 did not recur.
+  - g11 still passes, now for a deterministic reason. The code refuses
+    before generation ("none of them matches all of: vegan; under 30
+    minutes; with potato"), so it no longer depends on the model judging
+    the recipes unanswerable.
+  - g05 passes but cites only Carbonara Pasta in every run. The extractor
+    adds `must_include: pasta` for "pasta carbonara" (stage 4b), and
+    Spaghetti alla Carbonara lists "spaghetti", so it is filtered out.
+    Constraints are not relaxed (§4); the fix belongs in extraction. The
+    same spurious includes ("pancake", "salsa") in the extraction set
+    would be false refusals end to end.
+  - Latency (client side, 33 answered runs): p50 3.3 s, p95 4.3 s, max
+    5.1 s. Refusals max 2.8 s.
+- Review fixes after the run (PR #9): the image now ships
+  `data/aliases.json` (the container failed to start without it), and
+  matching folds accents on both sides ("crème" matched nothing) and knows
+  -f/-ves and -y/-ys plurals ("bay leaf" missed "bay leaves"). No golden
+  constraint uses an accented or irregular term, and recall@5 is still
+  11/11, so the run on `cd89004` stands.

@@ -22,6 +22,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from recipe_qa.config import Settings
+from recipe_qa.constraints import AliasTable
 from recipe_qa.corpus import load_manifest, load_recipes
 from recipe_qa.generation import PROMPT_VERSION
 from recipe_qa.providers import make_provider
@@ -111,6 +112,7 @@ def create_app(settings: Settings | None = None, provider: Provider | None = Non
         manifest,
         provider or make_provider(settings),
         settings.request_deadline_s,
+        AliasTable.load(settings.data_dir / "aliases.json"),
     )
     limiter = RateLimiter(settings.rate_limit_per_minute)
     in_flight = asyncio.Semaphore(settings.max_concurrent_requests)

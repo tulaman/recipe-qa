@@ -7,8 +7,8 @@ comma (prep notes such as "chopped", "to taste"), "to taste" and optional
 markers, then leading quantities, units, size words and prep verbs.
 A unit word is never stripped when it is the last word ("6 cloves").
 
-Matching (stage 4) runs on `normalized` for inclusion; exclusion should also
-look at `raw`, which keeps parenthetical detail such as "any nuts, e.g.
+Matching (`recipe_qa/constraints.py`) runs on `normalized` for inclusion;
+exclusion also looks at `raw`, which keeps parenthetical detail such as "any nuts, e.g.
 pistachios".
 """
 

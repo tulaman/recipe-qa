@@ -51,12 +51,12 @@ ANIMAL_PRODUCTS = (
     "crème", "creme", "dahi",
 )  # fmt: skip
 
-_PLANT_BEFORE = re.compile(
+PLANT_BEFORE = re.compile(
     r"(coconut|almond|soy|soya|oat|rice|cashew|peanut|cocoa|shea|apple|nut|plant|"
     r"plant-based|vegan|vegetarian|veggie|tofu|meatless|imitation|mock|non-dairy|"
     r"dairy-free)[\s-]*$"
 )
-_NOT_ANIMAL_AFTER = re.compile(r"^(?:s|es)?\s*(of tartar|beans?|mushrooms?)\b")
+NOT_ANIMAL_AFTER = re.compile(r"^(?:s|es)?\s*(of tartar|beans?|mushrooms?)\b")
 
 
 def _terms(words: tuple[str, ...]) -> re.Pattern[str]:
@@ -82,7 +82,7 @@ def _first_match(pattern: re.Pattern[str], ingredients: list[Ingredient]) -> str
         text = _text(ingredient)
         for match in pattern.finditer(text):
             before, after = text[: match.start()], text[match.start() + len(match[1]) :]
-            if _PLANT_BEFORE.search(before) or _NOT_ANIMAL_AFTER.match(after):
+            if PLANT_BEFORE.search(before) or NOT_ANIMAL_AFTER.match(after):
                 continue
             return f"ingredient '{ingredient.raw}' matches '{match[1]}'"
     return None

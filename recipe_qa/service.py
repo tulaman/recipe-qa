@@ -14,6 +14,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Any
 
+from recipe_qa.constraints import AliasTable, describe, why_ineligible
 from recipe_qa.corpus import Manifest, Recipe
 from recipe_qa.providers.base import (
     Completion,
@@ -21,8 +22,15 @@ from recipe_qa.providers.base import (
     ProviderInvalidOutput,
     ProviderUnavailable,
 )
-from recipe_qa.retrieval import BM25Index
-from recipe_qa.schemas import AskResponse, Citation, Generation, Meta, RefusalReason
+from recipe_qa.retrieval import BM25Index, Hit
+from recipe_qa.schemas import (
+    AskResponse,
+    Citation,
+    Extraction,
+    Generation,
+    Meta,
+    RefusalReason,
+)
 
 RETRIEVE_K = 5
 CONTEXT_K = 3
@@ -46,6 +54,15 @@ REFUSAL_MESSAGES: dict[RefusalReason, str] = {
 }
 
 
+def unmet_constraints_message(constraints: Extraction) -> str:
+    """An out_of_corpus message that names what no recipe satisfies (SPEC §5)."""
+    return (
+        "I can only answer from the recipes in this collection, and none of them matches "
+        f"all of: {'; '.join(describe(constraints))}. "
+        "Try relaxing a constraint or asking about a specific dish."
+    )
+
+
 class UpstreamUnavailable(Exception):
     """Maps to 503 upstream_unavailable."""
 
@@ -59,6 +76,37 @@ class Outcome:
     answer: str | None
     cited_ids: list[str]
     refusal: RefusalReason | None = None
+    message: str | None = None
+    """Refusal message when the reason's default is not specific enough."""
+
+
+@dataclass(frozen=True)
+class Retrieval:
+    hits: list[Hit]
+    eligible_count: int
+    rejected: dict[str, list[str]]
+    """Recipe ID → every constraint it failed."""
+
+
+def retrieve(
+    index: BM25Index,
+    recipes: list[Recipe],
+    question: str,
+    constraints: Extraction,
+    k: int = RETRIEVE_K,
+    aliases: AliasTable | None = None,
+) -> Retrieval:
+    """SPEC §3 steps 5-6: filter the whole corpus by code, then rank what is left.
+
+    Filtering first means an eligible recipe is found however low BM25
+    would rank it among all recipes.
+    """
+    rejected = {
+        r.id: reasons for r in recipes if (reasons := why_ineligible(r, constraints, aliases))
+    }
+    eligible = [r.id for r in recipes if r.id not in rejected]
+    hits = index.search(question, eligible, k=k) if eligible else []
+    return Retrieval(hits, len(eligible), rejected)
 
 
 class AskService:
@@ -68,11 +116,13 @@ class AskService:
         manifest: Manifest,
         provider: Provider,
         deadline_s: float,
+        aliases: AliasTable | None = None,
     ) -> None:
         self.provider = provider
         self.corpus_version = manifest.corpus_version
         self._deadline_s = deadline_s
-        self._recipes = {r.id: r for r in recipes}
+        self._recipes = list(recipes)
+        self._aliases = aliases
         self._index = BM25Index(recipes)
         # I3: the only source of citations is the manifest.
         self._citations = {e.id: Citation(title=e.title, url=e.url) for e in manifest.recipes}
@@ -92,7 +142,9 @@ class AskService:
             citations=[self._citations[rid] for rid in outcome.cited_ids],
             refused=outcome.refusal is not None,
             refusal_reason=outcome.refusal,
-            refusal_message=REFUSAL_MESSAGES[outcome.refusal] if outcome.refusal else None,
+            refusal_message=(
+                (outcome.message or REFUSAL_MESSAGES[outcome.refusal]) if outcome.refusal else None
+            ),
             meta=Meta(
                 request_id=request_id,
                 model=self.provider.model,
@@ -117,16 +169,21 @@ class AskService:
             matched = [h.recipe.id for h in hits if h.score >= SAFETY_MATCH_RATIO * best]
             return Outcome(None, matched, "safety")
 
-        # 5-6. eligibility (stage 4: is_eligible over the whole corpus) and ranking
+        # 5-6. eligibility over the whole corpus, then ranking
         started = time.perf_counter()
-        eligible = list(self._recipes)
-        hits = self._index.search(question, eligible, k=RETRIEVE_K)
+        retrieval = retrieve(
+            self._index, self._recipes, question, extraction, aliases=self._aliases
+        )
         trace["stages_ms"]["retrieve"] = round((time.perf_counter() - started) * 1000, 1)
-        trace["eligible_count"] = len(eligible)
-        trace["top_k"] = [{"id": h.recipe.id, "score": round(h.score, 3)} for h in hits]
-        if not hits:
+        trace["eligible_count"] = retrieval.eligible_count
+        trace["rejected"] = retrieval.rejected
+        trace["top_k"] = [{"id": h.recipe.id, "score": round(h.score, 3)} for h in retrieval.hits]
+        if retrieval.eligible_count == 0:
+            # Constraints are never relaxed to find a match (SPEC §4).
+            return Outcome(None, [], "out_of_corpus", unmet_constraints_message(extraction))
+        if not retrieval.hits:
             return Outcome(None, [], "out_of_corpus")
-        context = [h.recipe for h in hits[:CONTEXT_K]]
+        context = [h.recipe for h in retrieval.hits[:CONTEXT_K]]
         allowed = {r.id for r in context}
 
         # 7-8. generation, validated against the candidate set

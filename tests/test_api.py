@@ -278,3 +278,20 @@ def test_ui_is_served_from_the_built_assets(tmp_path: Path) -> None:
     response = client_for(web_dist=tmp_path).get("/")
     assert response.status_code == 200
     assert "Recipe Q&amp;A" in response.text or "Recipe Q&A" in response.text
+
+
+def test_the_alias_table_comes_from_the_configured_data_dir(tmp_path: Path) -> None:
+    # A data directory is one snapshot: recipes, manifest and aliases together.
+    for name in ("recipes.jsonl", "manifest.json"):
+        (tmp_path / name).write_bytes((DATA / name).read_bytes())
+    (tmp_path / "aliases.json").write_text(
+        json.dumps({"description": "none", "aliases": {}, "exclude_only": {}})
+    )
+    garbanzo = FakeProvider(extract=lambda q: extraction(must_include=["garbanzo bean"]))
+    question = "What can I cook with garbanzo beans?"
+
+    status, body = ask(client_for(garbanzo), question)
+    assert (status, body["refused"]) == (200, False)  # the committed table maps it to chickpea
+
+    status, body = ask(client_for(garbanzo, data_dir=tmp_path), question)
+    assert (status, body["refusal_reason"]) == (200, "out_of_corpus")

@@ -48,10 +48,14 @@ def _singular(word: str) -> str:
     return word
 
 
+def fold(text: str) -> str:
+    """Lower-case and accent-free: "Crème" -> "creme"."""
+    return unicodedata.normalize("NFKD", text.lower()).encode("ascii", "ignore").decode()
+
+
 def tokenize(text: str) -> list[str]:
     """Lower-case, accent-free, singular word tokens; no stopwords or single letters."""
-    folded = unicodedata.normalize("NFKD", text.lower()).encode("ascii", "ignore").decode()
-    return [_singular(t) for t in _TOKEN.findall(folded) if len(t) > 1 and t not in STOPWORDS]
+    return [_singular(t) for t in _TOKEN.findall(fold(text)) if len(t) > 1 and t not in STOPWORDS]
 
 
 def recipe_terms(recipe: Recipe) -> Counter[str]:
