@@ -74,3 +74,24 @@ live in `recipe_qa/prompts/`.
   `claude-haiku-5-5`, structured outputs via `messages.parse`, effort
   `low`, no sampling parameters (Haiku 5.5 rejects non-default ones).
 
+
+### 2026-10-14 — IaC: `railway.json` → `.railway/railway.ts`
+
+- I questioned `railway.json` as "config, not IaC, and deprecated". The
+  agent (Claude Code, `claude-opus-5-5`) confirmed it from Railway's docs,
+  then tested the consequence instead of assuming it: `railway config
+  migrate status` showed no service reads the file, and `railway config
+  pull` showed the live service had no health check and no restart policy.
+  Stage 3 had written the file without checking that Railway applied it;
+  the lesson is recorded in ADR 003's amendment.
+- Accepted: Railway IaC in TypeScript, applied inside `deploy.yml` rather
+  than in Railway's separate plan/apply workflow (one path to production);
+  destructive applies only by a manual run with `allow_destructive`.
+- Changed: the stage 3 `GIT_SHA` service variable moved into the image
+  (`recipe_qa/BUILD_SHA`, tests first). A file the IaC does not own is
+  simpler than a variable changed on every deploy, and runtime variables
+  override the image, so an old container could report a new commit.
+- The `tsc` check added for `railway.ts` caught that the CLI-generated
+  `variables: { managed: true }` is not in the SDK's types; a plan of a
+  copy without it showed managed variables are the CLI default, so the
+  line was dropped.

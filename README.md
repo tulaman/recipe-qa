@@ -31,7 +31,8 @@ curl -s https://recipe-qa-production.up.railway.app/ask \
 
 ```bash
 # with Docker (preferred)
-docker build --build-arg GIT_SHA=$(git rev-parse HEAD) -t recipe-qa .
+git rev-parse HEAD > recipe_qa/BUILD_SHA   # optional: /healthz reports "dev" without it
+docker build -t recipe-qa .
 docker run --rm -p 8000:8000 -e ANTHROPIC_API_KEY=... recipe-qa
 # open http://localhost:8000
 
@@ -102,21 +103,32 @@ One Docker image (API + built UI, non-root user) on Railway; decisions in
 | Piece | Where |
 |---|---|
 | Image | `Dockerfile` (multi-stage: Vite build → Python 3.12 slim, runtime deps only) |
-| Service config (IaC) | `railway.json`: Dockerfile builder, `/healthz` health check, restart policy, 1 replica |
-| CI | `.github/workflows/ci.yml`: ruff + pytest; UI type-check + build; image build, boot with the fake provider, contract smoke against the container |
+| Infrastructure (IaC) | `.railway/railway.ts` (Railway IaC, TypeScript): the whole project — service, Dockerfile builder, `/healthz` health check, restart policy, 1 replica, variables |
+| CI | `.github/workflows/ci.yml`: ruff + pytest; UI type-check + build; `railway.ts` type-check and, on pull requests, the production plan in the job summary; image build, boot with the fake provider, contract smoke against the container |
 | CD | `.github/workflows/deploy.yml`: runs after CI succeeds on `main` |
 
-Deploy flow: set service variables (`ANTHROPIC_API_KEY` from GitHub
-secrets, `PORT`, `GIT_SHA`) without triggering a deploy → `railway up`
-builds the commit → wait until `/healthz` reports that exact SHA → smoke
-eval against the public URL with the live model; the report is kept as a
-workflow artifact.
+Deploy flow: `railway config apply` converges the project to
+`railway.ts` → `railway config plan --detailed-exit-code` fails the deploy
+if anything is still pending → set `ANTHROPIC_API_KEY` from GitHub secrets
+without triggering a deploy → write the commit to `recipe_qa/BUILD_SHA` →
+`railway up` builds the commit → wait until `/healthz` reports that exact
+SHA → smoke eval against the public URL with the live model; the report is
+kept as a workflow artifact.
 
-- **Idempotent**: every step sets fixed values for one commit; re-running
-  the workflow for the same SHA yields the same service.
+```bash
+cd .railway && npm ci && cd ..
+railway config plan   # what the next deploy would change (needs a linked project)
+```
+
+- **Idempotent**: apply converges to the file and the plan check proves
+  it; re-running the workflow for the same SHA yields the same service.
+- **Destructive changes**: a deploy never deletes a Railway resource or
+  variable on its own; it fails at apply. Read the plan, then Actions →
+  deploy → Run workflow with `allow_destructive`.
 - **Rollback**: Actions → deploy → Run workflow → enter an older commit
-  SHA. The workflow checks it out and deploys it the same way; `/healthz`
-  confirms which build is live.
+  SHA. The workflow checks it out and deploys it the same way, applying
+  that commit's `railway.ts`; `/healthz` confirms which build is live.
+  Commits before the IaC migration (no `.railway/railway.ts`) are refused.
 - **Secrets**: `ANTHROPIC_API_KEY` and a project-scoped `RAILWAY_TOKEN`
   live only in GitHub Actions secrets; the key is copied into Railway's
   service variables by the workflow. Nothing secret is in the repository
@@ -157,6 +169,8 @@ _TBD (filled at the end)._ Recorded so far:
 - Rate limiting and the concurrency cap are in process memory, keyed on
   Railway's `X-Real-IP`; correct for one instance only. A second replica
   needs a shared store (Redis) or the edge's own limiter.
+- Railway's generated domain cannot be declared in `.railway/railway.ts`;
+  it is the one piece of infrastructure outside the file. One environment only (production); no staging.
 
 - Ingredient alias table (`data/aliases.json`) lands with constraint
   matching in stage 4, not with ingestion.
