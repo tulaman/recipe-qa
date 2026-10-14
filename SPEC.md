@@ -1,6 +1,6 @@
 # Recipe Q&A Service — Behavior Specification
 
-Status: v0.4. v0.1 was written before any application code; v0.2 (2026-10-13)
+Status: v0.6. v0.1 was written before any application code; v0.2 (2026-10-13)
 revises the §4 diet rule after ingestion showed contradicted categories
 (see commit history and ADR 004); v0.3 (2026-10-13) makes two §3 steps
 explicit while building `/ask`: which recipes a `safety` refusal cites, and
@@ -9,7 +9,10 @@ a generation call; v0.4 (2026-10-14) states §7 as layered evaluation
 requirements: extraction measured on its own, false answers and false
 refusals kept apart, stability across repeated runs, a held-out set, and
 versioned reports; v0.5 (2026-10-14) records the scope of the §4 alias
-table while building `is_eligible`.
+table while building `is_eligible`; v0.6 (2026-10-14) makes §9.3 binding
+(the other variant is mentioned and cited, not optionally), moves the
+"never the word safe" rule of §5 into code for `must_exclude` answers, and
+states how §7.2 counts content checks.
 Owner: Ilya Lityuga. Date: 2026-10-14.
 
 This document is the contract the service is built and evaluated against.
@@ -134,12 +137,14 @@ POST /ask
   7. generate(question, constraints, ranked[:3]) → {answerable, answer, source_ids}
                                                          [LLM, structured output]
        answerable == false      → refuse out_of_corpus
-  8. validate: source_ids ⊆ ranked ids, 1–3 items, answer non-empty → else 502 / retry once
+  8. validate: source_ids ⊆ ranked ids, 1–3 items, answer non-empty, and, when
+       must_exclude is non-empty, no guarantee wording (§5)  → else 502 / retry once
   9. map source_ids → {title, url} from manifest; build response; emit log; return 200
 ```
 
 Code guarantees: schema, invariants I1–I5, constraint application, citation
-validity, refusal reasons for deterministic gates (steps 4–5).
+validity, refusal reasons for deterministic gates (steps 4–5), and no
+guarantee wording in a `must_exclude` answer (step 8, §5).
 Probabilistic (prompt + eval, not code): constraint *extraction* quality,
 answerability judgment in step 7, factual fidelity of `answer` to the cited
 recipe text. §7 says how these are measured.
@@ -223,7 +228,13 @@ what "careful" means:
 - `must_exclude` constraints ("recipes without nuts") are still honored as
   a *filter* (we only show recipes whose ingredient list has no listed
   nut), but the answer carries the same one-sentence source note and never
-  the word "safe".
+  the word "safe". The generation prompt receives the constraints and is
+  told to say that the ingredient list on the source page does not mention
+  the excluded ingredient. Code then rejects, as invalid output (§3 step 8),
+  a `must_exclude` answer containing any form of *safe* ("safe", "safely",
+  "unsafe", "safety") or *free* used as a guarantee ("nut-free", "free of",
+  "free from"). The check applies only to `must_exclude` answers, because
+  recipe text legitimately says "heat-safe tins" or "refrigerated safely".
 
 Refusal messages are polite, specific to the reason, and never blame the
 user. Example for `out_of_corpus`: "I can only answer from the recipes in
@@ -297,7 +308,7 @@ instance over HTTP and checks:
 - **Refusal correctness**: expected `refused` and `refusal_reason` match. Any mismatch on `safety` or `out_of_domain` fails the run.
 - **Source correctness**: for answers, expected recipe ID(s) ⊆ cited IDs, and no citation outside the allowed set for that case.
 - **Constraint correctness**: every cited recipe satisfies the case's constraint predicate (checked against corpus metadata, not against the answer text). Any failure fails the run.
-- **Content checks**: `expected_facts` (substrings or regexes that must appear) and `forbidden_claims` (must not appear) in `answer`. These are reported per case; the run passes if ≥ 13 of 15 content checks pass and every hard check above passes.
+- **Content checks**: `expected_facts` (substrings or regexes that must appear) and `forbidden_claims` (must not appear) in `answer`, and `sources_all` (every listed recipe is cited, for the §9.3 variant cases). These are reported per case and per run; a case without content expectations passes its content check when its outcome is right. The run passes if, in every repeat, ≥ 13 of 15 cases pass their content checks, and every hard check passes in every repeat. Hard checks are contract, `safety` and `out_of_domain` refusal correctness, constraint correctness and citation validity (I3).
 - **Retrieval recall@5**: measured by calling `retrieve()` directly (not via HTTP) for every answerable case; reported, target 100 % on the golden set.
 
 A separate rubric (`evals/factuality_review.md`) records a manual
@@ -356,9 +367,10 @@ Recorded here because the assignment says to ask or to write them down.
    the corpus cannot answer is "out of corpus", including unsatisfiable
    constraints and missing facts about a known dish.
 3. When two recipes describe the same dish differently, the answer follows
-   **one** recipe (the top-ranked eligible one) and may mention that
-   another variant exists, with both cited. Steps and ingredients from
-   different recipes are never merged into one procedure.
+   **one** recipe (the top-ranked eligible one) and, when another variant
+   is among the recipes it was given, says in one sentence that it exists
+   and cites both (v0.6: binding, previously optional). Steps and
+   ingredients from different recipes are never merged into one procedure.
 4. "Under N minutes" is strict (`<`); "within / at most / N minutes or
    less" is inclusive (`≤`). A page without a stated time never satisfies a
    time constraint.
