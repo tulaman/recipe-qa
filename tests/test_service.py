@@ -5,12 +5,14 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from recipe_qa.corpus import Recipe, load_manifest, load_recipes
 from recipe_qa.providers.base import Completion, Usage
-from recipe_qa.providers.fake import FakeProvider
+from recipe_qa.providers.fake import FakeProvider, GenerateFn, cite_first
 from recipe_qa.retrieval import BM25Index
 from recipe_qa.schemas import Extraction, Generation
-from recipe_qa.service import AskService
+from recipe_qa.service import AskService, UpstreamInvalid
 
 DATA = Path(__file__).resolve().parent.parent / "data"
 
@@ -56,9 +58,12 @@ VEGAN_RICE_UNDER_30 = {"diet": "vegan", "max_total_minutes": 30, "must_include":
 VEGAN_POTATO_UNDER_30 = {"diet": "vegan", "max_total_minutes": 30, "must_include": ["potato"]}
 
 
-def service_extracting(safety: bool = False, **constraints: Any) -> AskService:
+def service_extracting(
+    safety: bool = False, generate: GenerateFn = cite_first, **constraints: Any
+) -> AskService:
     provider = FakeProvider(
-        extract=lambda q: Extraction(in_domain=True, safety_question=safety, **constraints)
+        extract=lambda q: Extraction(in_domain=True, safety_question=safety, **constraints),
+        generate=generate,
     )
     return AskService(RECIPES, load_manifest(DATA / "manifest.json"), provider, deadline_s=5)
 
@@ -112,3 +117,78 @@ def test_the_safety_gate_runs_before_the_constraint_filter() -> None:
     response = asyncio.run(service.ask("Is the kheer nut-free?", "rid", {}))
     assert response.refusal_reason == "safety"
     assert service.provider.generate_calls == []
+
+
+# --- refusal policy: guarantee, fact, filter (SPEC §5) -----------------------
+
+
+def test_a_guarantee_question_is_refused_with_safety_and_cites_the_matched_recipes() -> None:
+    service = service_extracting(safety=True)
+    trace: dict[str, Any] = {}
+    response = asyncio.run(service.ask("Is the baklava nut-free?", "rid", trace))
+
+    assert (response.refused, response.refusal_reason, response.answer) == (True, "safety", None)
+    # Retrieval runs without generation, so the user can read the list themselves.
+    assert {c.title for c in response.citations} == {"Baklava I", "Baklava II"}
+    assert service.provider.generate_calls == []
+    assert "retrieve" in trace["stages_ms"]
+    message = response.refusal_message or ""
+    assert "guarantee" in message and "ingredient list" in message
+    assert message.count(". ") <= 1  # at most two sentences (SPEC §2.1)
+
+
+def test_a_factual_allergen_question_is_answered_from_the_recipe() -> None:
+    service = service_extracting()
+    response = asyncio.run(service.ask("Does the baklava contain nuts?", "rid", {}))
+
+    assert (response.refused, response.refusal_reason) == (False, None)
+    (call,) = service.provider.generate_calls
+    assert {"baklava-i", "baklava-ii"} <= set(call)
+    assert response.citations[0].title in {"Baklava I", "Baklava II"}
+
+
+DESSERTS_WITHOUT_NUTS = "Which desserts can I make without nuts?"
+NOT_MENTIONED = "Apple Crisp works; the ingredient list on the source page does not mention nuts."
+GUARANTEES = [
+    "Apple Crisp is safe for a nut allergy.",
+    "Apple Crisp is SAFE to serve.",
+    "You can safely serve Apple Crisp.",
+    "Apple Crisp is not unsafe.",
+    "For safety, choose Apple Crisp.",
+    "Apple Crisp is nut-free.",
+    "Apple Crisp is free of nuts.",
+    "Apple Crisp is free from nuts.",
+]
+
+
+def answering(*answers: str) -> GenerateFn:
+    """Answer with each text in turn, citing the top candidate."""
+    texts = iter(answers)
+    return lambda q, ex, rs: Generation(answerable=True, answer=next(texts), source_ids=[rs[0].id])
+
+
+@pytest.mark.parametrize("guarantee", GUARANTEES)
+def test_a_must_exclude_answer_with_guarantee_wording_is_retried(guarantee: str) -> None:
+    service = service_extracting(generate=answering(guarantee, NOT_MENTIONED), must_exclude=["nut"])
+    trace: dict[str, Any] = {}
+    response = asyncio.run(service.ask(DESSERTS_WITHOUT_NUTS, "rid", trace))
+
+    assert response.refused is False
+    assert "safe" not in (response.answer or "").lower()
+    assert response.answer == NOT_MENTIONED
+    assert len(service.provider.generate_calls) == 2
+    assert len(trace["invalid_output"]) == 1
+
+
+def test_a_must_exclude_answer_that_keeps_guarantee_wording_is_upstream_invalid() -> None:
+    service = service_extracting(generate=answering(*GUARANTEES[:2]), must_exclude=["nut"])
+    with pytest.raises(UpstreamInvalid):
+        asyncio.run(service.ask(DESSERTS_WITHOUT_NUTS, "rid", {}))
+
+
+def test_recipe_wording_like_heat_safe_is_kept_when_nothing_is_excluded() -> None:
+    # The guard is scoped to must_exclude: recipe text itself says "heat-safe".
+    answer = "Steam it in heat-safe tins."
+    service = service_extracting(generate=answering(answer))
+    response = asyncio.run(service.ask("How do I make nian gao?", "rid", {}))
+    assert response.answer == answer
