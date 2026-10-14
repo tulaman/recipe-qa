@@ -12,7 +12,7 @@ from typing import Any
 
 import pytest
 
-from recipe_qa.constraints import ALIASES, describe, is_eligible, why_ineligible
+from recipe_qa.constraints import default_aliases, describe, is_eligible, why_ineligible
 from recipe_qa.corpus import Diet, Fact, Ingredient, Metadata, Recipe, load_recipes
 from recipe_qa.schemas import Extraction
 
@@ -257,10 +257,25 @@ def test_exclude_matches_aliases_and_raw_text(ingredient: Ingredient, excluded: 
         (ing("nutmeg"), "nut"),
         (ing("grated coconut"), "nut"),
         (ing("eggplant"), "egg"),
+        (ing("1 cup non-dairy milk"), "dairy"),
+        (ing("dairy-free cheese"), "dairy"),
+        (ing("egg-free mayonnaise"), "egg"),
+        (ing("2 tbsp egg free mayo"), "egg"),
+        (ing("gluten-free flour"), "gluten"),
     ],
 )
 def test_exclude_ignores_look_alikes(ingredient: Ingredient, excluded: str) -> None:
     assert is_eligible(recipe([ingredient]), ask(must_exclude=[excluded]))
+
+
+def test_negation_only_counts_for_the_excluded_allergen() -> None:
+    # "sugar-free" says nothing about dairy; "dairy-free" says nothing about eggs.
+    assert not is_eligible(recipe([ing("sugar-free milk")]), ask(must_exclude=["dairy"]))
+    assert not is_eligible(recipe([ing("dairy-free mayonnaise")]), ask(must_exclude=["egg"]))
+
+
+def test_a_negated_allergen_is_not_included_either() -> None:
+    assert not is_eligible(recipe([ing("non-dairy milk")]), ask(must_include=["dairy"]))
 
 
 # --- several constraints ----------------------------------------------------------
@@ -339,4 +354,4 @@ def test_alias_table_matches_its_spec_scope() -> None:
     spec = (ROOT / "SPEC.md").read_text(encoding="utf-8")
     assert re.search(r"Alias table scope \(`data/aliases.json`", spec)
     for key in table["aliases"]:
-        assert key == key.lower() and len(ALIASES.include(key)) > 1, key
+        assert key == key.lower() and len(default_aliases().include(key)) > 1, key

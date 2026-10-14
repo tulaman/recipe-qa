@@ -12,11 +12,13 @@ looks at the normalized name (§4); exclusion also at the raw line, which
 keeps parenthetical detail ("any nuts, e.g. pistachios"), and counts
 optional ingredients. A dairy or egg word with a plant qualifier before it
 ("coconut milk") or a non-animal noun after it ("butter beans") is not a
-match, by the same rule as the diet check.
+match, by the same rule as the diet check; nor is an allergen the line
+itself negates ("non-dairy", "egg-free mayonnaise").
 """
 
 from __future__ import annotations
 
+import functools
 import json
 import re
 from dataclasses import dataclass
@@ -28,6 +30,8 @@ from recipe_qa.retrieval import fold, tokenize
 from recipe_qa.schemas import Extraction
 
 ALIASES_PATH = Path(__file__).resolve().parent.parent / "data" / "aliases.json"
+"""The committed table. The service loads the one next to its configured
+recipes instead (api.create_app), so a data directory is one snapshot."""
 _ANIMAL_WORDS = frozenset(ANIMAL_PRODUCTS)
 
 
@@ -57,7 +61,10 @@ class AliasTable:
         return (*self.include(term), *self.exclude_only.get(_key(term), ()))
 
 
-ALIASES = AliasTable.load()
+@functools.cache
+def default_aliases() -> AliasTable:
+    """The committed table, read on first use rather than at import."""
+    return AliasTable.load()
 
 
 def _pattern(term: str) -> re.Pattern[str]:
@@ -77,29 +84,56 @@ def _pattern(term: str) -> re.Pattern[str]:
     return re.compile(rf"\b({stem})(?:s|es)?\b")
 
 
-def _matches(text: str, terms: tuple[str, ...]) -> bool:
+_FREE_AFTER = re.compile(r"^[\s-]*free\b")
+_DAIRY_NEGATIONS = frozenset({"non-dairy", "dairy-free"})
+_NOT_DAIRY = frozenset(
+    {"egg", "yolk", "albumen", "mayonnaise", "mayo", "meringue", "custard", "honey"}
+)
+"""Animal words a "dairy-free" qualifier says nothing about: dairy-free mayonnaise has egg."""
+
+
+def _negated_before(item: str, term: str) -> re.Pattern[str]:
+    """ "non-dairy", "dairy-free cheese", "egg free mayo": the line says the
+    asked-for allergen is absent. Only the constraint's own item or the
+    matched term negate; "sugar-free milk" is still milk."""
+    words = "|".join(re.escape(fold(w)) for w in (item, term))
+    return re.compile(
+        rf"(?:\bnon[\s-]*|\bnon[\s-]*(?:{words})[\s-]+"
+        rf"|\b(?:{words})(?:s|es)?[\s-]+free[\s-]+)$"
+    )
+
+
+def _matches(text: str, item: str, terms: tuple[str, ...]) -> bool:
     for term in terms:
+        negated = _negated_before(item, term)
         for match in _pattern(term).finditer(text):
+            before = text[: match.start()]
+            if negated.search(before) or _FREE_AFTER.match(text[match.end() :]):
+                continue
             if match[1] in _ANIMAL_WORDS:
-                before, after = text[: match.start()], text[match.start() + len(match[1]) :]
-                if PLANT_BEFORE.search(before) or NOT_ANIMAL_AFTER.match(after):
+                after = text[match.start() + len(match[1]) :]
+                plant = PLANT_BEFORE.search(before)
+                if plant and plant[1] in _DAIRY_NEGATIONS and match[1] in _NOT_DAIRY:
+                    plant = None
+                if plant or NOT_ANIMAL_AFTER.match(after):
                     continue
             return True
     return False
 
 
-def _included(ingredient: Ingredient, terms: tuple[str, ...]) -> bool:
-    return _matches(fold(ingredient.normalized), terms)
+def _included(ingredient: Ingredient, item: str, terms: tuple[str, ...]) -> bool:
+    return _matches(fold(ingredient.normalized), item, terms)
 
 
-def _excluded(ingredient: Ingredient, terms: tuple[str, ...]) -> bool:
-    return _matches(fold(f"{ingredient.raw} | {ingredient.normalized}"), terms)
+def _excluded(ingredient: Ingredient, item: str, terms: tuple[str, ...]) -> bool:
+    return _matches(fold(f"{ingredient.raw} | {ingredient.normalized}"), item, terms)
 
 
 def why_ineligible(
-    recipe: Recipe, constraints: Extraction, aliases: AliasTable = ALIASES
+    recipe: Recipe, constraints: Extraction, aliases: AliasTable | None = None
 ) -> list[str]:
     """Every constraint `recipe` fails; empty when it is eligible."""
+    aliases = aliases or default_aliases()
     failures = []
     meta = recipe.metadata
 
@@ -123,20 +157,20 @@ def why_ineligible(
 
     for item in constraints.must_include:
         terms = aliases.include(item)
-        if not any(_included(i, terms) for i in recipe.ingredients):
+        if not any(_included(i, item, terms) for i in recipe.ingredients):
             failures.append(f"no ingredient matches {item!r}")
 
     for item in constraints.must_exclude:
         terms = aliases.exclude(item)
         for ingredient in recipe.ingredients:
-            if _excluded(ingredient, terms):
+            if _excluded(ingredient, item, terms):
                 optional = " (optional)" if ingredient.optional else ""
                 failures.append(f"contains {ingredient.raw!r}{optional}, excluded by {item!r}")
 
     return failures
 
 
-def is_eligible(recipe: Recipe, constraints: Extraction, aliases: AliasTable = ALIASES) -> bool:
+def is_eligible(recipe: Recipe, constraints: Extraction, aliases: AliasTable | None = None) -> bool:
     return not why_ineligible(recipe, constraints, aliases)
 
 

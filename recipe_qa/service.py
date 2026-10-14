@@ -14,7 +14,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Any
 
-from recipe_qa.constraints import describe, why_ineligible
+from recipe_qa.constraints import AliasTable, describe, why_ineligible
 from recipe_qa.corpus import Manifest, Recipe
 from recipe_qa.providers.base import (
     Completion,
@@ -94,13 +94,16 @@ def retrieve(
     question: str,
     constraints: Extraction,
     k: int = RETRIEVE_K,
+    aliases: AliasTable | None = None,
 ) -> Retrieval:
     """SPEC §3 steps 5-6: filter the whole corpus by code, then rank what is left.
 
     Filtering first means an eligible recipe is found however low BM25
     would rank it among all recipes.
     """
-    rejected = {r.id: reasons for r in recipes if (reasons := why_ineligible(r, constraints))}
+    rejected = {
+        r.id: reasons for r in recipes if (reasons := why_ineligible(r, constraints, aliases))
+    }
     eligible = [r.id for r in recipes if r.id not in rejected]
     hits = index.search(question, eligible, k=k) if eligible else []
     return Retrieval(hits, len(eligible), rejected)
@@ -113,11 +116,13 @@ class AskService:
         manifest: Manifest,
         provider: Provider,
         deadline_s: float,
+        aliases: AliasTable | None = None,
     ) -> None:
         self.provider = provider
         self.corpus_version = manifest.corpus_version
         self._deadline_s = deadline_s
         self._recipes = list(recipes)
+        self._aliases = aliases
         self._index = BM25Index(recipes)
         # I3: the only source of citations is the manifest.
         self._citations = {e.id: Citation(title=e.title, url=e.url) for e in manifest.recipes}
@@ -166,7 +171,9 @@ class AskService:
 
         # 5-6. eligibility over the whole corpus, then ranking
         started = time.perf_counter()
-        retrieval = retrieve(self._index, self._recipes, question, extraction)
+        retrieval = retrieve(
+            self._index, self._recipes, question, extraction, aliases=self._aliases
+        )
         trace["stages_ms"]["retrieve"] = round((time.perf_counter() - started) * 1000, 1)
         trace["eligible_count"] = retrieval.eligible_count
         trace["rejected"] = retrieval.rejected
