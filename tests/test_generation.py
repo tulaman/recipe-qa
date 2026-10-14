@@ -45,6 +45,36 @@ def test_nutrition_sections_are_never_shown() -> None:
         assert recipe.sections["nutrition"] not in render_recipe(recipe)
 
 
+@pytest.mark.parametrize(
+    ("recipe_id", "line"),
+    [
+        # Long totals in hours, so the model does not repeat "2280 minutes".
+        (
+            "homemade-tempeh",
+            "Total time: 38 hours (derived: Soaking: 12 hours; Prep: 2 hours;"
+            " Fermentation: 24 hours)",
+        ),
+        # A sum of ranges is an upper bound, not the page's total.
+        (
+            "idli-steamed-rice-and-black-gram-bread",
+            "Total time: up to 22 hours 25 minutes (derived: Soaking: 6–10 hours;"
+            " Prep: 10 minutes; Fermentation: 8–12 hours; Cooking: 11–15 minutes)",
+        ),
+        (
+            "indulgent-chocolate-torte",
+            "Total time: up to 2 hours 10 minutes (derived: Prep: 30 minutes;"
+            " Baking: 35-40 minutes; Final prep: 1 hour)",
+        ),
+        # An explicit value keeps the page's wording when it differs.
+        ("kedgeree-rice-and-smoked-fish", "Total time: up to 40 minutes (explicit: 30–40 minutes)"),
+        ("balsamic-glaze", "Total time: 30 minutes (explicit: ½ hour)"),
+        ("agnolotti-pasta-soup-agnolotti-in-brodo", "Total time: 15 minutes (explicit)\n"),
+    ],
+)
+def test_total_time_is_readable_and_keeps_the_page_wording(recipe_id: str, line: str) -> None:
+    assert line in render_recipe(RECIPES[recipe_id])
+
+
 def test_unknown_time_is_rendered_as_unknown() -> None:
     recipe = next(r for r in RECIPES.values() if r.metadata.total_minutes.status == "unknown")
     assert "Total time: unknown" in render_recipe(recipe)

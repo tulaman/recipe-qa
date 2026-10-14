@@ -7,7 +7,7 @@ is never eligible for a time constraint, a wrong one silently is.
 
 import pytest
 
-from recipe_qa.ingestion.timeparse import parse_total_minutes
+from recipe_qa.ingestion.timeparse import parse_total_minutes, uses_upper_bound
 
 
 @pytest.mark.parametrize(
@@ -110,3 +110,24 @@ def test_ambiguous_time_is_unknown_but_keeps_evidence(raw: str) -> None:
 def test_missing_time_is_unknown_without_evidence(raw: str | None) -> None:
     fact = parse_total_minutes(raw)
     assert (fact.value, fact.status, fact.evidence) == (None, "unknown", None)
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("30–40 minutes", True),
+        ("Soaking: 6–10 hours<br/>Prep: 10 minutes", True),
+        ("40 minutes", False),
+        # Only the stage that supplied the value counts: a labelled total
+        # wins over a ranged stage, and an "including" note is not summed.
+        ("Prep: 10–20 minutes<br>Total: 1 hour", False),
+        ("Total: 1–2 hours<br>Prep: 10 minutes", True),
+        ("1 hour, including 10–15 minutes rest", False),
+        ("90 minutes (40–50 minutes active)", False),
+        # No value, so no bound was taken.
+        ("Prep: 10–20 minutes", False),
+        ("overnight", False),
+    ],
+)
+def test_upper_bound_only_when_the_value_used_a_range(raw: str, expected: bool) -> None:
+    assert uses_upper_bound(raw) is expected
