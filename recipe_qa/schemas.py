@@ -105,8 +105,8 @@ class ErrorResponse(StrictModel):
 class Extraction(StrictModel):
     """What the question asks for. Never an answer to it."""
 
-    # Stage 3 acts on in_domain and safety_question only; the constraint
-    # fields are extracted now and enforced by is_eligible in stage 4.
+    # The service gates on in_domain and safety_question; the constraint
+    # fields are applied by code (recipe_qa/constraints.py), never by the model.
 
     in_domain: bool = Field(description="True if the question is about food, cooking or recipes.")
     safety_question: bool = Field(

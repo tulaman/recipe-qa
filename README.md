@@ -164,7 +164,7 @@ header, `meta.request_id` / `error.request_id` in the body, shown in the
 UI). Each `/ask` request writes one JSON log line (Railway → service →
 Logs, search the ID) with: the question, build SHA, model, prompt version
 (hash of `recipe_qa/prompts/`), corpus version, the extracted constraints
-and flags, eligible count, BM25 top-5 with scores, the IDs sent to the
+and flags, eligible count and why each other recipe was rejected, BM25 top-5 with scores, the IDs sent to the
 model, the IDs it cited, refusal reason or error, invalid-output retries,
 token usage per call and timings per stage. That is enough to tell which
 layer failed: extraction (wrong flags), retrieval (right recipe absent
@@ -178,17 +178,15 @@ are recipe questions, not personal data, and are logged in full (SPEC
 
 _TBD (filled at the end)._ Recorded so far:
 
-- Stage 3 extracts constraints but does not yet enforce them: `is_eligible`
-  over the whole corpus lands in stage 4. Until then a time/diet/ingredient
-  constraint is only as good as BM25 ranking and the model.
 - Rate limiting and the concurrency cap are in process memory, keyed on
   Railway's `X-Real-IP`; correct for one instance only. A second replica
   needs a shared store (Redis) or the edge's own limiter.
 - Railway's generated domain cannot be declared in `.railway/railway.ts`;
   it is the one piece of infrastructure outside the file. One environment only (production); no staging.
 
-- Ingredient alias table (`data/aliases.json`) lands with constraint
-  matching in stage 4, not with ingestion.
+- The ingredient alias table (`data/aliases.json`) is small and explicit
+  (nut, dairy, egg, gluten for exclusion only, and the spellings the golden
+  set needs; SPEC §4). An ingredient outside it matches only as written.
 - Ingredient `normalized` names are heuristic; exclusion matching must also
   read `raw` (ADR 004).
 - Pages whose diet category contradicts their ingredients are excluded,
