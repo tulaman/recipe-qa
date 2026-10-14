@@ -95,3 +95,8 @@ live in `recipe_qa/prompts/`.
   `variables: { managed: true }` is not in the SDK's types; a plan of a
   copy without it showed managed variables are the CLI default, so the
   line was dropped.
+- Review (Codex bot on PR #3) flagged that an explicit `ON_FAILURE`
+  restart type never converges in the plan (railwayapp/cli#1184), which
+  would have failed every deploy at the empty-plan check. Verified against
+  the issue and Railway's documented defaults before changing anything;
+  only the default-valued field is affected, so it is now left implicit.

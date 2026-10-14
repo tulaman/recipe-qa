@@ -17,7 +17,11 @@ export default defineRailway(() => {
       dockerfilePath: "Dockerfile",
     },
     deploy: {
-      restartPolicyType: "ON_FAILURE",
+      // Restart on failure (Railway's default type) at most 3 times, not the
+      // default 10. The type is left implicit: the planner strips platform
+      // defaults from live state, so an explicit "ON_FAILURE" would show as
+      // pending forever and fail deploy.yml's empty-plan check
+      // (railwayapp/cli#1184, open as of CLI 5.68.0).
       restartPolicyMaxRetries: 3,
     },
     // Railway switches traffic only after /healthz answers 200. It loads the
