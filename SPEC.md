@@ -8,7 +8,8 @@ that a question sharing no term with any recipe is `out_of_corpus` without
 a generation call; v0.4 (2026-10-14) states §7 as layered evaluation
 requirements: extraction measured on its own, false answers and false
 refusals kept apart, stability across repeated runs, a held-out set, and
-versioned reports.
+versioned reports; v0.5 (2026-10-14) records the scope of the §4 alias
+table while building `is_eligible`.
 Owner: Ilya Lityuga. Date: 2026-10-14.
 
 This document is the contract the service is built and evaluated against.
@@ -170,6 +171,27 @@ with unit tests:
 | `must_include = [x]` | Passes iff some normalized ingredient matches `x` or one of its documented aliases (`data/aliases.json`). |
 | `must_exclude = [x]` | Passes iff no ingredient, including those marked optional, matches `x` or its aliases. Optional ingredients count as present (conservative). |
 | Several constraints | All must pass for the same recipe. We never silently drop one constraint to find a match; an unsatisfiable combination is `out_of_corpus`. |
+
+Alias table scope (`data/aliases.json`, v0.5). The table is small and
+explicit; anything not in it matches only as written (whole word, singular
+or plural, case-insensitive). It covers:
+
+- **Allergen groups** for include and exclude: `nut` (tree nuts and peanut;
+  coconut and nutmeg are not nuts here), `dairy` (milk products and named
+  cheeses), `egg` (yolk, egg white, mayonnaise, meringue).
+- **Spelling and naming variants** the golden set needs: chickpea /
+  garbanzo, yogurt / yoghurt, raisin → sultana, currant.
+- **Gluten sources, for exclusion only** (`gluten` → wheat, flour, bread,
+  pasta, barley, rye, …). It deliberately over-matches ("rice flour"),
+  which is safe for a filter. It is never used for `diet = gluten_free`,
+  which stays explicit-category only.
+
+Aliases are directional: a constraint on a key also matches its terms, never
+the reverse ("no nuts" excludes almonds; "with almonds" does not match
+walnuts). A match preceded by a plant qualifier ("coconut milk", "peanut
+butter") or followed by a non-animal noun ("butter beans", "cream of
+tartar") is not a dairy match, by the same rule as the diet check (§6
+ingestion). The table is a filter, not a guarantee: §5 still applies.
 
 Provenance is surfaced in logs and in eval reports, not in the API
 response. A derived value is never described to the user as something the

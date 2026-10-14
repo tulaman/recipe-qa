@@ -1,0 +1,29 @@
+{
+  "description": "Ingredient aliases for must_include / must_exclude (SPEC §4). Directional: a constraint on a key also matches its listed terms, never the reverse ('nut' matches almonds; 'almond' does not match walnuts). 'aliases' apply to both include and exclude; 'exclude_only' entries over-match on purpose and apply to must_exclude only. Neither section is ever used for diet = gluten_free, which needs an explicit category. The table is a filter, not an allergen guarantee (SPEC §5).",
+  "aliases": {
+    "nut": [
+      "almond", "cashew", "pistachio", "walnut", "pecan", "hazelnut", "macadamia",
+      "pine nut", "brazil nut", "peanut", "marzipan"
+    ],
+    "dairy": [
+      "milk", "buttermilk", "butter", "cream", "cheese", "yogurt", "yoghurt", "ghee",
+      "paneer", "curd", "whey", "casein", "kefir", "custard", "half and half", "crème",
+      "creme", "dahi", "ricotta", "mozzarella", "parmesan", "parmigiano", "parmiggiano",
+      "reggiano", "pecorino", "feta", "mascarpone", "cheddar", "gruyere", "gruyère",
+      "halloumi"
+    ],
+    "egg": ["yolk", "egg white", "albumen", "mayonnaise", "mayo", "meringue"],
+    "chickpea": ["garbanzo", "chick pea"],
+    "garbanzo": ["chickpea", "chick pea"],
+    "garbanzo bean": ["chickpea", "chick pea"],
+    "yogurt": ["yoghurt"],
+    "yoghurt": ["yogurt"],
+    "raisin": ["sultana", "currant"]
+  },
+  "exclude_only": {
+    "gluten": [
+      "wheat", "flour", "bread", "breadcrumb", "pasta", "spaghetti", "noodle", "couscous",
+      "bulgur", "semolina", "barley", "rye", "spelt", "malt", "seitan", "soy sauce", "beer"
+    ]
+  }
+}
