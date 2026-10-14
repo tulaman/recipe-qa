@@ -234,3 +234,75 @@ live in `recipe_qa/prompts/`.
   -f/-ves and -y/-ys plurals ("bay leaf" missed "bay leaves"). No golden
   constraint uses an accented or irregular term, and recall@5 is still
   11/11, so the run on `cd89004` stands.
+
+### 2026-10-14 — stage 5b: refusal policy, grounding, content checks
+
+- The task assumed cases 4, 5, 12, 14, 15 and some content checks were
+  still open after 5a. The 5a report said 15/15, but that number was hard
+  checks only: `check_expectations` never read `expected_facts` or
+  `forbidden_claims`. Raised before planning; decided with the user:
+  content becomes its own per-run column, old reports are rescored
+  offline (`evals/rescore.py`), milestone files are never rewritten.
+- Rescoring found a regression nothing had caught. In 5a g05 cited only
+  Carbonara Pasta in every run: the extractor added `must_include: pasta`,
+  and `is_eligible` dropped Spaghetti alla Carbonara ("spaghetti").
+  `sources_any` accepted either variant. Decided with the user: SPEC §9.3
+  becomes binding (v0.6, "mention and cite the other variant"), g04/g05 get
+  `sources_all`, and the fix goes into extraction, the layer that failed.
+- "Never the word safe": the agent first proposed a global ban. Rejected
+  in discussion, because the corpus says "heat-safe tins" and "refrigerated
+  safely". Accepted design: a prompt rule with an allowed phrasing ("the
+  ingredient list on the source page does not mention X") plus a code
+  guard scoped to `must_exclude` answers (any form of *safe*, *-free*,
+  *free of/from* → invalid output → one plain retry → 502). A retry that
+  tells the model why was deferred until the trace shows the guard firing.
+  It fired 0 times in every run after the prompt rule.
+- Safety branch: behaviour already matched SPEC §5 and is now pinned by
+  tests (both baklavas cited, no generation, message ≤ 2 sentences). The
+  one gap was its retrieval time, missing from the trace; fixed.
+- Generation never received the constraints (ADR 002 said it did):
+  `generate_message` now renders a `<constraints>` block, test first.
+- One prompt change per commit, each followed by golden ×3 and extraction
+  ×3 from a clean export. A report was committed whenever a case flipped
+  (`stage-5b-f{3,6,7,8,4}-*.json`):
+
+  | Commit | Change | Golden content per run | Extraction | Flips |
+  |---|---|---|---|---|
+  | `b134d62` (pre) | harness + guard, prompts as 5a | 14, 14, 14 | 23/32 | — (exploratory) |
+  | `a1ce046` | generate: constraints, provenance | 13, 14, 14 | 23/32 | g04 pass → unstable (one variant cited) |
+  | `05f0980` | generate: always cite the other variant | 14, 14, 14 | 23/32 | g04 → pass |
+  | `c6f32e3` | extract: dish words are not includes | 15, 15, 15 | 28/32 | g05 → pass; extraction g14, x05, x06 → fail/unstable |
+  | `1dcfbde` | extract: a guarantee has no constraints | 15, 15, 15 | 30/32 | g14, x05, x17 → pass; g02 → fail |
+  | `0af6664` | generate: "not mentioned" wording | 15, 15, 15 | 30/32 | extraction g03 → unstable (extract.md unchanged) |
+  | `ad4a74a` | generate: absent fact, times, no asides | 15, 15, 15 | 30/32 | g02 → unstable, x17 → unstable (extract.md unchanged) |
+
+- Golden by category, rescored against the current set (v0.6, with
+  `sources_all`); runs passing / 45:
+
+  | Category | Baseline 4b (`2096155`) | After 5a (`cd89004`) | After 5b (`ad4a74a`) |
+  |---|---|---|---|
+  | Contract | 44 | 45 | 45 |
+  | Refusal | 41 | 45 | 45 |
+  | Sources | 39 | 45 | 45 |
+  | Constraints | 42 | 45 | 45 |
+  | Content | 38 (12, 13, 13 per run) | 42 (14, 14, 14) | 45 (15, 15, 15) |
+  | Cases passing hard checks 3/3 | 13/15 | 15/15 | 15/15 |
+  | Extraction cases, 3/3 | 23/32 | not run (prompts as 4b) | 30/32 |
+
+  4b and 5a were scored against an older golden file; their content
+  column is what they would have scored under the current rules.
+- Final run: `evals/reports/milestones/stage-5b-golden.json`, `-extraction`,
+  `-stages`. Hard 15/15 in every run, content 15/15 in every run, no
+  unstable golden case. Extraction unstable: g02, x17. Latency, client
+  side: answers p50 3.3 s / p95 4.7 s; refusals p50 1.1 s / p95 2.5 s.
+  The held-out set has not been run.
+- Accepted as generated: the guard regex, the stages join, the rescore
+  tool, all prompt wording after review. Corrected before committing: a
+  stages test expected median 3,600 where (2,500 + 4,800) / 2 is 3,650.
+  Extraction prompt examples were written to avoid golden dishes, so the
+  rule is not fitted to the questions it is measured on.
+- For the factuality review, not caught by any check: in the last run a
+  g06 answer called Le Tourin a "variant-free garlic soup" and said Spicy
+  Tomato Soup "is also vegetarian" (a derived value stated as a label);
+  a g07 answer called Agnolotti in Brodo "a variant" of another soup. The
+  variant rule leaks the word "variant" into answers that have none.
