@@ -1,6 +1,6 @@
 # Recipe Q&A Service — Behavior Specification
 
-Status: v0.6. v0.1 was written before any application code; v0.2 (2026-10-13)
+Status: v0.7. v0.1 was written before any application code; v0.2 (2026-10-13)
 revises the §4 diet rule after ingestion showed contradicted categories
 (see commit history and ADR 004); v0.3 (2026-10-13) makes two §3 steps
 explicit while building `/ask`: which recipes a `safety` refusal cites, and
@@ -12,8 +12,11 @@ versioned reports; v0.5 (2026-10-14) records the scope of the §4 alias
 table while building `is_eligible`; v0.6 (2026-10-14) makes §9.3 binding
 (the other variant is mentioned and cited, not optionally), moves the
 "never the word safe" rule of §5 into code for `must_exclude` answers, and
-states how §7.2 counts content checks.
-Owner: Ilya Lityuga. Date: 2026-10-14.
+states how §7.2 counts content checks; v0.7 (2026-10-15) states in §2.3
+that a provider which stops serving the account (rate limit, spend limit,
+billing) is `upstream_unavailable`, after stage 6 found a spend-limit stop
+would have answered 500.
+Owner: Ilya Lityuga. Date: 2026-10-15.
 
 This document is the contract the service is built and evaluated against.
 Anything the assignment left open is resolved in §9 (Assumptions) rather
@@ -112,7 +115,7 @@ outage must not become `out_of_corpus`.
 | 422 | `invalid_request` | Empty / too long / non-string question, bad JSON, wrong content type. |
 | 429 | `rate_limited` | Per-IP limit exceeded (default 30 req/min) or global concurrency cap reached. |
 | 502 | `upstream_invalid` | Provider returned output that fails schema validation after one retry. |
-| 503 | `upstream_unavailable` | Provider timeout / connection error / 5xx after one retry. |
+| 503 | `upstream_unavailable` | Provider timeout / connection error / 5xx after one retry, or the provider refuses to serve the account: rate limit (429), spend limit reached (400 whose message says the usage limit is reached), billing error (402). Any other 4xx from the provider is our bug: 500. |
 | 500 | `internal_error` | Invariant violation or unexpected exception. |
 
 Timeouts: provider call 8 s per attempt, one retry on timeout/5xx, total
