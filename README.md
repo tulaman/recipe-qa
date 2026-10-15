@@ -267,7 +267,7 @@ SPEC §8 targets:
 | Hard deadline 12 s, then 503 | slowest request 5.1 s; the deadline itself is covered by `tests/test_api.py`, `tests/test_service.py` | not reached |
 | Cost ≤ $1.00 / 1,000 | $0.71 answered, $0.59 golden mix | yes |
 | Cold start ≤ 10 s | 4.1 s on Railway ([ADR 003](adr/003-deployment.md)) | yes |
-| Daily provider spend cap documented | a **monthly** $30 cap exists; no daily cap (below) | no, as written |
+| Daily provider spend cap documented | a **monthly** $30 cap exists; no daily cap, by decision (below) | no |
 
 ### Bottleneck and next optimization
 
@@ -308,23 +308,23 @@ conditions for switching:
 
 - **What**: $30 per calendar month for the whole Anthropic workspace that
   holds the production key; every key in that workspace counts against
-  it. There is no daily cap; SPEC §8
-  asks for one, and that target is recorded as missed rather than
-  rewritten. $30 is about 42,000 answered questions a month (≈ 1,400 a
-  day) at $0.71 per 1,000.
+  it. There is no daily cap, by decision (2026-10-15): the monthly cap at
+  the provider is the spend control for this deployment, and no
+  in-process budget is added. SPEC §8 asks for a daily cap; that target is
+  recorded as not met, not rewritten. $30 is about 42,000 answered
+  questions a month (≈ 1,400 a day) at $0.71 per 1,000.
 - **Where**: Anthropic Console → Billing → Spend limits, set by the
   account owner. It is not in the repository or in `railway.ts`; there is
   nothing to declare it with.
 - **What happens when reached**: the API answers HTTP 400
   `invalid_request_error` ("You have reached your specified workspace API
   usage limits", Anthropic docs, Rate limits → Spend limits, read
-  2026-10-15) until the next month or until the limit is raised.
-  `recipe_qa/providers/claude.py` treats a 4xx other than 429 as our own
-  bug, so every `/ask` would answer **500 `internal_error`**, not 503
-  `upstream_unavailable` as SPEC §2.3 intends for a provider that cannot
-  serve. `/healthz`, `/schema` and the UI keep working. Derived from the
-  code and the provider's documentation, not reproduced; recorded under
-  production gaps and not fixed in stage 6.
+  2026-10-15) until the next month or until the limit is raised. Every
+  `/ask` then answers **503 `upstream_unavailable`** (SPEC §2.3 v0.7);
+  `/healthz`, `/schema` and the UI keep working. Stage 6 found that this
+  response would have become 500 `internal_error`; fixed in stage 6b
+  (`recipe_qa/providers/claude.py`, `tests/test_claude_provider.py`,
+  tested with the documented error shape, not reproduced live).
 - **Why the rate limit is not a spend limit**: one client at 30 requests a
   minute for 24 hours sends 43,200 requests, ≈ $31 at the answered
   price, so a single address can spend the month's cap in about a day.
@@ -334,7 +334,8 @@ conditions for switching:
 Every response, including errors, carries a request ID (`X-Request-ID`
 header, `meta.request_id` / `error.request_id` in the body, shown in the
 UI). Each `/ask` request writes one JSON log line (Railway → service →
-Logs, search the ID) with: the question, build SHA, model, prompt version
+Logs, search the ID; level `info`, `warn` on a 4xx, `error` on a 5xx)
+with: the question, build SHA, model, prompt version
 (hash of `recipe_qa/prompts/`), corpus version, the extracted constraints
 and flags, eligible count and why each other recipe was rejected, BM25 top-5 with scores, the IDs sent to the
 model, the IDs it cited, refusal reason or error, invalid-output retries,
@@ -372,20 +373,19 @@ are recipe questions, not personal data, and are logged in full (SPEC
   environment from the same `railway.ts`, deployed first and gated on the
   golden set, would catch a bad prompt before users do; today the smoke
   eval runs after production is already live.
-- **Provider spend cap enforced at the provider, daily, and handled.**
-  The Console cap is monthly ($30, workspace-wide), so one client can
-  spend it in about a day (Cost & latency). Needs: a daily cap or an
-  in-process daily token budget that refuses with 503 before the provider
-  does, and mapping the provider's spend-limit response (HTTP 400) to
-  `503 upstream_unavailable` instead of today's `500 internal_error`
-  (found in stage 6, not fixed: stage 6 changes no pipeline behavior).
+- **Finer spend control.** The provider enforces a monthly cap ($30,
+  workspace-wide) and the service answers 503 once it is reached. No
+  daily or per-client budget, by decision: one client at the rate limit
+  could spend the month's cap in about a day, and the service would then
+  be down until the month ends or the cap is raised. Accepted for this
+  deployment; a service with real traffic would add a daily budget.
 - **Alerting.** Nothing pages anyone. Needs alerts on 5xx rate, p95
   latency over the SPEC §8 targets, invalid-output retries and the
-  guarantee guard firing, from the per-request trace. A prerequisite
-  found in stage 6: Railway tags every line the service writes to stderr
-  as `level: error`, the request traces and uvicorn's startup lines
-  included, so an error-level alert would fire on every request. Logs
-  should carry their own level.
+  guarantee guard firing, from the per-request trace. The prerequisite
+  is in place since stage 6b: every log line is JSON on stdout with its
+  own level, and a request trace is `error` only on a 5xx, so an
+  error-level alert in Railway means a failed request (before, Railway
+  tagged every stderr line, traces included, as `error`).
 - **Log retention.** Railway keeps logs for its plan's window; a
   production deployment would ship the trace to a store with 30-day
   retention (SPEC §9.7), which is also what replaying a bad answer needs.

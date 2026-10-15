@@ -363,6 +363,25 @@ change no pipeline behavior.
   `.github/`, `ingestion/`, `config`, `corpus`; ADR 004 and the held-out
   rule added to the standing decisions.
 
+### 2026-10-15 — stage 6b: the two gaps stage 6 found
+
+- Asked what to do with the production gaps, the agent proposed fixing
+  the two it had found (small, measured, no effect on answers), leaving
+  the infrastructure gaps documented, and leaving the variant wording
+  alone (a prompt change after the held-out run would make that number
+  describe old prompts). Decision (mine): no daily spend budget; the
+  monthly cap at the provider is enough. Recorded in README, SPEC §8
+  target text unchanged.
+- Spend limit → 503: SPEC §2.3 v0.7 first, then failing tests built from
+  the documented error shape, then the fix. The message is read from the
+  error body, so any other 400 still surfaces as 500.
+- Logs: JSON on stdout with Railway's level names. Caught in a local
+  `uvicorn --no-access-log` run, not by the first tests: rerouting
+  uvicorn's loggers re-enabled the access log the container switches off;
+  only loggers uvicorn configured are rerouted now, with a test.
+- Measurements are not re-run: the stage 6 reports describe `5d8af05`,
+  and 6b changes only the error path and log format.
+
 ## Closing summary
 
 The workflow held across every stage (0 to 6, plus the IaC migration)

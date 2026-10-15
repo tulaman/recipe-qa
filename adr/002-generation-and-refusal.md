@@ -155,6 +155,6 @@ see `docs/ai-notes.md`, stage 5b.
 Stage 6 notes: the extraction condition is at its limit, not past it
 (one golden question, g02, mis-parsed in some runs, stage 5b). The
 content condition held: 15/15 in every public run. The spend cap is
-not part of this decision, but a provider refusing for spend answers
-HTTP 400, which this code maps to 500, not 503 (README, production
-gaps).
+not part of this decision; a provider refusing for spend answers HTTP
+400, which stage 6 found mapped to 500 and stage 6b maps to 503 (SPEC
+§2.3 v0.7).
