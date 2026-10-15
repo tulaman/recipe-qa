@@ -1,6 +1,10 @@
 # ADR 003 — Deployment: one container on Railway, deployed from GitHub Actions
 
-Status: Proposed (2026-10-13). Implemented in stage 3; Accepted with measurements in stage 6.
+Status: **Accepted** (2026-10-15), on the stage 6 deploy measurements
+below (push to healthy 1 min 45 s, cold start 4.1 s, image 75.9 MB;
+`deploy` run 38629498466) and the public golden run served by that
+deploy ([`stage-6-public-golden.json`](../evals/reports/milestones/stage-6-public-golden.json)).
+Proposed 2026-10-13, implemented in stage 3.
 Amended 2026-10-14: the IaC file moved from `railway.json` to
 `.railway/railway.ts` (see "Amendment" below).
 
@@ -153,6 +157,10 @@ its first health check; the application itself is ready in 1.5 s.
 - Compliance requires a specific region or VPC → Railway's region options
   may not suffice; revisit the provider.
 
+Stage 6 note: no condition is touched. One instance served the 50
+stage 6 requests (golden × 3, hold-out) with 0 errors and an answered
+p95 of 4.6 s client side; the one operational finding (every log line
+tagged `error`) is a logging gap, not a hosting limit (README).
 
 ## Amendment 2026-10-14: `railway.json` → `.railway/railway.ts`
 

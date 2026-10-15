@@ -1,6 +1,13 @@
 # ADR 002 — Generation, grounding and refusal: LLM extracts, code decides, prompt answers
 
-Status: Proposed (2026-10-13).
+Status: **Accepted** (2026-10-15). On the public URL: false answers 0,
+false refusals 0, hard and content checks 15/15 in every golden run
+([`stage-6-public-golden.json`](../evals/reports/milestones/stage-6-public-golden.json)),
+held-out 5/5 run once ([`stage-6-public-holdout.json`](../evals/reports/milestones/stage-6-public-holdout.json)),
+factuality review 0 / 0 / 0 ([`factuality_review.md`](../evals/factuality_review.md)),
+$0.71 per 1,000 answered questions and client p95 4.58 s
+([`stage-6-public-stages.json`](../evals/reports/milestones/stage-6-public-stages.json), README).
+Proposed 2026-10-13.
 
 ## Context
 
@@ -144,3 +151,10 @@ see `docs/ai-notes.md`, stage 5b.
   1,000).
 - A product requirement to answer nutrition or safety questions appears →
   this needs a curated allergen dataset, not a prompt change.
+
+Stage 6 notes: the extraction condition is at its limit, not past it
+(one golden question, g02, mis-parsed in some runs, stage 5b). The
+content condition held: 15/15 in every public run. The spend cap is
+not part of this decision, but a provider refusing for spend answers
+HTTP 400, which this code maps to 500, not 503 (README, production
+gaps).

@@ -1,6 +1,12 @@
 # ADR 001 — Retrieval: BM25 over whole recipes with deterministic metadata filters
 
-Status: Proposed (2026-10-13). To be Accepted with measurements after the eval harness runs.
+Status: **Accepted** (2026-10-15). Recall@5 11/11 on the golden set
+(`tests/test_retrieval_recall.py`); expected recipe cited in every public
+golden run ([`stage-6-public-golden.json`](../evals/reports/milestones/stage-6-public-golden.json))
+and on all three answerable held-out paraphrases, run once
+([`stage-6-public-holdout.json`](../evals/reports/milestones/stage-6-public-holdout.json));
+retrieve stage p95 9.4 ms ([`stage-6-public-stages.json`](../evals/reports/milestones/stage-6-public-stages.json)).
+Proposed 2026-10-13.
 
 ## Context
 
@@ -78,3 +84,8 @@ still loses a recipe end to end (g05 in stage 5a, fixed in extraction).
 - Recipes grow past ~2k tokens each so that top-3 no longer fits the
   context budget → split into field-level chunks with recipe-level
   re-assembly.
+
+Stage 6 note: the first condition was tested by the held-out
+paraphrases and held (3/3, but on three cases, not a larger eval). The
+context-budget condition is far off: three recipes plus the prompt are
+4,542 input tokens at p95.
