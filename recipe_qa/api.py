@@ -9,7 +9,6 @@ structured JSON log line with what is needed to explain its answer.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import time
 import uuid
@@ -21,6 +20,7 @@ from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
+from recipe_qa import logs
 from recipe_qa.config import Settings
 from recipe_qa.constraints import AliasTable
 from recipe_qa.corpus import load_manifest, load_recipes
@@ -140,7 +140,11 @@ def create_app(settings: Settings | None = None, provider: Provider | None = Non
         started = time.perf_counter()
         response = await _ask(request, rid, trace)
         trace.update(status=response.status_code, latency_ms=_ms_since(started))
-        log.info(json.dumps(trace, ensure_ascii=False, default=str))
+        status = response.status_code
+        level = (
+            logging.ERROR if status >= 500 else logging.WARNING if status >= 400 else logging.INFO
+        )
+        log.log(level, "ask", extra={"fields": trace})
         return response
 
     async def _ask(request: Request, rid: str, trace: dict[str, Any]) -> Response:
@@ -198,6 +202,6 @@ def __getattr__(name: str) -> FastAPI:
     # this module (tests, tools) never reads the environment or the corpus.
     if name == "app":
         globals()["app"] = application = create_app()
-        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        logs.configure()
         return application
     raise AttributeError(name)

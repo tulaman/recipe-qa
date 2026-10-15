@@ -91,6 +91,16 @@ def test_configure_sends_uvicorn_and_app_logs_to_one_json_stream(restore_logging
     ]
 
 
+def test_a_silenced_access_log_stays_silent(restore_logging: None) -> None:
+    access = logging.getLogger("uvicorn.access")
+    access.handlers.clear()  # what `uvicorn --no-access-log` leaves behind
+    access.propagate = False
+    stream = io.StringIO()
+    configure(stream)
+    access.info('"GET /healthz HTTP/1.1" 200')
+    assert lines(stream) == []
+
+
 def ask_and_log(provider: FakeProvider) -> list[dict]:
     stream = io.StringIO()
     configure(stream)
