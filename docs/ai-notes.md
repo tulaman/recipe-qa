@@ -307,3 +307,89 @@ live in `recipe_qa/prompts/`.
   rule leaks the word "variant" into answers that have none. (The same g06
   answer calls Spicy Tomato Soup vegetarian; that is fine, its category is
   explicit.)
+
+### 2026-10-14 — between 5b and 6: total time in readable units (PR #11)
+
+- Found in the UI, not by an eval: "Homemade Tempeh's total time is 2280
+  minutes". The stored value was right (SPEC §4 sums stages, a range
+  counts at its upper end); what the model was shown was not readable and
+  dropped the page's ranges. Tests first (`3050e3e`, `23e4bbb`), then
+  `render_recipe` writes hours and minutes, "up to" when a range was used,
+  and the page's own wording beside it. Stored values, eligibility and
+  prompt files unchanged, so `PROMPT_VERSION` stayed `d259a00c2700` and the
+  stage 5b reports still describe the prompts.
+
+### 2026-10-15 — stage 6: measurements and close-out
+
+Agent: Claude Code (`claude-opus-5-5`). Rule for the stage: measure
+first, write documents from the committed reports, change statuses last,
+change no pipeline behavior.
+
+- Measured on the public URL, build `5d8af05`: golden × 3
+  (`stage-6-public-golden.json`): hard and content 15/15 in every run,
+  0 false answers, 0 false refusals. Hold-out, once, `--repeat 1`
+  (`stage-6-public-holdout.json`): 5/5. Per stage
+  (`stage-6-public-stages.json`): answers p50 3.1 s / p95 4.2 s server,
+  3.3 s / 4.6 s client; generate is 63 % of the median.
+- Accepted: reading the server traces from Railway's log
+  (`railway logs --json`, keep `event = ask`, drop Railway's own
+  `timestamp`/`level` keys) instead of adding a log export to the
+  service; 45/45 requests matched by ID. The procedure is in the commit
+  message, since the log itself stays out of the repository.
+- Accepted: ADR 003's image size from Railway's build log
+  (`image push`, 75.9 MB). The Actions log the plan pointed at does not
+  print it.
+- Asked, not assumed: the daily spend cap could not be derived from the
+  repository. The answer (a $30 monthly workspace limit in the Console)
+  does not meet SPEC §8's "daily"; recorded as missed with the reason,
+  SPEC unchanged.
+- Found while documenting the cap, not fixed: the provider answers a
+  spend-limit stop with HTTP 400, and `providers/claude.py` maps a
+  non-429 4xx to 500 `internal_error`, not 503. Found while pulling the
+  traces, not fixed: Railway tags every stderr line `level: error`. Both
+  are README production gaps; stage 6 changes no pipeline behavior.
+- Factuality review (`evals/factuality_review.md`): the agent read all
+  33 answers against their pages: 0 added steps, 0 invented times or
+  quantities, 0 merged recipes. The variant-rule leak seen in stage 5b is
+  still there (4 notes), now also naming uncited recipes.
+- Rewritten before commit, after checking: a review line saying the
+  author had reviewed the table before commit (not true at that point);
+  a README claim that provider prompt caching cannot apply (its minimum
+  length was not verified); "cuts cost by a third" (it is a quarter,
+  $0.71 → $0.51); "no request needed a retry" (the trace counts
+  invalid-output retries only, not the SDK's transport retry).
+- `CLAUDE.md` checked against the tree: the layout listed prompts under
+  `docs/` (they are in `recipe_qa/prompts/`) and missed `.railway/`,
+  `.github/`, `ingestion/`, `config`, `corpus`; ADR 004 and the held-out
+  rule added to the standing decisions.
+
+## Closing summary
+
+The workflow held across every stage (0 to 6, plus the IaC migration)
+and ~140 commits: a written spec before code (SPEC v0.1 → v0.6; behavior
+changes landed in the spec before the code), a failing-test commit before each piece of logic the spec names,
+an ADR for each decision with the condition that would invalidate it,
+and an eval that runs the same three repeats on every prompt change. The
+agent wrote most of the code and first drafts of every document; the
+parts I rewrote were where it reached for the convenient rule instead of
+the checked one: refusals without citations (stage 0), a config file
+nobody applied (IaC), a global ban on the word "safe" (5b). Things that only showed up by running against
+real data or the real platform: the time-field coverage (stage 0), diet
+categories contradicting ingredients (2), Railway never reading
+`railway.json` (IaC), spurious extraction includes (5a/5b), unreadable
+minute totals (PR #11), and the spend-limit status code (6).
+
+Final numbers (`claude-haiku-5-5`, build `5d8af05`, public URL):
+
+| Measure | Value |
+|---|---|
+| Golden × 3, hard / content | 15/15 and 15/15 in every run |
+| False answers / false refusals / wrong reason (45 runs) | 0 / 0 / 0 |
+| Held-out, run once | 5/5 |
+| Extraction, 32 labelled questions × 3 | 30/32 stable (stage 5b) |
+| Retrieval recall@5 | 11/11 |
+| Factuality, 33 answers | 0 added steps, 0 invented times or quantities, 0 merged recipes |
+| Latency, answers, client p95 | 4.58 s (target 5 s) |
+| Latency, gate refusals, client p95 | 1.30 s (target 2 s; 9 requests) |
+| Cost per 1,000 answered questions | $0.71 (target $1.00; projection $0.55 missed) |
+| Push to healthy / cold start / image | 1 min 45 s / 4.1 s / 75.9 MB |

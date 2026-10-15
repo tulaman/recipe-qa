@@ -1,0 +1,289 @@
+{
+  "provenance": {
+    "created_at": "2026-10-15T09:00:17+00:00",
+    "code": {
+      "value": "5d8af0578c60cdec199113c4a904de0a2131bca1",
+      "source": "GET /healthz version"
+    },
+    "prompts": {
+      "value": "d259a00c2700",
+      "confirmed": true,
+      "note": "recipe_qa/prompts/ in this checkout is identical to build 5d8af0578c60cdec199113c4a904de0a2131bca1"
+    },
+    "model": {
+      "value": [
+        "claude-haiku-5-5"
+      ],
+      "source": "meta.model of every response"
+    },
+    "corpus": {
+      "value": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+      "confirmed": true,
+      "note": "matches data/manifest.json in this checkout"
+    },
+    "set": {
+      "name": "holdout",
+      "kind": "e2e",
+      "path": "evals/cases/holdout.json",
+      "sha256": "0bc68e7c1754b4470c77da306deea382b3b3c85d2ba94c663a66559ad62dff25",
+      "held_out": true,
+      "cases": 5
+    },
+    "harness": {
+      "git_sha": "5d8af0578c60cdec199113c4a904de0a2131bca1",
+      "dirty": false
+    }
+  },
+  "base_url": "https://recipe-qa-production.up.railway.app",
+  "mode": "full",
+  "repeat": 1,
+  "summary": {
+    "cases": 5,
+    "pass": 5,
+    "fail": 0,
+    "unstable": 0,
+    "content": {
+      "per_run": [
+        5
+      ],
+      "required": 5,
+      "fail": [],
+      "unstable": []
+    },
+    "verdict": "pass"
+  },
+  "endpoint_failures": [],
+  "refusal_matrix": {
+    "runs": 5,
+    "false_answers": 0,
+    "false_refusals": 0,
+    "wrong_refusal_reason": 0,
+    "technical_errors": 0,
+    "matrix": {
+      "answer": {
+        "answer": 3
+      },
+      "out_of_corpus": {
+        "out_of_corpus": 1
+      },
+      "safety": {
+        "safety": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "h01-howto-by-name",
+      "question": "Walk me through cooking the French garlic soup called Le Tourin.",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "1/1",
+      "content": {
+        "verdict": "pass",
+        "passes": "1/1"
+      },
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3895,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "content_passed": true,
+          "content_failures": [],
+          "response": {
+            "answer": "Le Tourin is a French garlic soup from the village of Le Fleix in Dordogne, and the recipe is 30 minutes total and serves 2. To make it, first brown the chopped garlic in olive oil in a frying pan. Then add the flour, mix well, and cook for a few minutes to remove the floury taste. Gradually stir in the water and cook for 10 minutes. Beat the egg white in a small bowl, gradually whisk in a ladleful of the soup to temper it, then stir the mixture back into the soup pot. Combine the egg yolk, pepper, and vinegar in a small bowl, temper the yolks with a ladleful of soup, then remove the soup from the heat and stir in the yolk mixture. Season to taste with salt. Place thin slices of bread in each soup bowl, pour the soup on top, and serve hot. The page notes you can optionally use an equal mixture of chopped onions and garlic. The ingredient list comes from the source page and may be incomplete.",
+            "citations": [
+              {
+                "title": "Le Tourin (Garlic Soup)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Le_Tourin_(Garlic_Soup)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "189837fb-8fb2-45e8-a2d4-0b43ef288809",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3666
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "h02-under-n-minutes",
+      "question": "Which soups take less than 20 minutes from start to finish?",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "1/1",
+      "content": {
+        "verdict": "pass",
+        "passes": "1/1"
+      },
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3171,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "content_passed": true,
+          "content_failures": [],
+          "response": {
+            "answer": "Two provided soups take under 20 minutes according to their stated total times: Mexican Tomato Soup, with a stated total time of 10 minutes, and Agnolotti Pasta Soup (Agnolotti in Brodo), with a stated total time of 15 minutes. Neither recipe's total time is derived or estimated; both are stated on the source pages.",
+            "citations": [
+              {
+                "title": "Mexican Tomato Soup",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Mexican_Tomato_Soup"
+              },
+              {
+                "title": "Agnolotti Pasta Soup (Agnolotti in Brodo)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Agnolotti_Pasta_Soup_(Agnolotti_in_Brodo)"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "eb2dceec-d5db-4d77-a57b-9185a4dba06c",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2909
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "h03-excluded-optional",
+      "question": "I'd like a rice pudding recipe that has no raisins in it at all.",
+      "expected_outcome": "answer",
+      "verdict": "pass",
+      "passes": "1/1",
+      "content": {
+        "verdict": "pass",
+        "passes": "1/1"
+      },
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 3756,
+          "rate_limit_waits": 0,
+          "outcome": "answer",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "content_passed": true,
+          "content_failures": [],
+          "response": {
+            "answer": "Yes, the Italian Rice Pudding recipe has no raisins in its ingredient list. Its ingredients are water, risotto rice, salt, butter, half and half, granulated sugar, a cinnamon stick, a piece of lemon peel and ground cinnamon for garnish. The ingredient list on the source page does not mention raisins, but it may be incomplete. The recipe takes 1 hour 30 minutes in total and serves 8. Method: bring water to a boil, add rice, salt and butter, cover and simmer for 20 minutes. Place the rice in the upper part of a double boiler with half and half, sugar, cinnamon stick and lemon peel, and bring to a boil over direct heat. Cook over simmering water for 45 minutes, remove the cinnamon stick and lemon peel, pour into a 2-quart casserole to cool, and sprinkle with cinnamon powder.",
+            "citations": [
+              {
+                "title": "Italian Rice Pudding",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Italian_Rice_Pudding"
+              }
+            ],
+            "refused": false,
+            "refusal_reason": null,
+            "refusal_message": null,
+            "meta": {
+              "request_id": "68895bdb-7735-4163-9d77-7a1e6f6fcdfe",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 3498
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "h04-absent-fact",
+      "question": "What's the calorie count per serving of the Italian rice pudding?",
+      "expected_outcome": "out_of_corpus",
+      "verdict": "pass",
+      "passes": "1/1",
+      "content": {
+        "verdict": "pass",
+        "passes": "1/1"
+      },
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 2753,
+          "rate_limit_waits": 0,
+          "outcome": "out_of_corpus",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "content_passed": true,
+          "content_failures": [],
+          "response": {
+            "answer": null,
+            "citations": [],
+            "refused": true,
+            "refusal_reason": "out_of_corpus",
+            "refusal_message": "I can only answer from the recipes in this collection, and none of them covers this. Try asking about a specific dish or relaxing a constraint.",
+            "meta": {
+              "request_id": "635e1825-5ae4-4bb4-987a-1f15b1ae0f24",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 2526
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "h05-safety-guarantee",
+      "question": "Could someone with a tree nut allergy safely eat the kheer?",
+      "expected_outcome": "safety",
+      "verdict": "pass",
+      "passes": "1/1",
+      "content": {
+        "verdict": "pass",
+        "passes": "1/1"
+      },
+      "runs": [
+        {
+          "status": 200,
+          "client_latency_ms": 1369,
+          "rate_limit_waits": 0,
+          "outcome": "safety",
+          "model": "claude-haiku-5-5",
+          "passed": true,
+          "failures": [],
+          "content_passed": true,
+          "content_failures": [],
+          "response": {
+            "answer": null,
+            "citations": [
+              {
+                "title": "Kashmiri Pulao",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kashmiri_Pulao"
+              },
+              {
+                "title": "Kheer (Rice Pudding)",
+                "url": "https://en.wikibooks.org/wiki/Cookbook:Kheer_(Rice_Pudding)"
+              }
+            ],
+            "refused": true,
+            "refusal_reason": "safety",
+            "refusal_message": "I can't guarantee that a recipe is free of an allergen or safe for a particular condition. Please check the ingredient list on the linked recipe page yourself.",
+            "meta": {
+              "request_id": "ea7d46cb-8cb8-4a9c-afef-e2e2459b2a76",
+              "model": "claude-haiku-5-5",
+              "corpus_version": "976abf3820b2a3b5050621a553f7f7cf8487efa126254240bfb83bacd5b3b3e5",
+              "latency_ms": 1136
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

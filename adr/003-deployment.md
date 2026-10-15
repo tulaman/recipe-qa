@@ -1,6 +1,10 @@
 # ADR 003 — Deployment: one container on Railway, deployed from GitHub Actions
 
-Status: Proposed (2026-10-13). Implemented in stage 3; Accepted with measurements in stage 6.
+Status: **Accepted** (2026-10-15), on the stage 6 deploy measurements
+below (push to healthy 1 min 45 s, cold start 4.1 s, image 75.9 MB;
+`deploy` run 38629498466) and the public golden run served by that
+deploy ([`stage-6-public-golden.json`](../evals/reports/milestones/stage-6-public-golden.json)).
+Proposed 2026-10-13, implemented in stage 3.
 Amended 2026-10-14: the IaC file moved from `railway.json` to
 `.railway/railway.ts` (see "Amendment" below).
 
@@ -97,6 +101,26 @@ next ordinary merge, which needed no manual step. Its apply changed
 nothing and Railway created exactly one deployment (no apply-triggered
 redeploy, see Consequences).
 
+### Stage 6: the deploy of the final build
+
+Measured 2026-10-15 from the run that deployed the build every stage 6
+report ran against: merge of PR #11, `5d8af05`. Times from the GitHub
+Actions step timestamps (CI run 38629420097, `deploy` run 38629498466)
+and Railway's build and deploy logs for deployment `4208fbbf`.
+
+| Metric | Value | Source |
+|---|---|---|
+| Push to healthy | **1 min 45 s** = 4 s until CI starts + CI 32 s + 2 s until `deploy` is triggered + 15 s runner start and setup + apply 1 s + plan check 1 s (no changes) + provider key 1 s + `railway up` 48 s + 1 s until `/healthz` reports the SHA (first poll) | merged 20:07:36Z, `/healthz` reported `5d8af05` at 20:09:20.9Z |
+| Cold start on Railway | **4.1 s** from "Starting Container" (20:09:11.0Z) to "Healthcheck succeeded" (20:09:15.1Z), first attempt; the app logged "Application startup complete" 1.5 s after the container started | Railway deploy and build logs, deployment `4208fbbf` |
+| Cold start in CI | `/healthz` answered inside the "Start container" step (20:08:06Z–20:08:07Z), so ≤ 2 s at the steps' one-second resolution | CI run 38629420097, `container` job |
+| Image size | **75.9 MB** compressed (75,910,356 bytes pushed by Railway's build, 7.4 s); 74 MB gzipped for `a0fb06b` above | Railway build log, `image push` |
+| Smoke eval after deploy | 3/3 cases in each of 3 runs, 21 s | `deploy` run 38629498466, artifact `eval-report-5d8af05…` |
+
+The figures match the first IaC deploy within a few seconds: the
+pipeline's own steps (apply, plan, key) take 3 s, the build dominates.
+The cold start is the time Railway takes to start the container and run
+its first health check; the application itself is ready in 1.5 s.
+
 ## Consequences
 
 - Deploy is one path driven by CI: apply, check the plan is empty, then
@@ -132,6 +156,11 @@ redeploy, see Consequences).
 - The UI needs its own release cadence → split the static site out.
 - Compliance requires a specific region or VPC → Railway's region options
   may not suffice; revisit the provider.
+
+Stage 6 note: no condition is touched. One instance served the 50
+stage 6 requests (golden × 3, hold-out) with 0 errors and an answered
+p95 of 4.6 s client side; the one operational finding (every log line
+tagged `error`) is a logging gap, not a hosting limit (README).
 
 ## Amendment 2026-10-14: `railway.json` → `.railway/railway.ts`
 

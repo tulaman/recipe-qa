@@ -11,8 +11,8 @@ machine-readable refusals.
 - Eval harness: [evals/](evals/)
 - AI usage notes: [docs/ai-notes.md](docs/ai-notes.md), [CLAUDE.md](CLAUDE.md)
 
-Status: in progress. Sections marked _TBD_ are filled as the corresponding
-stage lands; nothing here claims to be done before it is.
+Status: complete for the assessment (stage 6, 2026-10-15). Every number
+below cites the committed report it comes from.
 
 ## Public URLs
 
@@ -25,9 +25,11 @@ curl -s https://recipe-qa-production.up.railway.app/ask \
   -H 'Content-Type: application/json' \
   -d '{"question": "How do I make spaghetti alla carbonara?"}'
 ```
-- Container-level access for reviewers: Railway project **Viewer**
-  invitation (read-only deployments, logs, container status). _TBD: invite
-  sent on receipt of the reviewers' e-mail address._
+- Container-level access for reviewers: Railway project **Viewer** role
+  (read-only deployments, build and runtime logs, container status and
+  metrics; no variables). Procedure: send the e-mail address that should
+  have access; a Viewer invitation to the `recipe-qa` project is sent on
+  receipt, and the link in Railway's e-mail opens the project.
 
 ## Run locally
 
@@ -114,23 +116,31 @@ from every other set, runs once, as a milestone.
 Sets: `smoke` (three questions: a how-to answer, `out_of_domain`, and a
 `safety` refusal with citations), `golden` (15 cases, one per scenario in
 SPEC §7.2), the extraction set (32 labelled questions) and `holdout` (5
-paraphrases, not run yet).
+paraphrases, run once in stage 6).
 
-Latest results (stage 5b, build `ad4a74a`, `claude-haiku-5-5`, 3 runs per
-case; reports in [`evals/reports/milestones/`](evals/reports/milestones/)):
+Final results, `claude-haiku-5-5`, corpus `976abf38…`, prompts
+`d259a00c2700`; reports in
+[`evals/reports/milestones/`](evals/reports/milestones/):
 
 | Measure | Result | Report |
 |---|---|---|
-| Golden, hard checks | 15/15 cases in every run | [`stage-5b-golden.json`](evals/reports/milestones/stage-5b-golden.json) |
-| Golden, content checks | 15/15, 15/15, 15/15 (need ≥ 13 per run); no unstable case | same |
-| Refusals over 45 runs | false answers 0, false refusals 0, wrong reason 0, errors 0 | same |
+| Golden on the public URL, hard checks | 15/15 cases in every run (3 runs, build `5d8af05`) | [`stage-6-public-golden.json`](evals/reports/milestones/stage-6-public-golden.json) |
+| Golden on the public URL, content checks | 15/15, 15/15, 15/15 (need ≥ 13 per run); no unstable case | same |
+| Refusals over 45 public runs | false answers 0, false refusals 0, wrong reason 0, errors 0 | same |
+| Golden, local (stage 5b, build `ad4a74a`) | hard 15/15 and content 15/15 in every run; same refusal counts | [`stage-5b-golden.json`](evals/reports/milestones/stage-5b-golden.json) |
+| **Held-out set, run once** (public URL, build `5d8af05`) | **5/5 cases pass**, content 5/5; false answers 0, false refusals 0 | [`stage-6-public-holdout.json`](evals/reports/milestones/stage-6-public-holdout.json) |
 | Extraction | 30/32 cases every run; unstable: g02, x17 (spurious `must_include`) | [`stage-5b-extraction.json`](evals/reports/milestones/stage-5b-extraction.json) |
 | Retrieval recall@5 | 11/11 answerable golden cases | `tests/test_retrieval_recall.py` |
-| Latency, client side | answers p50 3.3 s / p95 4.7 s; refusals p50 1.1 s / p95 2.5 s | `stage-5b-golden.json`; per stage in [`stage-5b-stages.json`](evals/reports/milestones/stage-5b-stages.json) |
-| Held-out set | not run | — |
+| Factuality review (33 public answers read against their pages) | added steps 0, invented time or quantity 0, merged recipes 0; 4 wording notes | [`evals/factuality_review.md`](evals/factuality_review.md) |
+| Latency | see [Cost & latency](#cost--latency) | — |
 
-How these moved from the stage 4b baseline, and why, is in
-[docs/ai-notes.md](docs/ai-notes.md) (stage 5b) and in ADR 001 / 002.
+The held-out number is reported apart from golden: it is five
+paraphrases written before tuning, never used to change a prompt, case or
+rule, and run exactly once (the harness refuses a second run). Five cases
+is a small sample; it says the golden result is not specific to the
+golden wording, not more. How the golden numbers moved from the stage 4b
+baseline, and why, is in [docs/ai-notes.md](docs/ai-notes.md) and in
+ADR 001 / 002.
 
 ## Deployment
 
@@ -175,9 +185,149 @@ railway config plan   # what the next deploy would change (needs a linked projec
 
 ## Cost & latency
 
-_TBD: measured token usage, cost per question and per 1,000, latency
-percentiles, model choice and switching conditions, current bottleneck and
-next optimization._
+Every number here comes from a committed report; medians and p95 are
+nearest-rank. Two measured setups, same prompts (`d259a00c2700`), model
+and corpus:
+
+| Setup | Build | Served from | Client reports | Server stages |
+|---|---|---|---|---|
+| **Public** | `5d8af05` | Railway, `us-west2`, one instance, warm; client on the author's laptop over the internet | [`stage-6-public-golden.json`](evals/reports/milestones/stage-6-public-golden.json) | [`stage-6-public-stages.json`](evals/reports/milestones/stage-6-public-stages.json) |
+| **Local** | `ad4a74a` | `127.0.0.1`, clean export of the commit | [`stage-5b-golden.json`](evals/reports/milestones/stage-5b-golden.json) | [`stage-5b-stages.json`](evals/reports/milestones/stage-5b-stages.json) |
+
+Each is golden × 3 = 45 requests: 33 answers, 9 refusals at a
+deterministic gate (g11 no eligible recipe, g13 `out_of_domain`, g14
+`safety`), 3 refusals by the model (g12, absent fact). The two builds
+differ only outside the prompt files (the "nut free" guard and how total
+time is rendered to the model). Server stages come from each request's
+trace, joined by request ID (45/45 matched in both); for the public run
+the traces were read from Railway's log (`railway logs --json`).
+
+### Tokens per request
+
+Median (p95), summed over attempts; no request had an invalid-output retry.
+
+| Stage | Answers, public | Answers, local | Refusals, public | Refusals, local |
+|---|---|---|---|---|
+| extract, in | 1,641 (1,650) | 1,641 (1,650) | 1,641 (1,653) | 1,641 (1,653) |
+| extract, out | 65 (75) | 65 (74) | 19 (73) | 19 (73) |
+| generate, in | 3,554 (4,542) | 3,554 (4,543) | 3,624 (3,624), g12 only | 3,602 (3,602), g12 only |
+| generate, out | 314 (480) | 252 (550) | 25 (25), g12 only | 25 (25), g12 only |
+
+Gate refusals make one call (extract); only the model's own refusal
+(g12) reaches generate. Extraction input is mostly the output schema,
+which is why it is 1.6k tokens, not the ~400 ADR 002 estimated.
+
+### Cost
+
+Formula, Claude Haiku 5.5 list prices on 2026-10-13 (SPEC §8):
+`cost = input_tokens × $0.10 / 1M + output_tokens × $0.50 / 1M`,
+with the public medians above:
+
+| Request | Tokens in / out | Per question | Per 1,000 |
+|---|---|---|---|
+| Answer (median) | 1,641 + 3,554 = 5,195 / 65 + 314 = 379 | $0.00071 | **$0.71** |
+| Answer (p95 tokens in every stage) | 6,192 / 555 | $0.00090 | $0.90 |
+| Gate refusal (extract only) | 1,641 / 19 | $0.00017 | $0.17 |
+| Model refusal (g12) | 5,265 / 44 | $0.00055 | $0.55 |
+| Golden mix (33 : 9 : 3) | — | $0.00059 | $0.59 |
+
+Target ≤ $1.00 per 1,000 questions: met, also at p95 tokens. The SPEC §8
+projection of ≈ $0.55 is missed for answered questions ($0.71): the
+extraction input is 3× the estimate (above). The projection is not
+rewritten.
+
+### Latency
+
+Milliseconds, median / p95. Client = what the eval harness measured
+(network included); server = the trace.
+
+| | Public | Local |
+|---|---|---|
+| **Answers** (33) — extract | 997 / 1,634 | 1,193 / 1,953 |
+| retrieve (filter + BM25) | 0.2 / 9.4 | 0.4 / 14.8 |
+| generate | 1,950 / 2,957 | 1,996 / 3,105 |
+| server total | 3,099 / 4,247 | 3,282 / 4,695 |
+| **client, end to end** | **3,346 / 4,581** | 3,284 / 4,698 |
+| **Gate refusals** (9), client | **1,158 / 1,298** | 1,064 / 1,241 |
+| Model refusal g12 (3), client | 3,279 / 3,850 | 2,167 / 2,461 |
+| All 12 refusals, server total | 968 / 3,627 | 1,124 / 2,459 |
+
+Client-side numbers by outcome are computed from the per-run
+`client_latency_ms` in the golden reports. The server stages are
+dominated by the provider, so public and local differ by the provider's
+run-to-run variation more than by the host; the network adds ≈ 250 ms
+at the median (client 3,346 vs server 3,099).
+
+SPEC §8 targets:
+
+| Target | Measured | Met |
+|---|---|---|
+| Answered, warm, p95 ≤ 5 s, ≥ 30 requests | 4.58 s public (33 requests; one above 5 s: g08, 5,084 ms) | yes |
+| Refusal via deterministic gate, p95 ≤ 2 s | 1.30 s public | yes, on 9 requests: the golden set has 3 gate cases, so this sample is below 30 |
+| Hard deadline 12 s, then 503 | slowest request 5.1 s; the deadline itself is covered by `tests/test_api.py`, `tests/test_service.py` | not reached |
+| Cost ≤ $1.00 / 1,000 | $0.71 answered, $0.59 golden mix | yes |
+| Cold start ≤ 10 s | 4.1 s on Railway ([ADR 003](adr/003-deployment.md)) | yes |
+| Daily provider spend cap documented | a **monthly** $30 cap exists; no daily cap (below) | no, as written |
+
+### Bottleneck and next optimization
+
+`generate` is the bottleneck: 63 % of the median server time for an
+answer (1,950 of 3,099 ms) and its p95 is 70 % of the server p95 (2,957
+of 4,247 ms); `extract` is the rest, retrieval is under 10 ms. Generation
+time follows output length (314 tokens median, 480 at p95). The next
+optimization would be **streaming the answer text** of the generate call
+to the UI: perceived latency would drop from the full generate time to
+extract plus the first tokens, at no change in cost. It is not free:
+citations are validated only once the output is complete, so the UI
+must be able to replace a streamed answer with a refusal or error when
+validation fails. Cut from scope for that reason (below).
+
+### Model choice and when to switch
+
+Claude Haiku 5.5 for both calls ([ADR 002](adr/002-generation-and-refusal.md)):
+the hard parts (eligibility, citation validation, refusal gates) are in
+code, and on Haiku the golden set passes every hard and content check in
+every run, publicly and locally, with 0 false answers. Measurable
+conditions for switching:
+
+- **To Sonnet 5.5 for `generate`**: content checks below 13/15 in any
+  golden run after prompt fixes, or the factuality review finding any
+  added step, invented time or quantity, or merged recipe. Expected cost
+  ≈ $8–10 per 1,000 (ADR 002), so it needs that evidence first.
+- **To Sonnet 5.5 for `extract`**: more than 1 of 15 golden questions
+  mis-parsed after prompt tuning (stage 5b: 1, g02, unstable). The cheaper
+  first step is the rule-based pre-pass ADR 002 keeps as a fallback.
+- **To something cheaper**: Haiku is already the cheapest current Claude
+  model, so cheaper means taking calls away. Extraction is 32 % of an
+  answer's input tokens and all of a gate refusal's cost; a rule-based
+  extractor that keeps extraction at ≥ 30/32 and golden at 15/15 would
+  cut cost per answer by about a quarter ($0.71 → $0.51 per 1,000). Trigger: cost above $1.00 per
+  1,000, or the monthly cap reached before month end at real traffic.
+
+### Provider spend cap
+
+- **What**: $30 per calendar month for the whole Anthropic workspace that
+  holds the production key; every key in that workspace counts against
+  it. There is no daily cap; SPEC §8
+  asks for one, and that target is recorded as missed rather than
+  rewritten. $30 is about 42,000 answered questions a month (≈ 1,400 a
+  day) at $0.71 per 1,000.
+- **Where**: Anthropic Console → Billing → Spend limits, set by the
+  account owner. It is not in the repository or in `railway.ts`; there is
+  nothing to declare it with.
+- **What happens when reached**: the API answers HTTP 400
+  `invalid_request_error` ("You have reached your specified workspace API
+  usage limits", Anthropic docs, Rate limits → Spend limits, read
+  2026-10-15) until the next month or until the limit is raised.
+  `recipe_qa/providers/claude.py` treats a 4xx other than 429 as our own
+  bug, so every `/ask` would answer **500 `internal_error`**, not 503
+  `upstream_unavailable` as SPEC §2.3 intends for a provider that cannot
+  serve. `/healthz`, `/schema` and the UI keep working. Derived from the
+  code and the provider's documentation, not reproduced; recorded under
+  production gaps and not fixed in stage 6.
+- **Why the rate limit is not a spend limit**: one client at 30 requests a
+  minute for 24 hours sends 43,200 requests, ≈ $31 at the answered
+  price, so a single address can spend the month's cap in about a day.
 
 ## Finding the cause of a bad answer in production
 
@@ -198,13 +348,65 @@ are recipe questions, not personal data, and are logged in full (SPEC
 
 ## Scope cut and production gaps
 
-_TBD (filled at the end)._ Recorded so far:
+### Cut on purpose
 
-- Rate limiting and the concurrency cap are in process memory, keyed on
-  Railway's `X-Real-IP`; correct for one instance only. A second replica
-  needs a shared store (Redis) or the edge's own limiter.
-- Railway's generated domain cannot be declared in `.railway/railway.ts`;
-  it is the one piece of infrastructure outside the file. One environment only (production); no staging.
+| Cut | Why | Where it would go |
+|---|---|---|
+| Caching (answers, extraction) | A repeated question is rare in an assessment, and a cache keyed on question text would serve a stale answer after a corpus or prompt change unless it is keyed on both versions too. | Key on (question, `corpus_version`, `PROMPT_VERSION`); measure the hit rate first |
+| Streaming | `generate` is the bottleneck (above), but citations are validated only on the complete output, so a streamed answer can still turn into a refusal. | The next optimization (Cost & latency) |
+| Chat history | One question, one answer (SPEC §1). Follow-ups would need the previous constraints carried over, i.e. a second extraction design. | — |
+| Reranker | Recall@5 is 11/11 with eligibility applied first, and the model reads all three recipes it is given; nothing to rerank toward. | When recall@5 drops (ADR 001) |
+| Embeddings, hybrid retrieval, vector DB | The ADR 001 trigger (recall@5 on paraphrase cases < 100 %) never fired; the held-out paraphrases also passed. | [ADR 001](adr/001-retrieval.md), "becomes invalid when" |
+| Multi-language questions, accounts, nutrition, recipe scaling | Out of scope in SPEC §1. Nutrition questions are refused (`out_of_corpus`). | — |
+
+### What production-grade would still need
+
+- **Shared rate limiter.** The per-IP limit and the concurrency cap live
+  in process memory, keyed on Railway's `X-Real-IP`; correct for one
+  instance only. A second replica needs a shared store (Redis) or the
+  edge's own limiter.
+- **Multi-instance deploy.** One instance in one region; a deploy is a
+  short restart. Needs at least two replicas behind Railway's
+  health-checked rolling deploy, which in turn needs the shared limiter.
+- **Staging environment.** One environment (production). A staging
+  environment from the same `railway.ts`, deployed first and gated on the
+  golden set, would catch a bad prompt before users do; today the smoke
+  eval runs after production is already live.
+- **Provider spend cap enforced at the provider, daily, and handled.**
+  The Console cap is monthly ($30, workspace-wide), so one client can
+  spend it in about a day (Cost & latency). Needs: a daily cap or an
+  in-process daily token budget that refuses with 503 before the provider
+  does, and mapping the provider's spend-limit response (HTTP 400) to
+  `503 upstream_unavailable` instead of today's `500 internal_error`
+  (found in stage 6, not fixed: stage 6 changes no pipeline behavior).
+- **Alerting.** Nothing pages anyone. Needs alerts on 5xx rate, p95
+  latency over the SPEC §8 targets, invalid-output retries and the
+  guarantee guard firing, from the per-request trace. A prerequisite
+  found in stage 6: Railway tags every line the service writes to stderr
+  as `level: error`, the request traces and uvicorn's startup lines
+  included, so an error-level alert would fire on every request. Logs
+  should carry their own level.
+- **Log retention.** Railway keeps logs for its plan's window; a
+  production deployment would ship the trace to a store with 30-day
+  retention (SPEC §9.7), which is also what replaying a bad answer needs.
+- **Infrastructure outside the file.** Railway's generated domain cannot
+  be declared in `.railway/railway.ts`, and the spend cap lives in the
+  Anthropic Console.
+
+### Known limitations of the answers
+
+- The variant rule (SPEC §9.3) leaks into answers that have no variant:
+  "X is not a variant of this dish, so it is not used here", sometimes
+  naming a recipe that is not cited, and once calling a different soup
+  "another version". One answer attributed our derived vegetarian label
+  to the page. Wording only, no factual error
+  ([factuality review](evals/factuality_review.md), notes 1–4).
+- Extraction is unstable on two of 32 labelled questions (g02, x17: a
+  dish word extracted as a required ingredient in some runs).
+- The held-out set is five cases and the gate-refusal latency sample is
+  nine requests; both are reported as measured, not extrapolated.
+
+### Corpus and matching
 
 - The ingredient alias table (`data/aliases.json`) is small and explicit
   (nut, dairy, egg, gluten for exclusion only, and the spellings the golden

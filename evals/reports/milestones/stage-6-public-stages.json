@@ -1,0 +1,121 @@
+{
+  "provenance": {
+    "report": {
+      "path": "evals/reports/milestones/stage-6-public-golden.json",
+      "sha256": "f3e6c48a7a8500aaf4c0f17484ba560e9170d73542139f8ecb170017037b3469",
+      "code": {
+        "value": "5d8af0578c60cdec199113c4a904de0a2131bca1",
+        "source": "GET /healthz version"
+      },
+      "prompts": {
+        "value": "d259a00c2700",
+        "confirmed": true,
+        "note": "recipe_qa/prompts/ in this checkout is identical to build 5d8af0578c60cdec199113c4a904de0a2131bca1"
+      },
+      "model": {
+        "value": [
+          "claude-haiku-5-5"
+        ],
+        "source": "meta.model of every response"
+      }
+    },
+    "log": {
+      "sha256": "2d44fd82e0204a2b88e498d1a3467e0c65aa719d0f6ed2265f99125a6676c07f"
+    }
+  },
+  "answers": {
+    "requests": 33,
+    "latency_ms": {
+      "extract": {
+        "median": 997.4,
+        "p95": 1633.5
+      },
+      "retrieve": {
+        "median": 0.2,
+        "p95": 9.4
+      },
+      "generate": {
+        "median": 1949.9,
+        "p95": 2956.7
+      },
+      "total": {
+        "median": 3099,
+        "p95": 4247
+      }
+    },
+    "tokens": {
+      "extract": {
+        "input": {
+          "median": 1641,
+          "p95": 1650
+        },
+        "output": {
+          "median": 65,
+          "p95": 75
+        }
+      },
+      "generate": {
+        "input": {
+          "median": 3554,
+          "p95": 4542
+        },
+        "output": {
+          "median": 314,
+          "p95": 480
+        }
+      }
+    },
+    "invalid_output": 0
+  },
+  "refusals": {
+    "requests": 12,
+    "latency_ms": {
+      "extract": {
+        "median": 924.15,
+        "p95": 2326.9
+      },
+      "retrieve": {
+        "median": 0.2,
+        "p95": 3.9
+      },
+      "generate": {
+        "median": 1299,
+        "p95": 2183.8
+      },
+      "total": {
+        "median": 968.0,
+        "p95": 3627
+      }
+    },
+    "tokens": {
+      "extract": {
+        "input": {
+          "median": 1641.0,
+          "p95": 1653
+        },
+        "output": {
+          "median": 19.0,
+          "p95": 73
+        }
+      },
+      "generate": {
+        "input": {
+          "median": 3624,
+          "p95": 3624
+        },
+        "output": {
+          "median": 25,
+          "p95": 25
+        }
+      }
+    },
+    "invalid_output": 0,
+    "by_reason": {
+      "out_of_corpus": 6,
+      "out_of_domain": 3,
+      "safety": 3
+    }
+  },
+  "unmatched_runs": 0,
+  "technical_errors": 0
+}
