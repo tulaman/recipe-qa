@@ -8,6 +8,7 @@ without a key.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Sequence
 
 import anthropic
@@ -32,6 +33,22 @@ from recipe_qa.schemas import Extraction, Generation
 EFFORT = "low"
 EXTRACT_MAX_TOKENS = 1024
 GENERATE_MAX_TOKENS = 2048
+
+
+# A spend limit set in the Console answers 400, not 429, with a message
+# such as "You have reached your specified workspace API usage limits".
+SPEND_LIMIT = re.compile(r"reached your .*API usage limits", re.IGNORECASE)
+
+
+def _refuses_the_account(exc: anthropic.APIStatusError) -> bool:
+    """Rate limit, spend limit or billing: the provider will not serve us (SPEC §2.3)."""
+    if exc.status_code in (402, 429):
+        return True
+    if exc.status_code != 400 or not isinstance(exc.body, dict):
+        return False
+    error = exc.body.get("error")
+    message = error.get("message") if isinstance(error, dict) else None
+    return isinstance(message, str) and SPEND_LIMIT.search(message) is not None
 
 
 class ClaudeProvider:
@@ -60,9 +77,9 @@ class ClaudeProvider:
         except (anthropic.APITimeoutError, anthropic.APIConnectionError) as exc:
             raise ProviderUnavailable(type(exc).__name__) from exc
         except anthropic.APIStatusError as exc:
-            if exc.status_code == 429 or exc.status_code >= 500:
+            if _refuses_the_account(exc) or exc.status_code >= 500:
                 raise ProviderUnavailable(f"HTTP {exc.status_code}") from exc
-            raise  # 4xx is our bug or our configuration: internal_error
+            raise  # any other 4xx is our bug or our configuration: internal_error
         except ValidationError as exc:
             raise ProviderInvalidOutput(str(exc)) from exc
 
