@@ -54,8 +54,8 @@ provider.
 
 Measured 2026-10-14, `claude-haiku-5-5`, corpus `976abf38…`, build
 `ad4a74a` (prompts confirmed by the harness), 3 runs per case, served
-from a clean export of the commit. Status stays Proposed: the held-out
-set has not been run.
+from a clean export of the commit. Public measurements of the final
+build follow at the end of this section.
 
 **Extraction**, 32 labelled questions × 3 runs = 96 runs per field. Runs
 with the field right, stage 4b baseline → stage 5b
@@ -112,6 +112,20 @@ is 4.7 s (target 5 s).
 Golden by category across stages, rescored offline against the current
 set (`uv run python evals/rescore.py evals/reports/milestones/*-golden*.json`):
 see `docs/ai-notes.md`, stage 5b.
+
+**Public, final build** (2026-10-15, build `5d8af05`, same prompts
+`d259a00c2700`, on https://recipe-qa-production.up.railway.app):
+
+| Measure | Value | Report |
+|---|---|---|
+| Golden × 3, refusal matrix | identical to the table above: 33 answers, 6 / 3 / 3 refusals as expected; false answers 0, false refusals 0, wrong reason 0, errors 0 | `evals/reports/milestones/stage-6-public-golden.json` |
+| Golden content checks per run | 15/15, 15/15, 15/15 | same |
+| Held-out, run once | 5/5 cases; 3 answers, `out_of_corpus` and `safety` refusals as expected | `evals/reports/milestones/stage-6-public-holdout.json` |
+| Factuality review, 33 answers | added steps 0, invented time or quantity 0, merged recipes 0 | `evals/factuality_review.md` |
+| Answers, server median / p95 | extract 997 / 1,634 ms, generate 1,950 / 2,957 ms, total 3,099 / 4,247 ms | `evals/reports/milestones/stage-6-public-stages.json` |
+| Answers, tokens median | extract 1,641 in / 65 out, generate 3,554 in / 314 out | same |
+| Cost per 1,000 answered questions | $0.71 at medians, $0.90 at p95 tokens (formula in README) | same |
+| Answers, client p95 | 4.58 s (33 requests; target 5 s) | `stage-6-public-golden.json` |
 
 ## Consequences
 

@@ -40,8 +40,8 @@ testability without a provider key.
 
 ## Measurements
 
-Measured 2026-10-14 on corpus `976abf38…` (50 recipes). Status stays
-Proposed: the held-out set has not been run.
+Measured 2026-10-14 on corpus `976abf38…` (50 recipes); public rows
+2026-10-15, build `5d8af05` on Railway.
 
 | Measure | Value | Source |
 |---|---|---|
@@ -50,6 +50,10 @@ Proposed: the held-out set has not been run.
 | Retrieve stage, answered questions (filter + BM25, 33 requests) | median 0.4 ms, p95 14.8 ms | `evals/reports/milestones/stage-5b-stages.json` |
 | Retrieve stage, refusals (12 requests) | median 0.5 ms, p95 6.3 ms | same |
 | Generate input tokens (3 recipes + constraints + prompt), answers | median 3,554, p95 4,543 | same |
+| Held-out paraphrases answered with the expected recipe cited (h01–h03), run once | **3/3** | `evals/reports/milestones/stage-6-public-holdout.json` |
+| Golden answerable cases with an expected recipe cited, public, 3 runs | 11/11 in every run | `evals/reports/milestones/stage-6-public-golden.json` |
+| Retrieve stage, answered questions, public (33 requests) | median 0.2 ms, p95 9.4 ms | `evals/reports/milestones/stage-6-public-stages.json` |
+| Generate input tokens, answers, public | median 3,554, p95 4,542 | same |
 
 Hybrid retrieval was not tried: the trigger above (recall@5 on paraphrase
 cases < 100 %) did not fire. The one recall miss so far was fixed by the
