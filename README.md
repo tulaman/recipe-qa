@@ -348,13 +348,65 @@ are recipe questions, not personal data, and are logged in full (SPEC
 
 ## Scope cut and production gaps
 
-_TBD (filled at the end)._ Recorded so far:
+### Cut on purpose
 
-- Rate limiting and the concurrency cap are in process memory, keyed on
-  Railway's `X-Real-IP`; correct for one instance only. A second replica
-  needs a shared store (Redis) or the edge's own limiter.
-- Railway's generated domain cannot be declared in `.railway/railway.ts`;
-  it is the one piece of infrastructure outside the file. One environment only (production); no staging.
+| Cut | Why | Where it would go |
+|---|---|---|
+| Caching (answers, extraction) | A repeated question is rare in an assessment, and a cache keyed on question text would serve a stale answer after a corpus or prompt change unless it is keyed on both versions too. | Key on (question, `corpus_version`, `PROMPT_VERSION`); measure the hit rate first |
+| Streaming | `generate` is the bottleneck (above), but citations are validated only on the complete output, so a streamed answer can still turn into a refusal. | The next optimization (Cost & latency) |
+| Chat history | One question, one answer (SPEC §1). Follow-ups would need the previous constraints carried over, i.e. a second extraction design. | — |
+| Reranker | Recall@5 is 11/11 with eligibility applied first, and the model reads all three recipes it is given; nothing to rerank toward. | When recall@5 drops (ADR 001) |
+| Embeddings, hybrid retrieval, vector DB | The ADR 001 trigger (recall@5 on paraphrase cases < 100 %) never fired; the held-out paraphrases also passed. | [ADR 001](adr/001-retrieval.md), "becomes invalid when" |
+| Multi-language questions, accounts, nutrition, recipe scaling | Out of scope in SPEC §1. Nutrition questions are refused (`out_of_corpus`). | — |
+
+### What production-grade would still need
+
+- **Shared rate limiter.** The per-IP limit and the concurrency cap live
+  in process memory, keyed on Railway's `X-Real-IP`; correct for one
+  instance only. A second replica needs a shared store (Redis) or the
+  edge's own limiter.
+- **Multi-instance deploy.** One instance in one region; a deploy is a
+  short restart. Needs at least two replicas behind Railway's
+  health-checked rolling deploy, which in turn needs the shared limiter.
+- **Staging environment.** One environment (production). A staging
+  environment from the same `railway.ts`, deployed first and gated on the
+  golden set, would catch a bad prompt before users do; today the smoke
+  eval runs after production is already live.
+- **Provider spend cap enforced at the provider, daily, and handled.**
+  The Console cap is monthly ($30, workspace-wide), so one client can
+  spend it in about a day (Cost & latency). Needs: a daily cap or an
+  in-process daily token budget that refuses with 503 before the provider
+  does, and mapping the provider's spend-limit response (HTTP 400) to
+  `503 upstream_unavailable` instead of today's `500 internal_error`
+  (found in stage 6, not fixed: stage 6 changes no pipeline behavior).
+- **Alerting.** Nothing pages anyone. Needs alerts on 5xx rate, p95
+  latency over the SPEC §8 targets, invalid-output retries and the
+  guarantee guard firing, from the per-request trace. A prerequisite
+  found in stage 6: Railway tags every line the service writes to stderr
+  as `level: error`, the request traces and uvicorn's startup lines
+  included, so an error-level alert would fire on every request. Logs
+  should carry their own level.
+- **Log retention.** Railway keeps logs for its plan's window; a
+  production deployment would ship the trace to a store with 30-day
+  retention (SPEC §9.7), which is also what replaying a bad answer needs.
+- **Infrastructure outside the file.** Railway's generated domain cannot
+  be declared in `.railway/railway.ts`, and the spend cap lives in the
+  Anthropic Console.
+
+### Known limitations of the answers
+
+- The variant rule (SPEC §9.3) leaks into answers that have no variant:
+  "X is not a variant of this dish, so it is not used here", sometimes
+  naming a recipe that is not cited, and once calling a different soup
+  "another version". One answer attributed our derived vegetarian label
+  to the page. Wording only, no factual error
+  ([factuality review](evals/factuality_review.md), notes 1–4).
+- Extraction is unstable on two of 32 labelled questions (g02, x17: a
+  dish word extracted as a required ingredient in some runs).
+- The held-out set is five cases and the gate-refusal latency sample is
+  nine requests; both are reported as measured, not extrapolated.
+
+### Corpus and matching
 
 - The ingredient alias table (`data/aliases.json`) is small and explicit
   (nut, dairy, egg, gluten for exclusion only, and the spellings the golden
